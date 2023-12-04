@@ -1,8 +1,12 @@
+"use client"
 import React from 'react';
-import { Card, CardContent, CardActions, Typography, Button, Box, Icon } from '@mui/material';
+import { Card, CardContent, CardActions, Typography, Button, Box, Icon, useTheme } from '@mui/material';
 import Image from 'next/image';
 
+
 export const ConnectionCard = ({ title, description, button, image }) => {
+    const theme = useTheme();
+
     return (
         <Card sx={{ border: '1px solid gray', borderRadius: '10px', p: 2 }}>
             <CardContent>
