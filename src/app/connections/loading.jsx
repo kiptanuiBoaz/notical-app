@@ -10,23 +10,19 @@ export default function LoadingComponent() {
     // Use useEffect to start and stop the loading animation on router events
     useEffect(() => {
         // Define a function to start the loading animation
-        const handleStart = () => {
-            Loading.dots({
-                svgColor: '#4d7e3e',
-                backgroundColor: 'rgba(0,0,0,0.4)',
-            });
-        };
 
-        // Define a function to stop the loading animation
-        const handleStop = () => {
-            Loading.remove();
-        };
+        Loading.dots({
+            svgColor: '#4d7e3e',
+            backgroundColor: 'rgba(0,0,0,0.4)',
+        });
+
+
 
 
 
         // Remove event listeners on component unmount
         return () => {
-            handleStop();
+            Loading.remove();
         };
     }, [router]);
 
