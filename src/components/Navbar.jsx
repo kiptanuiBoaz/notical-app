@@ -11,14 +11,14 @@ export const Navbar = () => {
     if (pathname.startsWith('/auth')) return <></>;
     return (
         <nav sx={{ flexGrow: 1 }}>
-            <AppBar position="static">
-                <Toolbar sx={{ mx: 4 }}>
+            <AppBar position="static" sx={{ bgcolor: 'secondary.main' }}>
+                <Toolbar sx={{ mx: 4, color: 'primary.main' }} >
                     <Image src="/logo.png" alt="logo" sx={{ mr: 2 }} height={30} width={30} />
                     <Typography variant="h6" sx={{ flexGrow: 1, textAlign: 'center' }}>
                         <Button color="inherit" href="/connections">Connections</Button>
                         <Button color="inherit" href="/subscriptions">Subscriptions</Button>
                     </Typography>
-                    <Link href="/account">
+                    <Link href="/account" sx={{ TextDecoderation: "none" }}>
                         <Avatar href="/account" src="/user.png" alt="user" sx={{ ml: 2 }} />
                     </Link>
 
