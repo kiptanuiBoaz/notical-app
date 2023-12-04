@@ -57,11 +57,13 @@ const Connections = () => {
                         title="Notion"
                         description="Connect your notion pages"
                         button="Connect"
+                        image="/images/notion-icon.svg"
                     />
                     <ConnectionCard
                         title="Google Calendar"
                         description="Connect your Google Calendar"
                         button="Connect"
+                        image="/images/calendar-icon.svg"
                     />
                 </Box>
             </Box>
