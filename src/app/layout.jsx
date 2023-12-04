@@ -1,10 +1,12 @@
-import { Inter } from 'next/font/google'
 import './globals.css'
 import ThemeRegistry from './ThemeRegistry';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
+import { CacheProvider } from '@emotion/react';
+import { ThemeProvider, CssBaseline } from '@mui/material';
 
-const inter = Inter({ subsets: ['latin'] })
+
+
 
 export const metadata = {
   title: 'notical',
