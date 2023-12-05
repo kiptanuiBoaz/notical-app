@@ -10,7 +10,7 @@ let theme = createTheme({
     },
     palette: {
         primary: {
-            main: '#0276aa', // Black color for primary
+            main: '#FFFFFF', // Black color for primary
         },
         secondary: {
             main: '#333333', // Dark grey color for secondary

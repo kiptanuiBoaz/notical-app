@@ -1,15 +1,16 @@
 import React from 'react';
 import { Box, Typography, Button, Card, CardContent, CardActions } from '@mui/material';
 import { ConnectionCard } from '@/components/ConnectionCard';
+import { Footer } from '@/components/Footer';
 
 const Connections = () => {
     return (
 
         <Box
             sx={{
-                marginTop: '50px',
+                marginTop: '90px',
                 height: '100vh',
-                width: '100vw',
+                // width: '100vw',
                 display: 'flex',
                 alignItems: 'start',
                 justifyContent: 'center',
@@ -23,6 +24,7 @@ const Connections = () => {
                     padding: '2rem',
                 }}
             >
+
                 <Box
                     sx={{
                         display: 'flex',
@@ -39,12 +41,15 @@ const Connections = () => {
                         <Typography variant="body1" sx={{ color: 'gray' }}>
                             Not synced yet
                         </Typography>
+
                     </Box>
+
                     <Box sx={{ flex: '0 0 auto', marginTop: ['1rem', '0'] }}>
                         <Button variant="contained" color="primary">
                             Start Sync
                         </Button>
                     </Box>
+                    <hr />
                 </Box>
                 <Box
                     sx={{
@@ -67,6 +72,7 @@ const Connections = () => {
                     />
                 </Box>
             </Box>
+            <Footer />
         </Box>
     );
 }

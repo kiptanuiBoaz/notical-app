@@ -9,8 +9,8 @@ import { ThemeProvider, CssBaseline } from '@mui/material';
 
 
 export const metadata = {
-  title: 'notical',
-  description: 'Your connections at a central place',
+  title: 'Notycal | Sync Notion Dabases with Google Calendar',
+  description: 'A central place to connect Google Calendar and Notion',
 }
 
 // app/layout.js
@@ -22,7 +22,7 @@ export default function RootLayout(props) {
         <ThemeRegistry options={{ key: 'mui' }}>
           <Navbar />
           {children}
-          <Footer />
+
         </ThemeRegistry>
       </body>
     </html>

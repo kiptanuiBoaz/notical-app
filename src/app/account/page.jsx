@@ -1,30 +1,29 @@
 "use client"
-import React from 'react';
-import { Avatar, Box, Button, Grid, Typography, useTheme } from '@mui/material';
-import { ToggleButton, ToggleButtonGroup } from '@mui/lab';
-import { Brightness4, Brightness7, Mail, Phone, Person } from '@mui/icons-material';
+import React, { useState } from 'react';
+import { Avatar, Box, Button, Grid, Typography, useTheme, Switch } from '@mui/material';
+import { Brightness4 } from '@mui/icons-material';
 import WebIcon from '@mui/icons-material/Web';
 import LoopIcon from '@mui/icons-material/Loop';
 import LogoutIcon from '@mui/icons-material/Logout';
 
 const Account = () => {
+    const [mode, setMode] = useState('dark');
     const theme = useTheme();
 
-    // state for theme toggle
-    const [mode, setMode] = React.useState('light');
+    console.log(mode)
 
-    // handle theme toggle change
-    const handleModeChange = (event, newMode) => {
-        setMode(newMode);
+    const handleModeChange = (event) => {
+
+        setMode(event.target.checked ? 'dark' : 'light');
+        generateTheme(mode);
     };
-
     return (
         <Box
             sx={{
                 width: '100%',
                 // height: '100vh',
                 cursor: 'pointer',
-                marginTop: "30px",
+                marginTop: "90px",
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -40,33 +39,35 @@ const Account = () => {
                     },
                     height: '80%',
                     borderRadius: 2,
-                    boxShadow: 3,
-                    padding: 4,
+                    // boxShadow: 3,
+                    border: '1px solid gray',
+                    margin: 4,
                     overflow: 'auto',
                 }}
             >
-                <Grid container spacing={2}>
-                    <Grid item xs={12}>
-                        <Grid container alignItems="center" justifyContent="space-between">
+                <Grid container spacing={2} >
+                    <Grid item xs={12} >
+                        <Grid container alignItems="center" justifyContent="space-between" sx={{ padding: 4, fontSize: '25px' }}>
                             <Grid item>
                                 <Typography variant="h4" component="h1">
                                     Your Account
                                 </Typography>
                             </Grid>
                             <Grid item>
-                                <Button variant="contained" color="error">
+                                <Button variant="contained" color="error" sx={{ fontSize: '20px' }}>
                                     Delete account
                                 </Button>
                             </Grid>
                         </Grid>
                     </Grid>
+                    <hr style={{ width: "100%" }} />
                     <Grid item xs={12}>
-                        <Grid container alignItems="center" spacing={2}>
+                        <Grid container alignItems="center" spacing={2} sx={{ padding: 1 }}>
                             <Grid item>
-                                <Avatar href="/account" src="/user.png" alt="user" sx={{ ml: 2, height: "50px", width: "50px" }} />
+                                <Avatar href="/account" src="/user.png" alt="user" sx={{ ml: "10px", height: "50px", width: "50px" }} />
                             </Grid>
                             <Grid item>
-                                <Grid container direction="column" spacing={1}>
+                                <Grid container direction="column" >
                                     <Grid item>
                                         <Typography variant="h6" component="h2">
                                             Name
@@ -81,8 +82,9 @@ const Account = () => {
                             </Grid>
                         </Grid>
                     </Grid>
+                    <hr style={{ width: "100%" }} />
                     <Grid item xs={12}>
-                        <Grid container alignItems="center" spacing={2}>
+                        <Grid container alignItems="center" spacing={2} sx={{ padding: "0 0 10px 20px" }}>
                             <Grid item>
                                 <WebIcon fontSize="large" />
                             </Grid>
@@ -93,8 +95,9 @@ const Account = () => {
                             </Grid>
                         </Grid>
                     </Grid>
+                    <hr style={{ width: "100%" }} />
                     <Grid item xs={12}>
-                        <Grid container alignItems="center" spacing={2}>
+                        <Grid container alignItems="center" spacing={2} sx={{ padding: "0 0 10px 20px" }}>
                             <Grid item>
                                 <LoopIcon fontSize="large" />
                             </Grid>
@@ -105,30 +108,30 @@ const Account = () => {
                             </Grid>
                         </Grid>
                     </Grid>
+                    <hr style={{ width: "100%" }} />
                     <Grid item xs={12}>
-                        <Grid container alignItems="center" spacing={2}>
+                        <Grid container alignItems="center" spacing={2} sx={{ padding: '0 0 10px 20px' }}>
                             <Grid item>
-                                <Brightness4 fontSize="large" />
+                                <Switch
+                                    sx={{ color: '#57636C' }}
+
+                                    checked={mode === 'dark'}
+                                    onChange={handleModeChange}
+                                    aria-label="theme mode"
+                                />
+
                             </Grid>
                             <Grid item>
                                 <Typography variant="h6" component="h4">
                                     Theme
                                 </Typography>
                             </Grid>
-                            <Grid item>
-                                <ToggleButton
-                                    value={mode}
-                                    onChange={handleModeChange}
-                                    aria-label="theme mode"
-                                >
-                                    {mode === 'light' ? <Brightness7 /> : <Brightness4 />}
-                                </ToggleButton>
-                            </Grid>
+
                         </Grid>
                     </Grid>
-
+                    <hr style={{ width: "100%" }} />
                     <Grid item xs={12}>
-                        <Grid container alignItems="center" spacing={2}>
+                        <Grid container alignItems="center" spacing={2} sx={{ padding: "0 0 15px 20px" }}>
                             <Grid item>
                                 <LogoutIcon fontSize="large" />
                             </Grid>
