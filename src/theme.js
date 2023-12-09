@@ -1,32 +1,42 @@
 import { createTheme, responsiveFontSizes } from "@mui/material/styles";
 
-let theme = createTheme({
-    typography: {
-        fontFamily: "'Muli', sans-serif",
-        button: {
-            textTransform: "none",
-            textDecoration: "none",
-        },
+const colors = {
+    dark: {
+        primaryBackgroundColor: "#121926",
+        accentBackgroundColor: "#0D121D",
+        primaryColor: "#FFFFFF",
+        secondaryColor: "#8E9AA5",
     },
+    light: {
+        primaryBackgroundColor: "#121926",
+        accentBackgroundColor: "#0D121D",
+        primaryColor: "#0D121D",
+        secondaryColor: "#57636C",
+    },
+};
+
+export const getDesignTokens = (mode) => ({
     palette: {
-        primary: {
-            main: '#FFFFFF', // Black color for primary
-        },
-        secondary: {
-            main: '#333333', // Dark grey color for secondary
-        },
-    },
-    components: {
-        MuiInputBase: {
-            styleOverrides: {
-                root: {
-                    borderRadius: 10, // change this line
-                },
+        mode,
+        ...({
+            primary: {
+                main: colors[mode].primaryColor
             },
-        },
+            secondary: {
+                main: colors[mode].secondaryColor,
+            },
+            background: {
+                default: colors[mode].primaryBackgroundColor,
+                paper: colors[mode].accentBackgroundColor,
+            },
+            text: {
+                primary: colors[mode].primaryColor, // Use primaryColor or secondaryColor here
+            },
+        }),
     },
 });
 
-theme = responsiveFontSizes(theme);
+const theme = createTheme(getDesignTokens("dark"));
+const responsiveTheme = responsiveFontSizes(theme);
 
-export default theme;
+export default responsiveTheme;

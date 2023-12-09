@@ -16,45 +16,70 @@ const colors = {
     },
 };
 
-export const generateTheme = (mode) => {
-    const selectedColors = colors[mode];
-
-    return createTheme({
-        typography: {
-            fontFamily: "'Muli', sans-serif",
-            button: {
-                textTransform: "none",
-                textDecoration: "none",
-            },
-        },
-        palette: {
+export const getDesignTokens = (mode) => ({
+    palette: {
+        mode,
+        ...({
             primary: {
-                main: selectedColors.primaryColor,
+                main: colors.mode.primaryColor
             },
             secondary: {
-                main: selectedColors.secondaryColor,
+                main: colors.mode.secondaryColor,
             },
             background: {
-                default: selectedColors.primaryBackgroundColor,
-                paper: selectedColors.accentBackgroundColor,
+                default: colors.mode.primaryBackgroundColor,
+                paper: colors.mode.accentBackgroundColor,
             },
             text: {
-                primary: selectedColors.textColor,
+                primary: colors.mode.textColor,
             },
-        },
-        components: {
-            MuiInputBase: {
-                styleOverrides: {
-                    root: {
-                        borderRadius: 10,
-                    },
-                },
-            },
-        },
-    });
-};
 
 
-const theme = generateTheme("dark");
+        })
+    }
+});
 
-export default theme;
+
+// export const generateTheme = (mode) => {
+//     const selectedColors = colors[mode];
+
+//     console.log(theme)
+//     return createTheme({
+//         typography: {
+//             fontFamily: "'Muli', sans-serif",
+//             button: {
+//                 textTransform: "none",
+//                 textDecoration: "none",
+//             },
+//         },
+//         palette: {
+//             primary: {
+//                 main: selectedColors.primaryColor,
+//             },
+//             secondary: {
+//                 main: selectedColors.secondaryColor,
+//             },
+//             background: {
+//                 default: selectedColors.primaryBackgroundColor,
+//                 paper: selectedColors.accentBackgroundColor,
+//             },
+//             text: {
+//                 primary: selectedColors.textColor,
+//             },
+//         },
+//         components: {
+//             MuiInputBase: {
+//                 styleOverrides: {
+//                     root: {
+//                         borderRadius: 10,
+//                     },
+//                 },
+//             },
+//         },
+//     });
+// };
+
+
+// const theme = generateTheme("dark");
+
+// export default theme;

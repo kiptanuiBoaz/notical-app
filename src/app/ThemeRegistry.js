@@ -1,65 +1,27 @@
 // app/ThemeRegistry.tsx
 'use client';
-import React from "react";
+import React, { useMemo } from "react";
 import createCache from '@emotion/cache';
 import { useServerInsertedHTML } from 'next/navigation';
 import { CacheProvider } from '@emotion/react';
-import { ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import theme from '../../src/theme.js';
+import { getDesignTokens } from '../../src/theme.js';
 
-// This implementation is from emotion-js
-// https://github.com/emotion-js/emotion/issues/2928#issuecomment-1319747902
-export default function ThemeRegistry(props) {
-    const { options, children } = props;
 
-    const [{ cache, flush }] = React.useState(() => {
-        const cache = createCache(options);
-        cache.compat = true;
-        const prevInsert = cache.insert;
-        let inserted = [];
-        cache.insert = (...args) => {
-            const serialized = args[1];
-            if (cache.inserted[serialized.name] === undefined) {
-                inserted.push(serialized.name);
-            }
-            return prevInsert(...args);
-        };
-        const flush = () => {
-            const prevInserted = inserted;
-            inserted = [];
-            return prevInserted;
-        };
-        return { cache, flush };
-    });
+export default function ThemeRegistry({ children }) {
+    // const [mode, setMode] = React.useState<PaletteMode>('light');
 
-    useServerInsertedHTML(() => {
-        const names = flush();
-        if (names.length === 0) {
-            return null;
-        }
-        let styles = '';
-        for (const name of names) {
-            styles += cache.inserted[name];
-        }
-        return (
-            <style
-                key={cache.key}
-                data-emotion={`${cache.key} ${names.join(' ')}`}
-                dangerouslySetInnerHTML={{
-                    __html: styles,
-                }}
-            />
-        );
-    });
-
+    const darkModeTheme = createTheme(getDesignTokens('light'));
+    // console.log(theme);
     return (
-        <CacheProvider value={cache}>
-            <ThemeProvider theme={theme}>
-                <CssBaseline />
-                {children}
-            </ThemeProvider>
-        </CacheProvider>
+
+        <ThemeProvider theme={darkModeTheme} >
+            <CssBaseline />
+            {children}
+        </ThemeProvider>
+
+
     );
 }
 

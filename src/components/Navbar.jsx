@@ -1,14 +1,15 @@
 'use client'
 import React from 'react';
 import { usePathname } from 'next/navigation';
-import { AppBar, Toolbar, Typography, Button, Avatar } from '@mui/material';
+import { AppBar, Toolbar, Typography, Button, Avatar, useTheme } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
 import { SecurityRounded } from '@mui/icons-material';
-import theme from '../theme.js'; // Import your theme
+
 
 export const Navbar = () => {
     const pathname = usePathname();
+    const theme = useTheme();
     // console.log(theme)
     if (pathname.startsWith('/auth')) return <></>;
 

@@ -19,7 +19,7 @@ export default function RootLayout(props) {
   return (
     <html lang="en">
       <body>
-        <ThemeRegistry options={{ key: 'mui' }}>
+        <ThemeRegistry >
           <Navbar />
           {children}
 
