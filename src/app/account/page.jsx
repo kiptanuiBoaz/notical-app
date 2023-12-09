@@ -5,18 +5,26 @@ import { Brightness4 } from '@mui/icons-material';
 import WebIcon from '@mui/icons-material/Web';
 import LoopIcon from '@mui/icons-material/Loop';
 import LogoutIcon from '@mui/icons-material/Logout';
+import { TOGGLE_THEME, selectTheme } from '@/redux/features/themeSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Account = () => {
     const [mode, setMode] = useState('dark');
-    const theme = useTheme();
+    const dispatch = useDispatch();
+    const theme = useTheme()
 
-    console.log(mode)
 
-    const handleModeChange = (event) => {
+    const handleModeChange = ({ target }) => {
+        //update local state
+        setMode(target.checked ? 'dark' : 'light');
+        // update redux 
+        console.log(target.checked ? 'dark' : 'light')
+        dispatch(TOGGLE_THEME({ theme: target.checked ? 'dark' : 'light' }))
 
-        setMode(event.target.checked ? 'dark' : 'light');
-        generateTheme(mode);
     };
+
+    const themes = useSelector(selectTheme)
+    console.log(themes)
     return (
         <Box
             sx={{

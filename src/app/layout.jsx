@@ -4,6 +4,8 @@ import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { CacheProvider } from '@emotion/react';
 import { ThemeProvider, CssBaseline } from '@mui/material';
+import ReduxProvider from '@/redux/Reduxprovider';
+
 
 
 
@@ -19,11 +21,13 @@ export default function RootLayout(props) {
   return (
     <html lang="en">
       <body>
-        <ThemeRegistry >
-          <Navbar />
-          {children}
+        <ReduxProvider>
+          <ThemeRegistry >
+            <Navbar />
+            {children}
+          </ThemeRegistry>
+        </ReduxProvider>
 
-        </ThemeRegistry>
       </body>
     </html>
   );
