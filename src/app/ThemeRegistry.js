@@ -7,21 +7,22 @@ import { CacheProvider } from '@emotion/react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { getDesignTokens } from '../../src/theme.js';
+import { useSelector } from "react-redux";
+import { selectTheme } from "@/redux/features/themeSlice.js";
 
 
 export default function ThemeRegistry({ children }) {
-    // const [mode, setMode] = React.useState<PaletteMode>('light');
+    //selected theme from redux
+    const colorMode = useSelector(selectTheme);
 
-    const darkModeTheme = createTheme(getDesignTokens('light'));
-    // console.log(theme);
+    //create theme
+    const selectedTheme = createTheme(getDesignTokens(colorMode));
+
     return (
-
-        <ThemeProvider theme={darkModeTheme} >
+        <ThemeProvider theme={selectedTheme} >
             <CssBaseline />
             {children}
         </ThemeProvider>
-
-
     );
 }
 

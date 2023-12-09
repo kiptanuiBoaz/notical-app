@@ -9,7 +9,7 @@ const colors = {
     },
     light: {
         primaryBackgroundColor: "#121926",
-        accentBackgroundColor: "#0D121D",
+        accentBackgroundColor: "#FFFFFF",
         primaryColor: "#0D121D",
         secondaryColor: "#57636C",
     },

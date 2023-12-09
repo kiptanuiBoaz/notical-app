@@ -23,7 +23,6 @@ const themeSlice = createSlice({
     initialState,
     reducers: {
         TOGGLE_THEME: (state, action) => {
-            console.log("fired")
             state.theme = action.payload.theme;
         },
     },

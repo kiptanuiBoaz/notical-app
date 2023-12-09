@@ -5,10 +5,13 @@ import { AppBar, Toolbar, Typography, Button, Avatar, useTheme } from '@mui/mate
 import Image from 'next/image';
 import Link from 'next/link';
 import { SecurityRounded } from '@mui/icons-material';
+import { useSelector } from 'react-redux';
+import { selectTheme } from '@/redux/features/themeSlice';
 
 
 export const Navbar = () => {
     const pathname = usePathname();
+    const selectedTheme = useSelector(selectTheme);
     const theme = useTheme();
     // console.log(theme)
     if (pathname.startsWith('/auth')) return <></>;
@@ -16,9 +19,9 @@ export const Navbar = () => {
     return (
         <nav sx={{ flexGrow: 1 }}>
             <AppBar position="fixed" sx={{ bgcolor: theme.palette.background.paper }}>
-                <Toolbar sx={{ mx: 10, color: theme.palette.primary }} >
+                <Toolbar sx={{ mx: 10, color: theme.palette.primary.main }} >
                     <Link href="/connections">
-                        <Image src="/logo-light.svg" alt="notycal-logo" sx={{ mr: 2, px: 2 }} height={60} width={160} />
+                        <Image src={selectedTheme === "dark" ? "/logo-dark.svg" : "/logo-light.svg"} alt="notycal-logo" sx={{ mr: 2, px: 2 }} height={60} width={160} />
                     </Link>
 
                     <Typography variant="h4" sx={{ flexGrow: 1, textAlign: 'center', mr: "50px" }}>

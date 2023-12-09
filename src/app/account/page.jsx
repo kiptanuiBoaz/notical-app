@@ -18,13 +18,10 @@ const Account = () => {
         //update local state
         setMode(target.checked ? 'dark' : 'light');
         // update redux 
-        console.log(target.checked ? 'dark' : 'light')
         dispatch(TOGGLE_THEME({ theme: target.checked ? 'dark' : 'light' }))
 
     };
 
-    const themes = useSelector(selectTheme)
-    console.log(themes)
     return (
         <Box
             sx={{
