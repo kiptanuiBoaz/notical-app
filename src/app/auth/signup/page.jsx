@@ -41,6 +41,20 @@ const SignUp = () => {
         setEmail(event.target.value);
     }
 
+    async function handleSignInWithGoogle() {
+        const { data, error } = await supabase.auth.signInWithOAuth({
+            provider: 'google',
+            options: {
+                queryParams: {
+                    access_type: 'offline',
+                    prompt: 'consent',
+                },
+            },
+        });
+        console.log(data, error);
+
+    }
+
     const handleSignUp = async () => {
         const res = await supabase.auth.signUp({
             email,
@@ -151,6 +165,7 @@ const SignUp = () => {
                     </Typography>
 
                     <GoogleIcon
+                        onClick={handleSignInWithGoogle}
                         sx={{
                             mb: 2,
                             border: '1px solid gray',

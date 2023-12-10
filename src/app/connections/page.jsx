@@ -4,6 +4,7 @@ import { Box, Typography, Button, Card, CardContent, CardActions } from '@mui/ma
 import { ConnectionCard } from '@/components/ConnectionCard';
 import { Footer } from '@/components/Footer';
 import { useTheme } from '@emotion/react';
+import { ConnectedCard } from '@/components/ConnectedCard';
 
 const Connections = () => {
     const theme = useTheme();
@@ -67,6 +68,12 @@ const Connections = () => {
                         description="Connect your notion pages"
                         button="Connect"
                         image="/images/notion-icon.svg"
+                    />
+                    <ConnectedCard
+                        title="Google Calendar"
+                        description="Connect your Google Calendar"
+                        button="Connect"
+                        image="/images/calendar-icon.svg"
                     />
                     <ConnectionCard
                         title="Google Calendar"
