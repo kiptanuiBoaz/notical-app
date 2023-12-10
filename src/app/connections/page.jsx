@@ -1,16 +1,19 @@
+"use client"
 import React from 'react';
 import { Box, Typography, Button, Card, CardContent, CardActions } from '@mui/material';
 import { ConnectionCard } from '@/components/ConnectionCard';
 import { Footer } from '@/components/Footer';
+import { useTheme } from '@emotion/react';
 
 const Connections = () => {
+    const theme = useTheme();
     return (
 
         <Box
             sx={{
                 marginTop: '90px',
                 height: '100vh',
-                // width: '100vw',
+                backgroundColor: theme.palette.background.paper,
                 display: 'flex',
                 alignItems: 'start',
                 justifyContent: 'center',
@@ -22,6 +25,7 @@ const Connections = () => {
                     border: '1px solid gray',
                     borderRadius: '10px',
                     padding: '2rem',
+                    backgroundColor: theme.palette.background.default,
                 }}
             >
 
@@ -45,7 +49,7 @@ const Connections = () => {
                     </Box>
 
                     <Box sx={{ flex: '0 0 auto', marginTop: ['1rem', '0'] }}>
-                        <Button variant="contained" color="primary">
+                        <Button variant="contained" sx={{ backgroundColor: "#14AE97", color: "#fff" }}>
                             Start Sync
                         </Button>
                     </Box>

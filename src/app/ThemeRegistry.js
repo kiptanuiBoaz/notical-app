@@ -9,6 +9,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { getDesignTokens } from '../../src/theme.js';
 import { useSelector } from "react-redux";
 import { selectTheme } from "@/redux/features/themeSlice.js";
+import { Navbar } from "@/components/Navbar.jsx";
 
 
 export default function ThemeRegistry({ children }) {
@@ -16,11 +17,12 @@ export default function ThemeRegistry({ children }) {
     const colorMode = useSelector(selectTheme);
 
     //create theme
-    const selectedTheme = createTheme(getDesignTokens(colorMode));
 
+    const selectedTheme = useMemo(() => createTheme(getDesignTokens("dark")), [colorMode]);
     return (
         <ThemeProvider theme={selectedTheme} >
             <CssBaseline />
+            <Navbar />
             {children}
         </ThemeProvider>
     );

@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 import { selectTheme } from '@/redux/features/themeSlice';
 
 
+
 export const Navbar = () => {
     const pathname = usePathname();
     const selectedTheme = useSelector(selectTheme);
@@ -25,8 +26,12 @@ export const Navbar = () => {
                     </Link>
 
                     <Typography variant="h4" sx={{ flexGrow: 1, textAlign: 'center', mr: "50px" }}>
-                        <Button color="inherit" href="/connections" sx={{ fontSize: "21px", mr: "20px" }}>Connections</Button>
-                        <Button color="inherit" href="/subscriptions" sx={{ fontSize: "21px" }}>Subscriptions</Button>
+                        <Button color="inherit" href="/connections" sx={{ fontSize: "21px", mr: "20px", color: `${pathname === "/connections" && "#0276AA"}` }}>
+                            Connections
+                        </Button>
+                        <Button color="inherit" href="/subscriptions" sx={{ fontSize: "21px", color: `${pathname === "/subscriptions" && "#0276AA"}` }}>
+                            Subscriptions
+                        </Button>
                     </Typography>
                     <Link href="/account" sx={{ TextDecoderation: "none" }}>
                         <Avatar href="/account" src="/user.png" alt="user" sx={{ ml: 2, height: "50px", width: "50px" }} />

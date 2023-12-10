@@ -9,29 +9,31 @@ import { TOGGLE_THEME, selectTheme } from '@/redux/features/themeSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
 const Account = () => {
-    const [mode, setMode] = useState('dark');
+    // const [mode, setMode] = useState('dark');
     const dispatch = useDispatch();
     const theme = useTheme()
+    const mode = useSelector(selectTheme)
 
 
     const handleModeChange = ({ target }) => {
-        //update local state
-        setMode(target.checked ? 'dark' : 'light');
         // update redux 
         dispatch(TOGGLE_THEME({ theme: target.checked ? 'dark' : 'light' }))
 
     };
 
+
+
     return (
         <Box
             sx={{
                 width: '100%',
-                // height: '100vh',
+                height: '100vh',
                 cursor: 'pointer',
-                marginTop: "90px",
+                paddingTop: "80px",
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
+                color: theme.palette.secondary.main,
                 backgroundColor: theme.palette.background.default,
             }}
         >
@@ -52,7 +54,7 @@ const Account = () => {
             >
                 <Grid container spacing={2} >
                     <Grid item xs={12} >
-                        <Grid container alignItems="center" justifyContent="space-between" sx={{ padding: 4, fontSize: '25px' }}>
+                        <Grid container alignItems="center" justifyContent="space-between" sx={{ padding: 4, fontSize: '22px' }}>
                             <Grid item>
                                 <Typography variant="h4" component="h1">
                                     Your Account
@@ -79,7 +81,7 @@ const Account = () => {
                                         </Typography>
                                     </Grid>
                                     <Grid item>
-                                        <Typography variant="body1" component="p">
+                                        <Typography variant="body1" sx={{ fontSize: "19px", color: "#0276AA" }} component="p">
                                             emailaddress@example.com
                                         </Typography>
                                     </Grid>
@@ -119,7 +121,6 @@ const Account = () => {
                             <Grid item>
                                 <Switch
                                     sx={{ color: '#57636C' }}
-
                                     checked={mode === 'dark'}
                                     onChange={handleModeChange}
                                     aria-label="theme mode"
@@ -128,7 +129,7 @@ const Account = () => {
                             </Grid>
                             <Grid item>
                                 <Typography variant="h6" component="h4">
-                                    Theme
+                                    Dark Mode
                                 </Typography>
                             </Grid>
 

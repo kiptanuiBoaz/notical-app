@@ -5,10 +5,10 @@ const colors = {
         primaryBackgroundColor: "#121926",
         accentBackgroundColor: "#0D121D",
         primaryColor: "#FFFFFF",
-        secondaryColor: "#8E9AA5",
+        secondaryColor: "#FFFFFF",
     },
     light: {
-        primaryBackgroundColor: "#121926",
+        primaryBackgroundColor: "#F1F4F8",
         accentBackgroundColor: "#FFFFFF",
         primaryColor: "#0D121D",
         secondaryColor: "#57636C",
