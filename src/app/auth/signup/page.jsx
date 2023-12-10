@@ -1,10 +1,14 @@
 "use client"
 import React, { useRef, useState } from 'react';
-import { InputAdornment, IconButton, Box, Typography, TextField, Button, Icon, Link, FormHelperText } from '@mui/material';
+import { InputAdornment, IconButton, Box, Typography, TextField, Button, Icon, Link, FormHelperText, useTheme } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import GoogleIcon from '@mui/icons-material/Google';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+import { useSelector } from 'react-redux';
+import { selectTheme } from '@/redux/features/themeSlice';
+
 
 const SignUp = () => {
     // Initialize the state of the password visibility and the password value
@@ -17,8 +21,10 @@ const SignUp = () => {
 
     const router = useRouter();
     const formRef = useRef(null);
-    const supabase = createClientComponentClient()
-
+    const theme = useTheme();
+    const selectedTheme = useSelector(selectTheme);
+    const supabase = createClientComponentClient();
+    console.log(selectedTheme)
     // Define a function to handle the icon click and toggle the password visibility
     const handleClickShowPassword = () => {
         setShowPassword(!showPassword);
@@ -64,7 +70,9 @@ const SignUp = () => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                marginTop: '30px'
+                marginTop: '30px',
+                color: theme.palette.primary.main,
+                backgroundColor: theme.palette.background.default,
             }}
         >
             <Box
@@ -78,10 +86,7 @@ const SignUp = () => {
             >
                 <Box sx={{ marginBottom: '2rem', justifyContent: "center" }}>
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <Icon sx={{ mr: 2 }}>star</Icon>
-                        <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
-                            notical
-                        </Typography>
+                        <Image src={selectedTheme !== "dark" ? "/logo-dark.svg" : "/logo-light.svg"} alt="notycal-logo" sx={{ mr: 2, px: 2 }} height={60} width={160} />
                     </Box>
                     <Typography variant="h5" sx={{ fontWeight: 'bold', mt: 2 }}>
                         Get Started

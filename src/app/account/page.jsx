@@ -7,20 +7,30 @@ import LoopIcon from '@mui/icons-material/Loop';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { TOGGLE_THEME, selectTheme } from '@/redux/features/themeSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { useRouter } from 'next/navigation';
 
 const Account = () => {
     // const [mode, setMode] = useState('dark');
     const dispatch = useDispatch();
     const theme = useTheme()
-    const mode = useSelector(selectTheme)
-
+    const mode = useSelector(selectTheme);
+    const supabase = createClientComponentClient();
+    const router = useRouter();
 
     const handleModeChange = ({ target }) => {
         // update redux 
         dispatch(TOGGLE_THEME({ theme: target.checked ? 'dark' : 'light' }))
-
     };
 
+    const handleSignOut = async () => {
+        const res = await supabase.auth.signOut();
+        console.log(res);
+        if (!res.error) {
+            router.push("/auth/login")
+        }
+
+    }
 
 
     return (
@@ -142,7 +152,7 @@ const Account = () => {
                                 <LogoutIcon fontSize="large" />
                             </Grid>
                             <Grid item>
-                                <Typography variant="h6" component="h3">
+                                <Typography variant="h6" component="h3" onClick={handleSignOut} sx={{ "&:hover": { color: "red" } }}>
                                     Logout
                                 </Typography>
                             </Grid>

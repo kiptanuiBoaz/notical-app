@@ -1,5 +1,5 @@
 import './globals.css'
-import ThemeRegistry from './ThemeRegistry';
+import ThemeRegistry from './ThemeRegistry.jsx';
 import { Navbar } from '@/components/Navbar';
 import ReduxProvider from '@/redux/Reduxprovider';
 

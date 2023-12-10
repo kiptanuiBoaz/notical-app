@@ -6,6 +6,10 @@ import { SetMeal, Visibility, VisibilityOff } from '@mui/icons-material';
 import GoogleIcon from '@mui/icons-material/Google';
 import { useRouter } from 'next/navigation';
 import FormHelperText from '@mui/material/FormHelperText';
+import Image from 'next/image';
+import { useSelector } from 'react-redux';
+import { selectTheme } from '@/redux/features/themeSlice';
+import { useTheme } from '@emotion/react';
 
 const Login = () => {
     // Initialize the state of the password visibility and the password value
@@ -19,7 +23,10 @@ const Login = () => {
 
     const router = useRouter();
     const formRef = useRef(null);
+    const selectedTheme = useSelector(selectTheme);
     const supabase = createClientComponentClient()
+    const theme = useTheme();
+    console.log(selectedTheme)
 
     // Define a function to handle the icon click and toggle the password visibility
     const handleClickShowPassword = () => {
@@ -62,7 +69,9 @@ const Login = () => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                marginTop: '30px'
+                marginTop: '30px',
+                color: theme.palette.primary.main,
+                backgroundColor: theme.palette.background.default,
             }}
         >
             <Box
@@ -77,10 +86,7 @@ const Login = () => {
                 <Box sx={{ marginBottom: '2rem', justifyContent: "center" }} error={error}>
 
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <Icon sx={{ mr: 2 }}>star</Icon>
-                        <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
-                            notical
-                        </Typography>
+                        <Image src={selectedTheme === "dark" ? "/logo-dark.svg" : "/logo-light.svg"} alt="notycal-logo" sx={{ mr: 2, px: 2 }} height={60} width={160} />
                     </Box>
                     <Typography variant="h5" sx={{ fontWeight: 'bold', mt: 2 }}>
                         Welcome back
