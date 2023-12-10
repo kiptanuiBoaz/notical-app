@@ -35,8 +35,9 @@ export const getDesignTokens = (mode) => ({
         }),
     },
 });
+console.log(JSON.parse(localStorage.getItem("theme")).theme)
 
-const theme = createTheme(getDesignTokens("dark"));
+const theme = createTheme(JSON.parse(localStorage.getItem("theme")).theme);
 const responsiveTheme = responsiveFontSizes(theme);
 
 export default responsiveTheme;

@@ -18,7 +18,7 @@ export default function ThemeRegistry({ children }) {
 
     //create theme
 
-    const selectedTheme = useMemo(() => createTheme(getDesignTokens("dark")), [colorMode]);
+    const selectedTheme = useMemo(() => createTheme(getDesignTokens(colorMode)), [colorMode]);
     return (
         <ThemeProvider theme={selectedTheme} >
             <CssBaseline />
