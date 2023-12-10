@@ -1,19 +1,21 @@
 "use client"
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, Typography, Button, Card, CardContent, CardActions } from '@mui/material';
 import { ConnectionCard } from '@/components/ConnectionCard';
 import { Footer } from '@/components/Footer';
 import { useTheme } from '@emotion/react';
-import { ConnectedCard } from '@/components/ConnectedCard';
+import { ConnectCalendar } from '@/components/ConnectCalendar';
+import { ConnectNotion } from '@/components/ConnectNotion';
 
 const Connections = () => {
+    const [connecting, setConnecting] = useState(false);
     const theme = useTheme();
     return (
 
         <Box
             sx={{
-                marginTop: '90px',
-                height: '100vh',
+                paddingTop: '90px',
+                // height: '100vh',
                 backgroundColor: theme.palette.background.paper,
                 display: 'flex',
                 alignItems: 'start',
@@ -50,11 +52,11 @@ const Connections = () => {
                     </Box>
 
                     <Box sx={{ flex: '0 0 auto', marginTop: ['1rem', '0'] }}>
-                        <Button variant="contained" sx={{ backgroundColor: "#14AE97", color: "#fff" }}>
+                        <Button onClick={() => setConnecting(!connecting)} variant="contained" sx={{ backgroundColor: "#14AE97", color: "#fff" }}>
                             Start Sync
                         </Button>
                     </Box>
-                    <hr />
+
                 </Box>
                 <Box
                     sx={{
@@ -63,27 +65,44 @@ const Connections = () => {
                         gap: '1rem',
                     }}
                 >
-                    <ConnectionCard
-                        title="Notion"
-                        description="Connect your notion pages"
-                        button="Connect"
-                        image="/images/notion-icon.svg"
-                    />
-                    <ConnectedCard
-                        title="Google Calendar"
-                        description="Connect your Google Calendar"
-                        button="Connect"
-                        image="/images/calendar-icon.svg"
-                    />
-                    <ConnectionCard
-                        title="Google Calendar"
-                        description="Connect your Google Calendar"
-                        button="Connect"
-                        image="/images/calendar-icon.svg"
-                    />
+                    {connecting ? <>
+                        <ConnectionCard
+                            title="Notion"
+                            description="Connect your notion pages"
+                            button="Connect"
+                            image="/images/notion-icon.svg"
+                        />
+                        <ConnectionCard
+                            title="Google Calendar"
+                            description="Connect your Google Calendar"
+                            button="Connect"
+                            image="/images/calendar-icon.svg"
+                        />
+
+                    </>
+                        : <>
+
+
+
+                            <ConnectNotion
+                                title="Notion"
+                                description="Connect your notion pages"
+                                button="Connect"
+                                image="/images/notion-icon.svg"
+                            />
+
+
+                            <ConnectCalendar
+                                title="Google Calendar"
+                                description="Connect your Google Calendar"
+                                button="Connect"
+                                image="/images/calendar-icon.svg"
+                            />
+                        </>
+                    }
                 </Box>
             </Box>
-            <Footer />
+            {/* <Footer /> */}
         </Box>
     );
 }

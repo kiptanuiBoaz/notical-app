@@ -1,8 +1,10 @@
+"use client"
 import React from 'react';
 import { Card, CardContent, CardActions, Typography, Button, Box, Icon, useTheme } from '@mui/material';
+import { FaCheck } from "react-icons/fa6";
 import Image from 'next/image';
 
-export const ConnectedCard = ({ title, description, button, image }) => {
+export const ConnectCalendar = ({ title, description, button, image }) => {
     const theme = useTheme();
     return (
         <Card sx={{ border: '1px solid gray', borderRadius: '10px', p: 2, backgroundColor: theme.palette.background.paper }}>
@@ -14,7 +16,7 @@ export const ConnectedCard = ({ title, description, button, image }) => {
                         <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
                             {title}
                         </Typography>
-                        <Typography variant="body2" sx={{ color: 'gray' }}>
+                        <Typography variant="body2" sx={{ color: 'gray', fontSize: "18px" }}>
                             {description}
                         </Typography>
                     </Box>
@@ -23,7 +25,8 @@ export const ConnectedCard = ({ title, description, button, image }) => {
             <hr />
             <CardActions sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Box sx={{ display: 'flex', gap: '10px' }}>
-                    <Button variant="contained" sx={{ color: "#fff", backgroundColor: "#14AE97" }}>
+                    <Button variant="contained" sx={{ color: "#fff", backgroundColor: "#14AE97", display: "flex", alignItems: "center" }}>
+                        <FaCheck />
                         Connected
                     </Button>
                     <Button variant="contained" sx={{ color: "#fff", backgroundColor: "#1681B1" }}>

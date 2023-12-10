@@ -19,7 +19,7 @@ export const ConnectionCard = ({ title, description, button, image }) => {
                         <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
                             {title}
                         </Typography>
-                        <Typography variant="body2" sx={{ color: 'gray' }}>
+                        <Typography variant="body2" sx={{ color: 'gray', fontSize: "18px" }}>
                             {description}
                         </Typography>
                     </Box>
