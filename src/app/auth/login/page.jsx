@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { InputAdornment, IconButton, Box, Typography, TextField, Button, Icon, Link } from '@mui/material';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { SetMeal, Visibility, VisibilityOff } from '@mui/icons-material';
 import GoogleIcon from '@mui/icons-material/Google';
 import { useRouter } from 'next/navigation';
 
@@ -10,8 +10,12 @@ const Login = () => {
     // Initialize the state of the password visibility and the password value
     const [showPassword, setShowPassword] = useState(false);
     const [password, setPassword] = useState('');
+    const [email, setEmail] = useState();
+
+    console.log(email, password)
 
     const router = useRouter();
+    const supabase = createClientComponentClient()
 
     // Define a function to handle the icon click and toggle the password visibility
     const handleClickShowPassword = () => {
@@ -23,11 +27,16 @@ const Login = () => {
         setPassword(event.target.value);
     };
 
+    const handleEmailChange = (event) => {
+        setEmail(event.target.value);
+    }
+
     const handleSignIn = async () => {
-        await supabase.auth.signInWithPassword({
+        const res = await supabase.auth.signInWithPassword({
             email,
             password,
-        })
+        });
+        console.log(res);
         router.refresh()
     }
 
@@ -67,6 +76,7 @@ const Login = () => {
                 </Box>
                 <Box sx={{ marginBottom: '2rem' }}>
                     <TextField
+                        onChange={handleEmailChange}
                         label="Email Address"
                         type="email"
                         fullWidth
@@ -90,7 +100,7 @@ const Login = () => {
                         }}
                     />
                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <Button variant="contained" color="primary" onClick={() => router.push("/connections")}>
+                        <Button variant="contained" color="primary" onClick={() => handleSignIn()}>
                             Sign In
                         </Button>
                         <Link href="#" color="secondary">

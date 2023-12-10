@@ -10,9 +10,11 @@ const SignUp = () => {
     // Initialize the state of the password visibility and the password value
     const [showPassword, setShowPassword] = useState(false);
     const [password, setPassword] = useState('');
+    const [email, setEmail] = useState();
     const [confirmPassword, setConfirmPassword] = useState('');
 
     const router = useRouter();
+    const supabase = createClientComponentClient()
 
     // Define a function to handle the icon click and toggle the password visibility
     const handleClickShowPassword = () => {
@@ -26,15 +28,19 @@ const SignUp = () => {
     const handleConfirmPassword = (event) => {
         setConfirmPassword(event.target.value);
     };
+    const handleEmailChange = (event) => {
+        setEmail(event.target.value);
+    }
 
     const handleSignUp = async () => {
-        await supabase.auth.signUp({
+        const res = await supabase.auth.signUp({
             email,
             password,
             options: {
                 emailRedirectTo: `${location.origin}/auth/callback`,
             },
         })
+        console.log(res)
         router.refresh()
     }
     return (
@@ -77,6 +83,7 @@ const SignUp = () => {
                         type="email"
                         fullWidth
                         sx={{ mb: 2 }}
+                        onChange={handleEmailChange}
                     />
                     <TextField
                         label="Password"
@@ -113,7 +120,7 @@ const SignUp = () => {
                         }}
                     />
                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <Button variant="contained" color="primary" onClick={() => router.push("/connections")}>
+                        <Button variant="contained" color="primary" onClick={() => handleSignUp()}>
                             Sign Up
                         </Button>
 

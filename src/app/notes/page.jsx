@@ -6,7 +6,7 @@ export default function Page() {
     const [notes, setNotes] = useState()
     const supabase = createClientComponentClient()
 
-    console.log(notes)
+    // console.log(notes)
 
     useEffect(() => {
         const getData = async () => {
