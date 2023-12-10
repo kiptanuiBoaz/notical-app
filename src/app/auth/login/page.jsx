@@ -1,20 +1,24 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { InputAdornment, IconButton, Box, Typography, TextField, Button, Icon, Link } from '@mui/material';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { SetMeal, Visibility, VisibilityOff } from '@mui/icons-material';
 import GoogleIcon from '@mui/icons-material/Google';
 import { useRouter } from 'next/navigation';
+import FormHelperText from '@mui/material/FormHelperText';
 
 const Login = () => {
     // Initialize the state of the password visibility and the password value
     const [showPassword, setShowPassword] = useState(false);
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState();
+    const [error, setError] = useState(false);
+    const [helperText, setHelperText] = useState('Use the form below to access your account');
 
     console.log(email, password)
 
     const router = useRouter();
+    const formRef = useRef(null);
     const supabase = createClientComponentClient()
 
     // Define a function to handle the icon click and toggle the password visibility
@@ -36,8 +40,18 @@ const Login = () => {
             email,
             password,
         });
-        console.log(res);
-        router.refresh()
+        // console.log(res.error.message)
+
+        if (!res.error) {
+            setError(false)
+            setHelperText("Successfully signed in")
+            router.push("/")
+        } else {
+            setHelperText(res.error.message)
+            setError(true)
+        }
+        formRef.current.reset()
+
     }
 
     return (
@@ -60,7 +74,8 @@ const Login = () => {
 
                 }}
             >
-                <Box sx={{ marginBottom: '2rem', justifyContent: "center" }}>
+                <Box sx={{ marginBottom: '2rem', justifyContent: "center" }} error={error}>
+
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <Icon sx={{ mr: 2 }}>star</Icon>
                         <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
@@ -70,44 +85,49 @@ const Login = () => {
                     <Typography variant="h5" sx={{ fontWeight: 'bold', mt: 2 }}>
                         Welcome back
                     </Typography>
-                    <Typography variant="body1" sx={{ color: 'gray', mt: 1 }}>
+                    {/* <Typography  variant="body1" sx={{ color: 'gray', mt: 1 }}>
                         Use the form below to access your account
-                    </Typography>
+                    </Typography> */}
+                    <FormHelperText sx={{ color: error ? "red" : "green" }}>{helperText}</FormHelperText>
                 </Box>
-                <Box sx={{ marginBottom: '2rem' }}>
-                    <TextField
-                        onChange={handleEmailChange}
-                        label="Email Address"
-                        type="email"
-                        fullWidth
-                        sx={{ mb: 2 }}
-                    />
-                    <TextField
-                        label="Password"
-                        type={showPassword ? 'text' : 'password'}
-                        value={password}
-                        onChange={handleChangePassword}
-                        fullWidth
-                        sx={{ mb: 2 }}
-                        InputProps={{
-                            endAdornment: (
-                                <InputAdornment position="end">
-                                    <IconButton onClick={handleClickShowPassword}>
-                                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                                    </IconButton>
-                                </InputAdornment>
-                            ),
-                        }}
-                    />
-                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <Button variant="contained" color="primary" onClick={() => handleSignIn()}>
-                            Sign In
-                        </Button>
-                        <Link href="#" color="secondary">
-                            Forgot password?
-                        </Link>
+                <form ref={formRef}>
+
+
+                    <Box sx={{ marginBottom: '2rem' }}>
+                        <TextField
+                            onChange={handleEmailChange}
+                            label="Email Address"
+                            type="email"
+                            fullWidth
+                            sx={{ mb: 2 }}
+                        />
+                        <TextField
+                            label="Password"
+                            type={showPassword ? 'text' : 'password'}
+                            value={password}
+                            onChange={handleChangePassword}
+                            fullWidth
+                            sx={{ mb: 2 }}
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton onClick={handleClickShowPassword}>
+                                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                ),
+                            }}
+                        />
+                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                            <Button variant="contained" color="primary" onClick={() => handleSignIn()}>
+                                Sign In
+                            </Button>
+                            <Link href="#" color="secondary">
+                                Forgot password?
+                            </Link>
+                        </Box>
                     </Box>
-                </Box>
+                </form>
                 <Box sx={{ textAlign: 'center' }}>
                     <Typography variant="body2" sx={{ color: 'gray', mb: 2 }}>
                         Or sign in with

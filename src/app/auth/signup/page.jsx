@@ -1,6 +1,6 @@
 "use client"
-import React, { useState } from 'react';
-import { InputAdornment, IconButton, Box, Typography, TextField, Button, Icon, Link } from '@mui/material';
+import React, { useRef, useState } from 'react';
+import { InputAdornment, IconButton, Box, Typography, TextField, Button, Icon, Link, FormHelperText } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import GoogleIcon from '@mui/icons-material/Google';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
@@ -12,8 +12,11 @@ const SignUp = () => {
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState();
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [error, setError] = useState(false);
+    const [helperText, setHelperText] = useState('Create an acount by using the form below');
 
     const router = useRouter();
+    const formRef = useRef(null);
     const supabase = createClientComponentClient()
 
     // Define a function to handle the icon click and toggle the password visibility
@@ -41,7 +44,17 @@ const SignUp = () => {
             },
         })
         console.log(res)
-        router.refresh()
+        if (!res.error) {
+            setError(false)
+            setHelperText("Sign up successfull, check your mail for a confirmation link")
+
+
+        } else {
+            setError(true)
+            setHelperText(res.error.message)
+        }
+        formRef.current.reset()
+
     }
     return (
         <Box
@@ -73,59 +86,60 @@ const SignUp = () => {
                     <Typography variant="h5" sx={{ fontWeight: 'bold', mt: 2 }}>
                         Get Started
                     </Typography>
-                    <Typography variant="body1" sx={{ color: 'gray', mt: 1 }}>
-                        Create an acount by using the form below
-                    </Typography>
+                    <FormHelperText variant="body1" sx={{ color: error ? "red" : "green", mt: 1 }}>{helperText}</FormHelperText>
                 </Box>
-                <Box sx={{ marginBottom: '2rem' }}>
-                    <TextField
-                        label="Email Address"
-                        type="email"
-                        fullWidth
-                        sx={{ mb: 2 }}
-                        onChange={handleEmailChange}
-                    />
-                    <TextField
-                        label="Password"
-                        type={showPassword ? 'text' : 'password'}
-                        value={password}
-                        onChange={handleChangePassword}
-                        fullWidth
-                        sx={{ mb: 2 }}
-                        InputProps={{
-                            endAdornment: (
-                                <InputAdornment position="end">
-                                    <IconButton onClick={handleClickShowPassword}>
-                                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                                    </IconButton>
-                                </InputAdornment>
-                            ),
-                        }}
-                    />
-                    <TextField
-                        label="Confirm Password"
-                        type={showPassword ? 'text' : 'password'}
-                        value={confirmPassword}
-                        onChange={handleConfirmPassword}
-                        fullWidth
-                        sx={{ mb: 2 }}
-                        InputProps={{
-                            endAdornment: (
-                                <InputAdornment position="end">
-                                    <IconButton onClick={handleClickShowPassword}>
-                                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                                    </IconButton>
-                                </InputAdornment>
-                            ),
-                        }}
-                    />
-                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <Button variant="contained" color="primary" onClick={() => handleSignUp()}>
-                            Sign Up
-                        </Button>
+                <form ref={formRef}>
 
+                    <Box sx={{ marginBottom: '2rem' }}>
+                        <TextField
+                            label="Email Address"
+                            type="email"
+                            fullWidth
+                            sx={{ mb: 2 }}
+                            onChange={handleEmailChange}
+                        />
+                        <TextField
+                            label="Password"
+                            type={showPassword ? 'text' : 'password'}
+                            value={password}
+                            onChange={handleChangePassword}
+                            fullWidth
+                            sx={{ mb: 2 }}
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton onClick={handleClickShowPassword}>
+                                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                ),
+                            }}
+                        />
+                        <TextField
+                            label="Confirm Password"
+                            type={showPassword ? 'text' : 'password'}
+                            value={confirmPassword}
+                            onChange={handleConfirmPassword}
+                            fullWidth
+                            sx={{ mb: 2 }}
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton onClick={handleClickShowPassword}>
+                                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                ),
+                            }}
+                        />
+                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                            <Button variant="contained" color="primary" onClick={() => handleSignUp()}>
+                                Sign Up
+                            </Button>
+
+                        </Box>
                     </Box>
-                </Box>
+                </form>
                 <Box sx={{ textAlign: 'center' }}>
                     <Typography variant="body2" sx={{ color: 'gray', mb: 2 }}>
                         Or sign in with
