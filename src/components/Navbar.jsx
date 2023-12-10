@@ -2,6 +2,7 @@
 import React from 'react';
 import { usePathname } from 'next/navigation';
 import { AppBar, Toolbar, Typography, Button, Avatar, useTheme } from '@mui/material';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import Image from 'next/image';
 import Link from 'next/link';
 import { SecurityRounded } from '@mui/icons-material';
@@ -15,6 +16,13 @@ export const Navbar = () => {
     const selectedTheme = useSelector(selectTheme);
     const theme = useTheme();
     // console.log(theme)
+
+    const handleSignOut = async () => {
+        await supabase.auth.signOut()
+        router.refresh()
+    }
+
+
     if (pathname.startsWith('/auth')) return <></>;
 
     return (

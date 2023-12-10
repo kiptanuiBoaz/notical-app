@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { InputAdornment, IconButton, Box, Typography, TextField, Button, Icon, Link } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import GoogleIcon from '@mui/icons-material/Google';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useRouter } from 'next/navigation';
 
 const SignUp = () => {
@@ -25,6 +26,17 @@ const SignUp = () => {
     const handleConfirmPassword = (event) => {
         setConfirmPassword(event.target.value);
     };
+
+    const handleSignUp = async () => {
+        await supabase.auth.signUp({
+            email,
+            password,
+            options: {
+                emailRedirectTo: `${location.origin}/auth/callback`,
+            },
+        })
+        router.refresh()
+    }
     return (
         <Box
             sx={{

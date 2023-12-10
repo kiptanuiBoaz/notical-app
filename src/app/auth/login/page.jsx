@@ -1,6 +1,7 @@
 "use client"
 import React, { useState } from 'react';
 import { InputAdornment, IconButton, Box, Typography, TextField, Button, Icon, Link } from '@mui/material';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import GoogleIcon from '@mui/icons-material/Google';
 import { useRouter } from 'next/navigation';
@@ -21,6 +22,14 @@ const Login = () => {
     const handleChangePassword = (event) => {
         setPassword(event.target.value);
     };
+
+    const handleSignIn = async () => {
+        await supabase.auth.signInWithPassword({
+            email,
+            password,
+        })
+        router.refresh()
+    }
 
     return (
         <Box
