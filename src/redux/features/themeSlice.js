@@ -4,7 +4,7 @@ import { createSlice } from '@reduxjs/toolkit';
 export const getDefaultTheme = () => {
     if (typeof window !== 'undefined') {
         // Check local storage for the "theme" variable
-        const storedTheme = localStorage.getItem('theme');
+        const storedTheme = JSON.parse(localStorage.getItem('theme')).theme;
         if (storedTheme) {
             return storedTheme;
         }
