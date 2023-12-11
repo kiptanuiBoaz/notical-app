@@ -1,4 +1,6 @@
 import { createTheme, responsiveFontSizes } from "@mui/material/styles";
+import { useSelector } from "react-redux";
+import { selectTheme } from "./redux/features/themeSlice";
 
 const colors = {
     dark: {
@@ -35,9 +37,12 @@ export const getDesignTokens = (mode) => ({
         }),
     },
 });
-console.log(JSON.parse(localStorage.getItem("theme")).theme)
 
-const theme = createTheme(JSON.parse(localStorage.getItem("theme")).theme);
+const theme = createTheme(() => {
+    const colorMode = useSelector(selectTheme());
+    return colorMode;
+});
+
 const responsiveTheme = responsiveFontSizes(theme);
 
 export default responsiveTheme;

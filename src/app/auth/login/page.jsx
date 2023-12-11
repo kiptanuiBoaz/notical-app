@@ -1,6 +1,6 @@
 "use client"
 import React, { useRef, useState } from 'react';
-import { InputAdornment, IconButton, Box, Typography, TextField, Button, Icon, Link } from '@mui/material';
+import { InputAdornment, IconButton, Box, Typography, TextField, Button, Icon } from '@mui/material';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { SetMeal, Visibility, VisibilityOff } from '@mui/icons-material';
 import GoogleIcon from '@mui/icons-material/Google';
@@ -10,6 +10,7 @@ import Image from 'next/image';
 import { useSelector } from 'react-redux';
 import { selectTheme } from '@/redux/features/themeSlice';
 import { useTheme } from '@emotion/react';
+import Link from 'next/link';
 
 const Login = () => {
     // Initialize the state of the password visibility and the password value
@@ -109,7 +110,7 @@ const Login = () => {
                     {/* <Typography  variant="body1" sx={{ color: 'gray', mt: 1 }}>
                         Use the form below to access your account
                     </Typography> */}
-                    <FormHelperText sx={{ color: error ? "red" : "green" }}>{helperText}</FormHelperText>
+                    <FormHelperText sx={{ color: error ? "red" : "green", fontSize: "17px" }}>{helperText}</FormHelperText>
                 </Box>
                 <form ref={formRef}>
 
@@ -143,7 +144,7 @@ const Login = () => {
                             <Button variant="contained" color="primary" onClick={() => handleSignIn()}>
                                 Sign In
                             </Button>
-                            <Link href="#" color="secondary">
+                            <Link href="#" color="secondary" style={{ color: theme.palette.primary.main }}>
                                 Forgot password?
                             </Link>
                         </Box>
@@ -172,7 +173,7 @@ const Login = () => {
 
                     <Typography variant="body2" sx={{ color: 'gray', mb: 2 }}>
                         Don&rsquo;t have an account? &nbsp;
-                        <Link href="/auth/signup" color="primary">
+                        <Link href="/auth/signup" color="primary" style={{ color: theme.palette.primary.main }}>
                             Create account instead
                         </Link>
                     </Typography>

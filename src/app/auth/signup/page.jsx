@@ -1,6 +1,6 @@
 "use client"
 import React, { useRef, useState } from 'react';
-import { InputAdornment, IconButton, Box, Typography, TextField, Button, Icon, Link, FormHelperText, useTheme } from '@mui/material';
+import { InputAdornment, IconButton, Box, Typography, TextField, Button, FormHelperText, useTheme } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import GoogleIcon from '@mui/icons-material/Google';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useSelector } from 'react-redux';
 import { selectTheme } from '@/redux/features/themeSlice';
+import Link from 'next/link';
 
 
 const SignUp = () => {
@@ -105,7 +106,7 @@ const SignUp = () => {
                     <Typography variant="h5" sx={{ fontWeight: 'bold', mt: 2 }}>
                         Get Started
                     </Typography>
-                    <FormHelperText variant="body1" sx={{ color: error ? "red" : "green", mt: 1 }}>{helperText}</FormHelperText>
+                    <FormHelperText variant="body1" sx={{ color: error ? "red" : "green", mt: 1, fontSize: "17px" }}>{helperText}</FormHelperText>
                 </Box>
                 <form ref={formRef}>
 
@@ -182,7 +183,7 @@ const SignUp = () => {
 
                     <Typography variant="body2" sx={{ color: 'gray', mb: 2 }}>
                         Already have an account? &nbsp;
-                        <Link href="/auth/login" color="primary">
+                        <Link href="/auth/login" color="primary" style={{ color: theme.palette.primary.main }}>
                             Sign in instead
                         </Link>
                     </Typography>
