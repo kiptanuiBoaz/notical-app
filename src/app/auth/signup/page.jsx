@@ -85,7 +85,7 @@ const SignUp = () => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                marginTop: '30px',
+                marginTop: '60px',
                 color: theme.palette.primary.main,
                 backgroundColor: theme.palette.background.default,
             }}
