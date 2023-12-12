@@ -80,12 +80,12 @@ const SignUp = () => {
     return (
         <Box
             sx={{
-                height: '80vh',
+                height: '100vh',
                 width: '100vw',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                marginTop: '60px',
+                paddingTop: '60px',
                 color: theme.palette.primary.main,
                 backgroundColor: theme.palette.background.default,
             }}

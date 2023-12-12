@@ -80,12 +80,12 @@ const Login = () => {
     return (
         <Box
             sx={{
-                height: '80vh',
+                height: '100vh',
                 width: '100vw',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                marginTop: '30px',
+                paddingTop: '30px',
                 color: theme.palette.primary.main,
                 backgroundColor: theme.palette.background.default,
             }}
