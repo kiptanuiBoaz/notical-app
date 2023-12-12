@@ -4,7 +4,7 @@ import { usePathname } from 'next/navigation';
 import { AppBar, Toolbar, Typography, Button, Avatar, useTheme } from '@mui/material';
 import Image from 'next/image';
 import { useSelector } from 'react-redux';
-import { selectTheme } from '@/redux/features/themeSlice';
+import { selectTheme } from '../redux/features/themeSlice';
 import Link from 'next/link';
 
 

@@ -1,6 +1,7 @@
+"use client"
 import { createSlice } from '@reduxjs/toolkit';
 
-const storedTheme = !window === undefined && JSON.parse(localStorage.getItem('theme'))?.theme;
+const storedTheme = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('theme'))?.theme : null;
 
 const initialState = {
     theme: storedTheme ? storedTheme : 'dark'
