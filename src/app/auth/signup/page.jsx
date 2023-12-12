@@ -25,7 +25,7 @@ const SignUp = () => {
     const theme = useTheme();
     const selectedTheme = useSelector(selectTheme);
     const supabase = createClientComponentClient();
-    console.log(selectedTheme)
+
     // Define a function to handle the icon click and toggle the password visibility
     const handleClickShowPassword = () => {
         setShowPassword(!showPassword);
@@ -101,7 +101,7 @@ const SignUp = () => {
             >
                 <Box sx={{ marginBottom: '2rem', justifyContent: "center" }}>
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <Image src={selectedTheme !== "dark" ? "/logo-dark.svg" : "/logo-light.svg"} alt="notycal-logo" sx={{ mr: 2, px: 2 }} height={60} width={160} />
+                        <Image src={selectedTheme === "dark" ? "/logo-dark.svg" : "/logo-light.svg"} alt="notycal-logo" sx={{ mr: 2, px: 2 }} height={60} width={160} />
                     </Box>
                     <Typography variant="h5" sx={{ fontWeight: 'bold', mt: 2 }}>
                         Get Started

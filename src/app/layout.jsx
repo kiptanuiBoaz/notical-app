@@ -15,12 +15,9 @@ export default function RootLayout(props) {
     <ReduxProvider>
       <html lang="en">
         <body>
-
           <ThemeRegistry >
             {children}
           </ThemeRegistry>
-
-
         </body>
       </html>
     </ReduxProvider>

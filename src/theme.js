@@ -1,3 +1,4 @@
+"use client"
 import { createTheme, responsiveFontSizes } from "@mui/material/styles";
 import { useSelector } from "react-redux";
 import { selectTheme } from "./redux/features/themeSlice";
@@ -39,7 +40,9 @@ export const getDesignTokens = (mode) => ({
 });
 
 const theme = createTheme(() => {
+
     const colorMode = useSelector(selectTheme());
+    console.log(colorMode);
     return colorMode;
 });
 

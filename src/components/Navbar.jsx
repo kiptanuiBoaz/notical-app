@@ -2,9 +2,7 @@
 import React from 'react';
 import { usePathname } from 'next/navigation';
 import { AppBar, Toolbar, Typography, Button, Avatar, useTheme } from '@mui/material';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import Image from 'next/image';
-import { SecurityRounded } from '@mui/icons-material';
 import { useSelector } from 'react-redux';
 import { selectTheme } from '@/redux/features/themeSlice';
 import Link from 'next/link';
@@ -44,7 +42,6 @@ export const Navbar = () => {
                             Subscriptions
                         </Link>
                     </Typography>
-
 
 
                     <Link href="/account" sx={{ TextDecoderation: "none" }}>

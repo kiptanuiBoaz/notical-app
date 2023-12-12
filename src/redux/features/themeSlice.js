@@ -1,24 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-// Determine the initial theme based on system preferences or local storage
-export const getDefaultTheme = () => {
-    if (typeof window !== 'undefined') {
-        // Check local storage for the "theme" variable
-        const storedTheme = JSON.parse(localStorage.getItem('theme')).theme;
-        if (storedTheme) {
-            return storedTheme;
-        }
-        else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            return 'dark';
-        } else {
-            return 'light';
-        }
-    }
-}
+const storedTheme = !window === undefined && JSON.parse(localStorage.getItem('theme'))?.theme;
 
-const prefersDarkTheme = getDefaultTheme();
 const initialState = {
-    theme: prefersDarkTheme ? 'dark' : 'light',
+    theme: storedTheme ? storedTheme : 'dark'
 };
 
 // Managing theme
