@@ -4,8 +4,9 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { getDesignTokens } from '../theme.js';
 import { useSelector } from "react-redux";
-import { Navbar } from "../components/Navbar.jsx";
+import dynamic from 'next/dynamic';
 import { selectTheme } from "../redux/features/themeSlice.js";
+const Navbar = dynamic(() => import('../components/Navbar.jsx'), { ssr: false })
 
 
 export default function ThemeRegistry({ children }) {

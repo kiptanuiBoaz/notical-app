@@ -15,30 +15,29 @@ export const Navbar = () => {
     const currentUser = useSelector(selectUser);
     const theme = useTheme();
     // console.log(theme)
-
+    console.log(pathname)
     const handleSignOut = async () => {
         await supabase.auth.signOut()
         router.refresh()
     }
-
 
     if (pathname.startsWith('/auth')) return <></>;
 
     return (
         <nav sx={{ flexGrow: 1 }}>
             <AppBar position="fixed" sx={{ bgcolor: theme.palette.background.paper }}>
-                <Toolbar sx={{ mx: 10, color: theme.palette.primary.main }} >
+                <Toolbar sx={{ mx: 10, color: theme.palette.primary.main, fontSize: "18px" }} >
                     <Link href="/connections">
                         <Image src={selectedTheme === "dark" ? "/logo-dark.svg" : "/logo-light.svg"} alt="notycal-logo" sx={{ mr: 2, px: 2 }} height={60} width={160} />
                     </Link>
 
                     <Typography variant="p" sx={{ flexGrow: 1, textAlign: 'end', mr: "50px", color: theme.palette.primary.main }}>
-                        <Link style={{ color: theme.palette.primary.main, textDecoration: "none" }} href="/connections"  >
+                        <Link style={{ color: pathname === "/connections" ? "#0275A9" : theme.palette.primary.main, textDecoration: "none" }} href="/connections"  >
                             Connections
                         </Link>
                     </Typography>
                     <Typography variant="p" sx={{ flexGrow: 1, textAlign: 'start', mr: "50px", color: theme.palette.primary.main }}>
-                        <Link style={{ color: theme.palette.primary.main, textDecoration: "none" }} href="/subscriptions"  >
+                        <Link style={{ color: pathname === "/subscriptions" ? "#0275A9" : theme.palette.primary.main, textDecoration: "none" }} href="/subscriptions"  >
                             Subscriptions
                         </Link>
                     </Typography>
@@ -52,3 +51,5 @@ export const Navbar = () => {
         </nav>
     );
 }
+
+export default Navbar

@@ -10,17 +10,53 @@ import { createStripeCustomer } from './libs/createStripeCustomer';
 import { useSelector } from 'react-redux';
 import { selectUser } from '@/redux/features/authSlice';
 import { getStripeCustomerId } from './libs/getStripeCustomerId';
+import { BsNutFill } from 'react-icons/bs';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 
 const Connections = () => {
-    const [connecting, setConnecting] = useState(false);
-    const { email, full_name } = useSelector(selectUser);
+    const [loading, setLoading] = useState(false);
+
+    const [customerId, setCustomerId] = useState(BsNutFill);
+    const supabase = createClientComponentClient()
+
     const theme = useTheme();
+    const { email, full_name, user_id } = useSelector(selectUser);
 
     const handleConnection = async () => {
         const customer = await createStripeCustomer(full_name, email);
-        console.log(customer.data.id)
         const fetchedCustomer = await getStripeCustomerId(customer.data.id)
-        console.log(fetchedCustomer);
+        setCustomerId(fetchedCustomer.data.id);
+        updateProfile();
+        console.log(await getUser(user_id))
+    }
+
+    async function updateProfile() {
+        try {
+            setLoading(true)
+
+            const res = await supabase.from('users').upsert({
+                user_id, email, is_active: false, customer_id: customerId,
+            })
+            if (res?.error) throw error
+
+        } catch (error) {
+            console.log(error.message)
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    const getUser = async (id) => {
+        try {
+            const { data, error } = await supabase
+                .from('users')
+                .select('*')
+                .eq('user_id', id)
+                .single()
+            return JSON.stringify(data)
+        } catch (error) {
+            console.error(error.message)
+        }
     }
 
 
@@ -84,7 +120,7 @@ const Connections = () => {
                         gap: '1rem',
                     }}
                 >
-                    {connecting ? <>
+                    {loading ? <>
                         <ConnectionCard
                             title="Notion"
                             description="Connect your notion pages"
