@@ -21,11 +21,6 @@ const Account = () => {
 
     const currentUser = useSelector(selectUser);
 
-    const handleModeChange = ({ target }) => {
-        // update redux 
-        dispatch(TOGGLE_THEME({ theme: target.checked ? 'dark' : 'light' }))
-    };
-
     const handleSignOut = async () => {
         const res = await supabase.auth.signOut();
         console.log(res);
@@ -136,7 +131,7 @@ const Account = () => {
                                 <Switch
                                     sx={{ color: '#57636C' }}
                                     checked={mode === 'dark'}
-                                    onChange={handleModeChange}
+                                    onChange={(e) => dispatch(TOGGLE_THEME({ theme: e.target.checked ? 'dark' : 'light' }))}
                                     aria-label="theme mode"
                                 />
 

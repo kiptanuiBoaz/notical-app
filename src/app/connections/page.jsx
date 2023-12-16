@@ -6,10 +6,21 @@ import { Footer } from '@/components/Footer';
 import { useTheme } from '@emotion/react';
 import { ConnectCalendar } from '@/components/ConnectCalendar';
 import { ConnectNotion } from '@/components/ConnectNotion';
+import { createStripeCustomer } from './libs/createStripeCustomer';
+import { useSelector } from 'react-redux';
+import { selectUser } from '@/redux/features/authSlice';
 
 const Connections = () => {
     const [connecting, setConnecting] = useState(false);
+    const { email, full_name } = useSelector(selectUser);
     const theme = useTheme();
+
+    const handleConnection = async () => {
+        const customerId = await createStripeCustomer(full_name, email)
+        console.log(customerId);
+    }
+
+
     return (
 
         <Box
@@ -52,7 +63,12 @@ const Connections = () => {
                     </Box>
 
                     <Box sx={{ flex: '0 0 auto', marginTop: ['1rem', '0'] }}>
-                        <Button onClick={() => setConnecting(!connecting)} variant="contained" sx={{ backgroundColor: "#14AE97", color: "#fff" }}>
+                        <Button
+                            // onClick={() => setConnecting(!connecting)} 
+                            onClick={() => handleConnection()}
+                            variant="contained"
+                            sx={{ backgroundColor: "#14AE97", color: "#fff" }}
+                        >
                             Start Sync
                         </Button>
                     </Box>
