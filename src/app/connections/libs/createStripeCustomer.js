@@ -10,7 +10,7 @@ export const createStripeCustomer = async (full_name, email) => {
         )
         // console.log(response)
         return response;
-    } catch (e) {
+    } catch (error) {
         console.error(error.message)
         return error.message;
     }

@@ -9,6 +9,7 @@ import { ConnectNotion } from '@/components/ConnectNotion';
 import { createStripeCustomer } from './libs/createStripeCustomer';
 import { useSelector } from 'react-redux';
 import { selectUser } from '@/redux/features/authSlice';
+import { getStripeCustomerId } from './libs/getStripeCustomerId';
 
 const Connections = () => {
     const [connecting, setConnecting] = useState(false);
@@ -16,8 +17,10 @@ const Connections = () => {
     const theme = useTheme();
 
     const handleConnection = async () => {
-        const customerId = await createStripeCustomer(full_name, email)
-        console.log(customerId);
+        const customer = await createStripeCustomer(full_name, email);
+        console.log(customer.data.id)
+        const fetchedCustomer = await getStripeCustomerId(customer.data.id)
+        console.log(fetchedCustomer);
     }
 
 
