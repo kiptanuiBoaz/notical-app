@@ -12,7 +12,7 @@ export default function LoadingComponent() {
         // Define a function to start the loading animation
 
         Loading.dots({
-            svgColor: '#4d7e3e',
+            svgColor: '#0276AA',
             backgroundColor: 'rgba(0,0,0,0.4)',
         });
 

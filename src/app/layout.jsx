@@ -1,3 +1,4 @@
+import { AuthProvider } from './AuthProvider';
 import './globals.css'
 import ThemeRegistry from './ThemeRegistry.jsx';
 import { Navbar } from '@/components/Navbar';
@@ -13,13 +14,16 @@ export default function RootLayout(props) {
   const { children } = props;
   return (
     <ReduxProvider>
-      <html lang="en">
-        <body>
-          <ThemeRegistry >
-            {children}
-          </ThemeRegistry>
-        </body>
-      </html>
+      <AuthProvider>
+        <html lang="en">
+          <body>
+            <ThemeRegistry >
+              {children}
+            </ThemeRegistry>
+          </body>
+        </html>
+      </AuthProvider>
+
     </ReduxProvider>
   );
 }

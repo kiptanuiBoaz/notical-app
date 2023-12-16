@@ -1,12 +1,12 @@
 "use client";
 import { configureStore } from "@reduxjs/toolkit";
 import themeSlice from "./features/themeSlice";
-
+import authReducer from './features/authSlice';
 
 export const store = configureStore({
     reducer: {
         theme: themeSlice,
-
+        auth: authReducer,
     },
     devTools: process.env.NODE_ENV !== "production",
 
@@ -19,6 +19,7 @@ export const store = configureStore({
 //persist state
 store.subscribe(() => {
     localStorage.setItem("theme", JSON.stringify(store.getState().theme));
+    localStorage.setItem("user", JSON.stringify(store.getState().auth));
 });
 
 

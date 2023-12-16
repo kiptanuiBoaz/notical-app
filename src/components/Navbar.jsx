@@ -6,13 +6,13 @@ import Image from 'next/image';
 import { useSelector } from 'react-redux';
 import { selectTheme } from '../redux/features/themeSlice';
 import Link from 'next/link';
-
-
+import { selectUser } from '@/redux/features/authSlice';
 
 
 export const Navbar = () => {
     const pathname = usePathname();
     const selectedTheme = useSelector(selectTheme);
+    const currentUser = useSelector(selectUser);
     const theme = useTheme();
     // console.log(theme)
 
@@ -45,7 +45,7 @@ export const Navbar = () => {
 
 
                     <Link href="/account" sx={{ TextDecoderation: "none" }}>
-                        <Avatar href="/account" src="/user.png" alt="user" sx={{ ml: 2, height: "50px", width: "50px", }} />
+                        <Avatar href="/account" src={currentUser.avatarUrl} alt="user" sx={{ ml: 2, height: "50px", width: "50px", }} />
                     </Link>
                 </Toolbar>
             </AppBar>

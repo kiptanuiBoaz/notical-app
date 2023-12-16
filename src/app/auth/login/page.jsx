@@ -7,10 +7,11 @@ import GoogleIcon from '@mui/icons-material/Google';
 import { useRouter } from 'next/navigation';
 import FormHelperText from '@mui/material/FormHelperText';
 import Image from 'next/image';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectTheme } from '@/redux/features/themeSlice';
 import { useTheme } from '@emotion/react';
 import Link from 'next/link';
+import { UPDATE_AUTH } from '@/redux/features/authSlice';
 
 const Login = () => {
     // Initialize the state of the password visibility and the password value
@@ -27,6 +28,7 @@ const Login = () => {
     const selectedTheme = useSelector(selectTheme);
     const supabase = createClientComponentClient()
     const theme = useTheme();
+    const dispatch = useDispatch()
     console.log(selectedTheme)
 
     // Define a function to handle the icon click and toggle the password visibility
@@ -63,11 +65,22 @@ const Login = () => {
             email,
             password,
         });
-        // console.log(res.error.message)
+        console.log(res)
 
         if (!res.error) {
             setError(false)
-            setHelperText("Successfully signed in")
+            setHelperText("Successfully signed in");
+            const data = res.data.user;
+            dispatch(UPDATE_AUTH({
+                user_id: data.id,
+                email: data.email,
+                full_name: data.user_metadata.full_name,
+                avatarUrl: data.user_metadata.avatar_url,
+                role: {
+                    name: data.role,
+                    id: data.aud
+                },
+            }))
             router.push("/")
         } else {
             setHelperText(res.error.message)
@@ -113,7 +126,6 @@ const Login = () => {
                     <FormHelperText sx={{ color: error ? "red" : "green", fontSize: "17px" }}>{helperText}</FormHelperText>
                 </Box>
                 <form ref={formRef}>
-
 
                     <Box sx={{ marginBottom: '2rem' }}>
                         <TextField

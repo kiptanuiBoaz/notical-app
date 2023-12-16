@@ -9,6 +9,7 @@ import { TOGGLE_THEME, selectTheme } from '@/redux/features/themeSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useRouter } from 'next/navigation';
+import { RESET_AUTH, selectUser } from '@/redux/features/authSlice';
 
 const Account = () => {
     // const [mode, setMode] = useState('dark');
@@ -17,6 +18,8 @@ const Account = () => {
     const mode = useSelector(selectTheme);
     const supabase = createClientComponentClient();
     const router = useRouter();
+
+    const currentUser = useSelector(selectUser);
 
     const handleModeChange = ({ target }) => {
         // update redux 
@@ -27,6 +30,7 @@ const Account = () => {
         const res = await supabase.auth.signOut();
         console.log(res);
         if (!res.error) {
+            dispatch(RESET_AUTH());
             router.push("/auth/login")
         }
 
@@ -81,18 +85,18 @@ const Account = () => {
                     <Grid item xs={12}>
                         <Grid container alignItems="center" spacing={2} sx={{ padding: 1 }}>
                             <Grid item>
-                                <Avatar href="/account" src="/user.png" alt="user" sx={{ ml: "10px", height: "50px", width: "50px" }} />
+                                <Avatar href="/account" src={currentUser.avatarUrl} alt="user" sx={{ ml: "10px", height: "50px", width: "50px" }} />
                             </Grid>
                             <Grid item>
                                 <Grid container direction="column" >
                                     <Grid item>
                                         <Typography variant="h6" component="h2">
-                                            Name
+                                            {currentUser.full_name}
                                         </Typography>
                                     </Grid>
                                     <Grid item>
                                         <Typography variant="body1" sx={{ fontSize: "19px", color: "#0276AA" }} component="p">
-                                            emailaddress@example.com
+                                            {currentUser.email}
                                         </Typography>
                                     </Grid>
                                 </Grid>
