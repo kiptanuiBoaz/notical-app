@@ -14,8 +14,7 @@ export const Navbar = () => {
     const selectedTheme = useSelector(selectTheme);
     const currentUser = useSelector(selectUser);
     const theme = useTheme();
-    // console.log(theme)
-    console.log(pathname)
+
     const handleSignOut = async () => {
         await supabase.auth.signOut()
         router.refresh()
