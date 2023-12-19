@@ -14,6 +14,7 @@ import { Loading } from 'notiflix';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { nodeApi } from '@/axios/nodeApi';
+import { createAuth } from '@supabase/supabase-js'
 
 
 const NOTION_CONNECTION_STRING = 'https://api.notion.com/v1/oauth/authorize?client_id=c762fab7-bc3f-4726-bf5f-08908b6ccd09&response_type=code&owner=user&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fconnections';
@@ -41,7 +42,8 @@ const Connections = ({ searchParams }) => {
 
             //fetch user from superbase
             const res = await getUser(user_id);
-            setCustomerId(res.customer_id);
+            console.log(res)
+            setCustomerId(res?.customer_id);
 
             // server request after notion consent
             if (code) {
@@ -59,7 +61,6 @@ const Connections = ({ searchParams }) => {
 
         handleConnections();
     }, []);
-
 
 
     const getUser = async (id) => {

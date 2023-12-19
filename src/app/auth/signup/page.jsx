@@ -22,7 +22,7 @@ const SignUp = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState(false);
     const [helperText, setHelperText] = useState('Create an acount by using the form below');
-    const { user } = useUser()
+    // const { user } = useUser()
 
     const router = useRouter();
     const formRef = useRef(null);
@@ -35,7 +35,7 @@ const SignUp = () => {
         setShowPassword(!showPassword);
     };
 
-    console.log(user)
+    // console.log(user)
     const handleConnection = async (signedUpUserEmail) => {
         const customer = await createStripeCustomer(signedUpUserEmail);
         updateProfile(customer.data.id);

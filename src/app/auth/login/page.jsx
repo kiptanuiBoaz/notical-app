@@ -12,6 +12,7 @@ import { selectTheme } from '@/redux/features/themeSlice';
 import { useTheme } from '@emotion/react';
 import Link from 'next/link';
 import { UPDATE_AUTH } from '@/redux/features/authSlice';
+import { TOGGLE_AUTH_METHOD } from '@/redux/features/authMethodSlice';
 
 const Login = () => {
     // Initialize the state of the password visibility and the password value
@@ -29,7 +30,6 @@ const Login = () => {
     const supabase = createClientComponentClient()
     const theme = useTheme();
     const dispatch = useDispatch()
-    console.log(selectedTheme)
 
     // Define a function to handle the icon click and toggle the password visibility
     const handleClickShowPassword = () => {
@@ -46,6 +46,7 @@ const Login = () => {
     }
 
     async function handleSignInWithGoogle() {
+        dispatch(TOGGLE_AUTH_METHOD({ authMethod: "google" }));
         const { data, error } = await supabase.auth.signInWithOAuth({
             provider: 'google',
             options: {
@@ -61,6 +62,7 @@ const Login = () => {
 
 
     const handleSignIn = async () => {
+        dispatch(TOGGLE_AUTH_METHOD({ authMethod: "email" }));
         const res = await supabase.auth.signInWithPassword({
             email,
             password,
@@ -81,7 +83,7 @@ const Login = () => {
                     id: data.aud
                 },
             }))
-            router.push("/")
+            router.push(`/?code=${data.id}`)
         } else {
             setHelperText(res.error.message)
             setError(true)
