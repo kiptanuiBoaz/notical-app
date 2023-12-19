@@ -1,67 +1,77 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Typography, Button, Card, CardContent, CardActions } from '@mui/material';
 import { ConnectionCard } from '@/components/ConnectionCard';
 import { Footer } from '@/components/Footer';
 import { useTheme } from '@emotion/react';
 import { ConnectCalendar } from '@/components/ConnectCalendar';
 import { ConnectNotion } from '@/components/ConnectNotion';
-import { createStripeCustomer } from './libs/createStripeCustomer';
+import { createStripeCustomer } from '../auth/createStripeCustomer';
 import { useSelector } from 'react-redux';
 import { selectUser } from '@/redux/features/authSlice';
-import { getStripeCustomerId } from './libs/getStripeCustomerId';
-import { BsNutFill } from 'react-icons/bs';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { Loading } from 'notiflix';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { nodeApi } from '@/axios/nodeApi';
 
-const Connections = () => {
+
+const NOTION_CONNECTION_STRING = 'https://api.notion.com/v1/oauth/authorize?client_id=c762fab7-bc3f-4726-bf5f-08908b6ccd09&response_type=code&owner=user&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fconnections';
+const NOTION_ACCESS_TOKEN_ENDPOING = "/notion/auth/access_token";
+
+
+const Connections = ({ searchParams }) => {
     const [loading, setLoading] = useState(false);
+    const [customerId, setCustomerId] = useState();
 
-    const [customerId, setCustomerId] = useState(BsNutFill);
-    const supabase = createClientComponentClient()
-
-    const theme = useTheme();
     const { email, full_name, user_id } = useSelector(selectUser);
+    const supabase = createClientComponentClient();
+    const theme = useTheme();
 
-    const handleConnection = async () => {
-        const customer = await createStripeCustomer(full_name, email);
-        const fetchedCustomer = await getStripeCustomerId(customer.data.id)
-        setCustomerId(fetchedCustomer.data.id);
-        updateProfile();
-        console.log(await getUser(user_id))
-    }
+    const { code } = searchParams;
+    console.log(user_id, "user_id")
+    console.log(code, "code")
 
-    async function updateProfile() {
-        try {
-            setLoading(true)
+    useEffect(() => {
+        const handleConnections = async () => {
+            Loading.dots({
+                svgColor: '#0276AA',
+                backgroundColor: 'rgba(0,0,0,0.4)',
+            });
 
-            const res = await supabase.from('users').upsert({
-                user_id, email, is_active: false, customer_id: customerId,
-            })
-            if (res?.error) throw error
+            //fetch user from superbase
+            const res = await getUser(user_id);
+            setCustomerId(res.customer_id);
 
-        } catch (error) {
-            console.log(error.message)
-        } finally {
-            setLoading(false)
-        }
-    }
+            // server request after notion consent
+            if (code) {
+                const notionAccessToken = await nodeApi.post(
+                    NOTION_ACCESS_TOKEN_ENDPOING,
+                    { "code": code, "user_id": user_id }
+
+                )
+
+                console.log(notionAccessToken)
+            }
+
+            Loading.remove();
+        };
+
+        handleConnections();
+    }, []);
+
+
 
     const getUser = async (id) => {
         try {
-            const { data, error } = await supabase
-                .from('users')
-                .select('*')
-                .eq('user_id', id)
-                .single()
-            return JSON.stringify(data)
+            const { data, error } = await supabase.from('users').select('*').eq('user_id', id).single();
+            return data;
         } catch (error) {
-            console.error(error.message)
+            console.error(error.message);
         }
-    }
-
+    };
 
     return (
-
         <Box
             sx={{
                 paddingTop: '90px',
@@ -103,12 +113,13 @@ const Connections = () => {
 
                     <Box sx={{ flex: '0 0 auto', marginTop: ['1rem', '0'] }}>
                         <Button
-                            // onClick={() => setConnecting(!connecting)} 
-                            onClick={() => handleConnection()}
                             variant="contained"
                             sx={{ backgroundColor: "#14AE97", color: "#fff" }}
                         >
-                            Start Sync
+                            <Link href={NOTION_CONNECTION_STRING}>
+                                Start Sync
+                            </Link>
+
                         </Button>
                     </Box>
 
@@ -160,6 +171,6 @@ const Connections = () => {
             {/* <Footer /> */}
         </Box>
     );
-}
+};
 
 export default Connections;
