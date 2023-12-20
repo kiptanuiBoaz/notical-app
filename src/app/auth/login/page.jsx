@@ -11,8 +11,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectTheme } from '@/redux/features/themeSlice';
 import { useTheme } from '@emotion/react';
 import Link from 'next/link';
-import { UPDATE_AUTH } from '@/redux/features/authSlice';
-import { TOGGLE_AUTH_METHOD } from '@/redux/features/authMethodSlice';
 
 const Login = () => {
     // Initialize the state of the password visibility and the password value
@@ -22,73 +20,49 @@ const Login = () => {
     const [error, setError] = useState(false);
     const [helperText, setHelperText] = useState('Use the form below to access your account');
 
-    console.log(email, password)
 
     const router = useRouter();
     const formRef = useRef(null);
     const selectedTheme = useSelector(selectTheme);
     const supabase = createClientComponentClient()
     const theme = useTheme();
-    const dispatch = useDispatch()
-
-    // Define a function to handle the icon click and toggle the password visibility
-    const handleClickShowPassword = () => {
-        setShowPassword(!showPassword);
-    };
-
-    // Define a function to handle the password input change and update the password value
-    const handleChangePassword = (event) => {
-        setPassword(event.target.value);
-    };
-
-    const handleEmailChange = (event) => {
-        setEmail(event.target.value);
-    }
 
     async function handleSignInWithGoogle() {
-        dispatch(TOGGLE_AUTH_METHOD({ authMethod: "google" }));
-        const { data, error } = await supabase.auth.signInWithOAuth({
-            provider: 'google',
-            options: {
-                queryParams: {
-                    access_type: 'offline',
-                    prompt: 'consent',
+        try {
+            const res = await supabase.auth.signInWithOAuth({
+                provider: 'google',
+                options: {
+                    queryParams: {
+                        access_type: 'offline',
+                        prompt: 'consent',
+                    },
                 },
-            },
-        });
-        console.log(data, error);
+            });
+
+        } catch (error) {
+            console.error(error.message)
+        }
 
     }
 
 
     const handleSignIn = async () => {
-        dispatch(TOGGLE_AUTH_METHOD({ authMethod: "email" }));
-        const res = await supabase.auth.signInWithPassword({
-            email,
-            password,
-        });
-        console.log(res)
+        try {
+            const res = await supabase.auth.signInWithPassword({
+                email,
+                password,
+            });
 
-        if (!res.error) {
             setError(false)
             setHelperText("Successfully signed in");
-            const data = res.data.user;
-            dispatch(UPDATE_AUTH({
-                user_id: data.id,
-                email: data.email,
-                full_name: data.user_metadata.full_name,
-                avatarUrl: data.user_metadata.avatar_url,
-                role: {
-                    name: data.role,
-                    id: data.aud
-                },
-            }))
-            router.push(`/?code=${data.id}`)
-        } else {
+            router.push(`/`)
+        } catch (error) {
+            console.error(error.message);
             setHelperText(res.error.message)
             setError(true)
+        } finally {
+            formRef.current.reset()
         }
-        formRef.current.reset()
 
     }
 
@@ -131,7 +105,7 @@ const Login = () => {
 
                     <Box sx={{ marginBottom: '2rem' }}>
                         <TextField
-                            onChange={handleEmailChange}
+                            onChange={(e) => setEmail(e.target.value)}
                             label="Email Address"
                             type="email"
                             fullWidth
@@ -141,13 +115,13 @@ const Login = () => {
                             label="Password"
                             type={showPassword ? 'text' : 'password'}
                             value={password}
-                            onChange={handleChangePassword}
+                            onChange={(e) => setPassword(e.target.value)}
                             fullWidth
                             sx={{ mb: 2 }}
                             InputProps={{
                                 endAdornment: (
                                     <InputAdornment position="end">
-                                        <IconButton onClick={handleClickShowPassword}>
+                                        <IconButton onClick={() => setShowPassword(!showPassword)}>
                                             {showPassword ? <VisibilityOff /> : <Visibility />}
                                         </IconButton>
                                     </InputAdornment>

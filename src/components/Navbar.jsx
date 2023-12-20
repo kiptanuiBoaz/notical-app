@@ -27,7 +27,7 @@ export const Navbar = () => {
             <AppBar position="fixed" sx={{ bgcolor: theme.palette.background.paper }}>
                 <Toolbar sx={{ mx: 10, color: theme.palette.primary.main, fontSize: "18px" }} >
                     <Link href="/connections">
-                        <Image src={selectedTheme === "dark" ? "/logo-dark.svg" : "/logo-light.svg"} alt="notycal-logo" sx={{ mr: 2, px: 2 }} height={60} width={160} />
+                        <Image priority={true} src={selectedTheme === "dark" ? "/logo-dark.svg" : "/logo-light.svg"} alt="notycal-logo" sx={{ mr: 2, px: 2 }} height={60} width={160} />
                     </Link>
 
                     <Typography variant="p" sx={{ flexGrow: 1, textAlign: 'end', mr: "50px", color: theme.palette.primary.main }}>

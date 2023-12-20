@@ -15,23 +15,18 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { nodeApi } from '@/axios/nodeApi';
 import { createAuth } from '@supabase/supabase-js'
+import { getUser } from './libs/getUser';
+import { getNotionAccessToken } from './libs/getNotionAccessToken';
 
 
 const NOTION_CONNECTION_STRING = 'https://api.notion.com/v1/oauth/authorize?client_id=c762fab7-bc3f-4726-bf5f-08908b6ccd09&response_type=code&owner=user&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fconnections';
-const NOTION_ACCESS_TOKEN_ENDPOING = "/notion/auth/access_token";
-
 
 const Connections = ({ searchParams }) => {
     const [loading, setLoading] = useState(false);
     const [customerId, setCustomerId] = useState();
 
-    const { email, full_name, user_id } = useSelector(selectUser);
-    const supabase = createClientComponentClient();
+    const { user_id } = useSelector(selectUser);
     const theme = useTheme();
-
-    const { code } = searchParams;
-    console.log(user_id, "user_id")
-    console.log(code, "code")
 
     useEffect(() => {
         const handleConnections = async () => {
@@ -42,35 +37,27 @@ const Connections = ({ searchParams }) => {
 
             //fetch user from superbase
             const res = await getUser(user_id);
-            console.log(res)
             setCustomerId(res?.customer_id);
-
-            // server request after notion consent
-            if (code) {
-                const notionAccessToken = await nodeApi.post(
-                    NOTION_ACCESS_TOKEN_ENDPOING,
-                    { "code": code, "user_id": user_id }
-
-                )
-
-                console.log(notionAccessToken)
-            }
-
             Loading.remove();
         };
 
         handleConnections();
     }, []);
 
+    console.log(searchParams.code)
 
-    const getUser = async (id) => {
-        try {
-            const { data, error } = await supabase.from('users').select('*').eq('user_id', id).single();
-            return data;
-        } catch (error) {
-            console.error(error.message);
+    // server request after notion consent
+    useEffect(() => {
+        const getNotionToken = async () => {
+            const notionAccessToken = await getNotionAccessToken(user_id, searchParams.code);
+            console.log(notionAccessToken, "notion access token")
         }
-    };
+        if (searchParams.code) getNotionToken();
+
+    }, [searchParams, user_id])
+
+
+
 
     return (
         <Box
