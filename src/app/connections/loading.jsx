@@ -17,9 +17,6 @@ export default function LoadingComponent() {
         });
 
 
-
-
-
         // Remove event listeners on component unmount
         return () => {
             Loading.remove();

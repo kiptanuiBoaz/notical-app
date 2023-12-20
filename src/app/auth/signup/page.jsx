@@ -30,10 +30,6 @@ const SignUp = () => {
     const selectedTheme = useSelector(selectTheme);
     const supabase = createClientComponentClient();
 
-    // Define a function to handle the icon click and toggle the password visibility
-    const handleClickShowPassword = () => {
-        setShowPassword(!showPassword);
-    };
 
     // console.log(user)
     const handleConnection = async (signedUpUserEmail) => {
@@ -156,7 +152,7 @@ const SignUp = () => {
                             InputProps={{
                                 endAdornment: (
                                     <InputAdornment position="end">
-                                        <IconButton onClick={handleClickShowPassword}>
+                                        <IconButton onClick={() => setShowPassword(!showPassword)}>
                                             {showPassword ? <VisibilityOff /> : <Visibility />}
                                         </IconButton>
                                     </InputAdornment>

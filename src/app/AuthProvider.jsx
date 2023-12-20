@@ -11,11 +11,11 @@ export const AuthProvider = ({ children }) => {
 
 
     // Use useEffect to call router.push after rendering
-    // useEffect(() => {
-    //     if (!currentUser.user_id) {
-    //         router.push("/auth/login")
-    //     }
-    // }, [currentUser, router]);
+    useEffect(() => {
+        if (!currentUser.user_id) {
+            router.push("/auth/login")
+        }
+    }, [currentUser, router]);
 
     return <>
         {children}

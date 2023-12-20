@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 
 const storedUser = typeof window !== 'undefined' ? localStorage.getItem("user") : null;
-console.log(storedUser);
+
 const initialState = storedUser ? JSON.parse(storedUser) : {
     user: {
         user_id: null,

@@ -27,6 +27,8 @@ const Login = () => {
     const supabase = createClientComponentClient()
     const theme = useTheme();
 
+
+    //oauth sign in
     async function handleSignInWithGoogle() {
         try {
             const res = await supabase.auth.signInWithOAuth({
@@ -46,6 +48,7 @@ const Login = () => {
     }
 
 
+    //email and password signin
     const handleSignIn = async () => {
         try {
             const res = await supabase.auth.signInWithPassword({
