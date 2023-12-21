@@ -2,11 +2,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import themeSlice from "./features/themeSlice";
 import authReducer from './features/authSlice';
+import authMethodSlice from "./features/authMethodSlice";
 
 export const store = configureStore({
     reducer: {
         theme: themeSlice,
         auth: authReducer,
+        authMethod: authMethodSlice
     },
     devTools: process.env.NODE_ENV !== "production",
 
