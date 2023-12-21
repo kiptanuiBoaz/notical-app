@@ -8,7 +8,7 @@ export const getNotionAccessToken = async (user_id, code) => {
             { user_id, code }
         );
         console.log(res)
-        return res;
+        return res.data.access_token;
     } catch (error) {
         console.error(error.messsage)
     }
