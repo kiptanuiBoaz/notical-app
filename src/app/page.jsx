@@ -4,8 +4,11 @@ import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { UPDATE_AUTH } from '@/redux/features/authSlice';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { getUser } from './connections/libs/getUser';
+import { createStripeCustomer } from './connections/libs/createStripeCustomer';
+import { createUserProfile } from './connections/libs/createUserProfile';
 
-const Home = () => {
+const Home = ({ searchParams }) => {
 
   const router = useRouter();
   const dispatch = useDispatch();
@@ -13,11 +16,16 @@ const Home = () => {
 
   useEffect(() => {
     try {
-      const getUser = async () => {
-        //get current user from supabase
-        const res = await supabase.auth.getUser();
-        const { data: { user: { id, email, user_metadata, role, aud } } } = res;
+      const getCurrentUser = async () => {
+        const code = searchParams.code;
+        console.log(code)
+        const authenticatedUser = await supabase.auth.getUser() ?? await getUser(code);
+        console.log(authenticatedUser);
+        const { data: { user: { id, email, user_metadata, role, aud } } } = authenticatedUser;
 
+        const stripeCustomer = await createStripeCustomer(email);
+
+        await createUserProfile(stripeCustomer.data.id, id, email)
         //update redux state
         dispatch(UPDATE_AUTH({
           user_id: id,
@@ -29,10 +37,8 @@ const Home = () => {
             id: aud
           },
         }));
-
-
       }
-      getUser();
+      getCurrentUser();
       router.push("/connections")
 
     } catch (e) {

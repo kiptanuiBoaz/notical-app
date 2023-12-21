@@ -6,7 +6,7 @@ import { Footer } from '@/components/Footer';
 import { useTheme } from '@emotion/react';
 import { ConnectCalendar } from '@/components/ConnectCalendar';
 import { ConnectNotion } from '@/components/ConnectNotion';
-import { createStripeCustomer } from '../auth/createStripeCustomer';
+import { createStripeCustomer } from './libs/createStripeCustomer';
 import { useSelector } from 'react-redux';
 import { selectUser } from '@/redux/features/authSlice';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
@@ -37,11 +37,12 @@ const Connections = ({ searchParams }) => {
 
             //fetch user from superbase
             const res = await getUser(user_id);
+            console.log(res);
             setCustomerId(res?.customer_id);
             Loading.remove();
         };
 
-        handleConnections();
+        if (!searchParams.code) handleConnections();
     }, []);
 
     console.log(searchParams.code)

@@ -51,17 +51,21 @@ const Login = () => {
     //email and password signin
     const handleSignIn = async () => {
         try {
-            const res = await supabase.auth.signInWithPassword({
+            const { error, data } = await supabase.auth.signInWithPassword({
                 email,
                 password,
             });
-
+            if (error) {
+                setHelperText(error.message);
+                setError(true);
+            }
+            console.log(data)
             setError(false)
             setHelperText("Successfully signed in");
-            router.push(`/`)
+            router.push(`/?code=${data.user.id}`)
         } catch (error) {
             console.error(error.message);
-            setHelperText(res.error.message)
+
             setError(true)
         } finally {
             formRef.current.reset()

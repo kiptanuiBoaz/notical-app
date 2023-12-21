@@ -9,9 +9,9 @@ import Image from 'next/image';
 import { useSelector } from 'react-redux';
 import { selectTheme } from '@/redux/features/themeSlice';
 import Link from 'next/link';
-import { createStripeCustomer } from '../createStripeCustomer';
+import { createStripeCustomer } from '../../connections/libs/createStripeCustomer';
 import { Loading } from 'notiflix';
-import { useUser } from '@supabase/auth-helpers-react'
+import { createUserProfile } from '@/app/connections/libs/createUserProfile';
 
 
 const SignUp = () => {
@@ -22,42 +22,12 @@ const SignUp = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState(false);
     const [helperText, setHelperText] = useState('Create an acount by using the form below');
-    // const { user } = useUser()
 
     const router = useRouter();
     const formRef = useRef(null);
     const theme = useTheme();
     const selectedTheme = useSelector(selectTheme);
     const supabase = createClientComponentClient();
-
-
-    // console.log(user)
-    const handleConnection = async (signedUpUserEmail) => {
-        const customer = await createStripeCustomer(signedUpUserEmail);
-        updateProfile(customer.data.id);
-
-    }
-
-
-    const updateProfile = async (customer_id) => {
-        const { user_id, email } = signedUpUser;
-        try {
-            Loading.dots({
-                svgColor: '#0276AA',
-                backgroundColor: 'rgba(0,0,0,0.4)',
-            });
-
-            const res = await supabase.from('users').upsert({
-                user_id, email, is_active: false, customer_id,
-            })
-            if (res?.error) throw error
-
-        } catch (error) {
-            console.log(error.message)
-        } finally {
-            Loading.remove();
-        }
-    }
 
     async function handleSignInWithGoogle() {
         const { data, error } = await supabase.auth.signInWithOAuth({
@@ -80,20 +50,29 @@ const SignUp = () => {
                 backgroundColor: 'rgba(0,0,0,0.4)',
             });
 
-            const res = await supabase.auth.signUp({
+            const { data, error } = await supabase.auth.signUp({
                 email,
                 password,
                 options: {
                     emailRedirectTo: `${location.origin}/auth/callback`,
                 },
             })
-
+            if (error) {
+                setHelperText(error.message);
+                setError(true);
+            }
+            console.log(data.user)
             setError(false);
             setHelperText("Sign up successfull, check your mail for a confirmation link");
-            handleConnection(res.data.user.email);
+            //create stripe custormer
+            const customer = await createStripeCustomer(data.user.email);
+            // add customer to supabase db
+            const registerdCustomer = await createUserProfile(customer.data.id, data.user.id, data.user.email);
+            console.log(registerdCustomer)
+            router.push("/auth/login")
         } catch (error) {
             setError(true)
-            setHelperText(error.message)
+            consle.error(error.message)
 
         } finally {
             Loading.remove();
@@ -169,7 +148,7 @@ const SignUp = () => {
                             InputProps={{
                                 endAdornment: (
                                     <InputAdornment position="end">
-                                        <IconButton onClick={handleClickShowPassword}>
+                                        <IconButton onClick={() => setShowPassword(!showPassword)}>
                                             {showPassword ? <VisibilityOff /> : <Visibility />}
                                         </IconButton>
                                     </InputAdornment>
