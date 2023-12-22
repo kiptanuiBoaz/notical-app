@@ -32,22 +32,22 @@ const Connections = ({ searchParams }) => {
     const { user_id, email } = useSelector(selectUser);
     const theme = useTheme();
 
-    useEffect(() => {
-        const handleConnections = async () => {
-            Loading.dots({
-                svgColor: '#0276AA',
-                backgroundColor: 'rgba(0,0,0,0.4)',
-            });
+    // useEffect(() => {
+    //     const handleConnections = async () => {
+    //         Loading.dots({
+    //             svgColor: '#0276AA',
+    //             backgroundColor: 'rgba(0,0,0,0.4)',
+    //         });
 
-            //fetch user from superbase
-            const res = await getUser(user_id);
-            console.log(res);
-            setCustomerId(res?.customer_id);
-            Loading.remove();
-        };
+    //         //fetch user from superbase
+    //         const res = await getUser(user_id);
+    //         console.log(res);
+    //         setCustomerId(res?.customer_id);
+    //         Loading.remove();
+    //     };
 
-        if (!searchParams.code) handleConnections();
-    }, []);
+    //     if (!searchParams.code) handleConnections();
+    // }, []);
 
     console.log(searchParams.code)
 
@@ -62,14 +62,16 @@ const Connections = ({ searchParams }) => {
         const createGoogleConnection = async () => {
             const { access_token, refresh_token } = await getGoogleAccessToken(searchParams.code);
             updateTableWithGoogleTokens(access_token, refresh_token, email, user_id);
-
         }
 
-        if (searchParams.code.length > 36) {
-            createGoogleConnection()
-        } else {
-            createNotionConnection();
+        if (searchParams.code) {
+            if (searchParams.code.length > 36) {
+                createGoogleConnection()
+            } else {
+                createNotionConnection();
+            }
         }
+
 
     }, [searchParams, user_id, email])
 

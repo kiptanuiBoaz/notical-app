@@ -41,7 +41,7 @@ export const updateUserTableWithAccessToken = async (user_id, notion_secret_key,
     }
 }
 
-export const updateTableWithGoogleTokens = async (acces_token, refresh_token, email, user_id) => {
+export const updateTableWithGoogleTokens = async (google_access_token, google_refresh_token, email, user_id) => {
     const supabase = createClientComponentClient();
     try {
         Loading.dots({
@@ -50,8 +50,8 @@ export const updateTableWithGoogleTokens = async (acces_token, refresh_token, em
         });
         const { error } = await supabase.from('users').upsert({
             user_id,
-            acces_token,
-            refresh_token,
+            google_access_token,
+            google_refresh_token,
             email
         })
         if (error) throw error
