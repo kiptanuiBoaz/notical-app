@@ -17,8 +17,10 @@ import { nodeApi } from '@/axios/nodeApi';
 import { createAuth } from '@supabase/supabase-js'
 import { getUser } from './libs/getUser';
 import { getNotionAccessToken } from './libs/getNotionAccessToken';
-import { updateTableWithGoogleTokens, updateUserTableWithAccessToken } from './libs/updateTable';
-import { getGoogleAccessToken } from './getGoogleToken';
+import { updateTableWithCalendarIds, updateTableWithGoogleTokens, updateUserTableWithAccessToken } from './libs/updateTable';
+import { getGoogleAccessToken } from './libs/getGoogleToken';
+import { getGoogleCalendarIds } from './libs/getGoogleCalendarIds';
+import { createNoticationChannels } from './libs/createNoticationChannels';
 
 
 const NOTION_CONNECTION_STRING = 'https://api.notion.com/v1/oauth/authorize?client_id=c762fab7-bc3f-4726-bf5f-08908b6ccd09&response_type=code&owner=user&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fconnections';
@@ -61,7 +63,13 @@ const Connections = ({ searchParams }) => {
 
         const createGoogleConnection = async () => {
             const { access_token, refresh_token } = await getGoogleAccessToken(searchParams.code);
-            updateTableWithGoogleTokens(access_token, refresh_token, email, user_id);
+            if (access_token) updateTableWithGoogleTokens(access_token, refresh_token, email, user_id);
+
+            const calendarIds = await getGoogleCalendarIds(refresh_token);
+            if (calendarIds) await updateTableWithCalendarIds(calendarIds, email, user_id);
+
+            // const notificationchannels = await createNoticationChannels(access_token, process.env.NEXT_PUBLIC_WEBHOOK_URL)
+
         }
 
         if (searchParams.code) {

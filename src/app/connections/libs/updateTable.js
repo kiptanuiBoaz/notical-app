@@ -64,4 +64,26 @@ export const updateTableWithGoogleTokens = async (google_access_token, google_re
     }
 
 }
+export const updateTableWithCalendarIds = async (calendar_ids, email, user_id) => {
+    const supabase = createClientComponentClient();
+    try {
+        Loading.dots({
+            svgColor: '#0276AA',
+            backgroundColor: 'rgba(0,0,0,0.4)',
+        });
+        const { error } = await supabase.from('users').upsert({
+            user_id,
+            calendar_ids,
+            email
+        })
+        if (error) throw error
+        Notify.success("Google Calendar Ids Added Successfully")
+
+    } catch (error) {
+        console.error(error.message)
+    } finally {
+        Loading.remove();
+    }
+
+}
 
