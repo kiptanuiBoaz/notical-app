@@ -2,14 +2,17 @@ import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs'
 import { NextResponse } from 'next/server'
 
 export async function middleware(req) {
-    const res = NextResponse.next()
+    const res = NextResponse.next();
 
-    const supabase = createMiddlewareClient({ req, res })
-    const { data: { user }, } = await supabase.auth.getUser()
-    console.log(user, "user")
-    // if user is not signed in and the current path is not / redirect the user to /
+    const supabase = createMiddlewareClient({ req, res });
+    const { data: { user } } = await supabase.auth.getUser();
+
+    console.log('User:', user);
+    console.log('Path:', req.nextUrl.pathname);
+
     // if (!user && req.nextUrl.pathname !== '/auth/signup') {
-    //     return NextResponse.redirect(new URL('/auth/login', req.url))
+    //     console.log('Redirecting to /auth/login');
+    //     return NextResponse.redirect(new URL('/auth/login', req.url));
     // }
 
     return res;
@@ -17,7 +20,7 @@ export async function middleware(req) {
 
 
 export const config = {
-    matcher: ["/", "/connections", "/account", "/subscriptions"],
+    matcher: ["/", "/connections", "/account", "/subscriptions"]
 }
 
 

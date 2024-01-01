@@ -57,23 +57,7 @@ const Connections = ({ searchParams }) => {
 
     console.log(notionConnection)
 
-    useEffect(() => {
-        //check if user has authorized notion connection
-        const checkNotionConnection = async () => {
-            const { notion_access_token } = await getUser(user_id);
-            const { is_valid } = await verifyNotionConnection(notion_access_token)
-            setNotionConnection(is_valid);
-        }
-        //check if user has authorized google connection
-        const checkGoogleConnection = async () => {
-            const { google_access_token } = await getUser(user_id);
-            const { is_valid } = await verifyGoogleConnection(google_access_token);
-            setGoogleConnection(is_valid)
-        }
 
-        checkGoogleConnection()
-        checkNotionConnection()
-    }, [])
 
     // server request after notion consent
     useEffect(() => {
@@ -94,6 +78,19 @@ const Connections = ({ searchParams }) => {
 
         }
 
+        //check if user has authorized notion connection
+        const checkNotionConnection = async () => {
+            const { notion_secret_key } = await getUser(user_id);
+            const { is_valid } = await verifyNotionConnection(notion_secret_key)
+            setNotionConnection(is_valid);
+        }
+        //check if user has authorized google connection
+        const checkGoogleConnection = async () => {
+            const { google_access_token } = await getUser(user_id);
+            const { is_valid } = await verifyGoogleConnection(google_access_token);
+            setGoogleConnection(is_valid)
+        }
+
         //subsequent request after redirect from consecnt screens
         if (searchParams.code) {
             if (searchParams.code.length > 36) {
@@ -102,6 +99,9 @@ const Connections = ({ searchParams }) => {
                 createNotionConnection();
             }
         }
+
+        checkGoogleConnection();
+        checkNotionConnection();
 
     }, [searchParams, user_id, email])
 
