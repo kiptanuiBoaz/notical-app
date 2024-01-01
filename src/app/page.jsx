@@ -9,7 +9,6 @@ import { createStripeCustomer } from './connections/libs/createStripeCustomer';
 import { createUserProfile } from './connections/libs/createUserProfile';
 
 const Home = ({ searchParams }) => {
-
   const router = useRouter();
   const dispatch = useDispatch();
   const supabase = createClientComponentClient();

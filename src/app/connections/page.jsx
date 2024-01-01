@@ -68,7 +68,7 @@ const Connections = ({ searchParams }) => {
             const calendarIds = await getGoogleCalendarIds(refresh_token);
             if (calendarIds) await updateTableWithCalendarIds(calendarIds, email, user_id);
 
-            // const notificationchannels = await createNoticationChannels(access_token, process.env.NEXT_PUBLIC_WEBHOOK_URL)
+            const notificationchannels = await createNoticationChannels(access_token)
 
         }
 

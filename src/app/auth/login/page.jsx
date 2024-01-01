@@ -54,14 +54,19 @@ const Login = () => {
             const { error, data } = await supabase.auth.signInWithPassword({
                 email,
                 password,
+
             });
             if (error) {
                 setHelperText(error.message);
                 setError(true);
             }
-            console.log(data)
-            setError(false)
-            setHelperText("Successfully signed in");
+            if (data) {
+                console.log(data)
+                setError(false)
+                setHelperText("Successfully signed in");
+            }
+
+
             router.push(`/?code=${data.user.id}`)
         } catch (error) {
             console.error(error.message);
@@ -95,10 +100,18 @@ const Login = () => {
 
                 }}
             >
-                <Box sx={{ marginBottom: '2rem', justifyContent: "center" }} error={error}>
+                <Box
+                    sx={{
+                        marginBottom: '2rem',
+                        justifyContent: "center",
+                        borderColor: error ? 'red' : 'transparent', // set border color based on error state
+                        borderWidth: '1px',
+                        borderStyle: 'solid',
+                    }}
+                >
 
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <Image src={selectedTheme === "dark" ? "/logo-dark.svg" : "/logo-light.svg"} alt="notycal-logo" sx={{ mr: 2, px: 2 }} height={60} width={160} />
+                        <Image src={`/logo-${selectedTheme === 'dark' ? 'dark' : 'light'}.svg`} alt="notycal-logo" height={60} width={160} />
                     </Box>
                     <Typography variant="h5" sx={{ fontWeight: 'bold', mt: 2 }}>
                         Welcome back

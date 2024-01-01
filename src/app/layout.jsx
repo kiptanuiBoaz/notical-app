@@ -9,7 +9,7 @@ export const metadata = {
   description: 'A central place to connect Google Calendar and Notion',
 }
 
-// app/layout.js
+
 export default function RootLayout(props) {
   const { children } = props;
   return (

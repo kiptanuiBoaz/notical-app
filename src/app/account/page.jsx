@@ -31,7 +31,6 @@ const Account = () => {
 
     }
 
-
     return (
         <Box
             sx={{
