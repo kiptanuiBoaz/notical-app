@@ -1,24 +1,6 @@
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Loading, Notify } from "notiflix";
 
-const VERIFY_TOKEN_ENDPOINT = "/notion/auth/verify_access_token"
-
-
-
-export const verifyAccessToken = (notionAccessToken) => {
-    try {
-        Loading.dots({
-            svgColor: '#0276AA',
-            backgroundColor: 'rgba(0,0,0,0.4)',
-        });
-        const token_is_valid = nodeApi.post()
-    } catch (error) {
-
-    } finally {
-        Loading.remove();
-    }
-}
-
 export const updateUserTableWithAccessToken = async (user_id, notion_secret_key, email) => {
     const supabase = createClientComponentClient();
     try {

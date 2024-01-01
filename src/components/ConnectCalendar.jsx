@@ -7,7 +7,7 @@ import { disconnectCalendar } from '@/app/connections/libs/disconnectCalendar';
 import { useSelector } from 'react-redux';
 import { selectUser } from '@/redux/features/authSlice';
 
-export const ConnectCalendar = ({ title, description, button, image }) => {
+export const ConnectCalendar = ({ title, description, setGoogleConnection, image }) => {
     const theme = useTheme();
     const { user_id, email } = useSelector(selectUser);
 
@@ -30,21 +30,30 @@ export const ConnectCalendar = ({ title, description, button, image }) => {
             <hr />
             <CardActions sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Box sx={{ display: 'flex', gap: '10px' }}>
-                    <Button variant="contained" sx={{ color: "#fff", backgroundColor: "#14AE97", display: "flex", alignItems: "center" }}>
-                        <FaCheck />
+                    <Button
+                        style={{ textTransform: 'none', fontSize: "17px" }}
+                        variant="contained"
+                        sx={{ color: "#fff", backgroundColor: "#14AE97", display: "flex", alignItems: "center" }}
+                        startIcon={<FaCheck size={"20px"} />}
+                    >
                         Connected
                     </Button>
 
                 </Box>
+
                 <Button
-                    onClick={() => disconnectCalendar(user_id, email)}
+                    onClick={async () => {
+                        await disconnectCalendar(user_id, email);
+                        setGoogleConnection(false);
+                    }}
+                    style={{ textTransform: 'none', fontSize: "17px" }}
                     variant="contained"
                     sx={{ color: "#fff", backgroundColor: "red" }}
                 >
-                    disconnect
+                    Disconnect
                 </Button>
             </CardActions>
-        </Card>
+        </Card >
 
     )
 }

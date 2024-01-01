@@ -75,15 +75,19 @@ export const ConnectNotion = ({ title, description, image, setNotionConnection }
             <hr />
             <CardActions sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Box sx={{ display: 'flex', gap: '10px' }}>
-                    <Button variant="contained" sx={{ color: "#fff", backgroundColor: "#14AE97", display: "flex", alignItems: "center" }}>
-                        <FaCheck />
+                    <Button
+                        style={{ textTransform: 'none', fontSize: "17px" }}
+                        variant="contained"
+                        sx={{ color: "#fff", backgroundColor: "#14AE97", display: "flex", alignItems: "center" }}
+                        startIcon={<FaCheck size={"20px"} />}
+                    >
                         Connected
                     </Button>
 
                 </Box>
                 <Button
-                    onClick={() => {
-                        disconnectNotion(user_id, email);
+                    onClick={async () => {
+                        await disconnectNotion(user_id, email);
                         setNotionConnection(false);
                     }}
                     variant="contained"

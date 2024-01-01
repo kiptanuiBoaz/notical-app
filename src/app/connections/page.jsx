@@ -21,7 +21,8 @@ import { updateTableWithCalendarIds, updateTableWithGoogleTokens, updateUserTabl
 import { getGoogleAccessToken } from './libs/getGoogleToken';
 import { getGoogleCalendarIds } from './libs/getGoogleCalendarIds';
 import { createNoticationChannels } from './libs/createNoticationChannels';
-import { verifyNotionConnection } from './verifyNotionConnection';
+import { verifyNotionConnection } from './libs/verifyNotionConnection';
+import { verifyGoogleConnection } from './libs/verifyGoogleConnection';
 
 
 const NOTION_CONNECTION_STRING = 'https://api.notion.com/v1/oauth/authorize?client_id=c762fab7-bc3f-4726-bf5f-08908b6ccd09&response_type=code&owner=user&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fconnections';
@@ -31,6 +32,7 @@ const GOOGLE_CONNECTION_STRING = 'https://accounts.google.com/o/oauth2/auth/oaut
 const Connections = ({ searchParams }) => {
     const [loading, setLoading] = useState(true);
     const [notionConnection, setNotionConnection] = useState(false);
+    const [googleConnection, setGoogleConnection] = useState(false);
     const [customerId, setCustomerId] = useState();
 
     const { user_id, email } = useSelector(selectUser);
@@ -53,17 +55,25 @@ const Connections = ({ searchParams }) => {
     //     if (!searchParams.code) handleConnections();
     // }, []);
 
-    console.log(searchParams.code)
+    console.log(notionConnection)
 
     useEffect(() => {
+        //check if user has authorized notion connection
         const checkNotionConnection = async () => {
             const { notion_access_token } = await getUser(user_id);
-            const is_valid = await verifyNotionConnection(notion_access_token)
+            const { is_valid } = await verifyNotionConnection(notion_access_token)
             setNotionConnection(is_valid);
         }
+        //check if user has authorized google connection
+        const checkGoogleConnection = async () => {
+            const { google_access_token } = await getUser(user_id);
+            const { is_valid } = await verifyGoogleConnection(google_access_token);
+            setGoogleConnection(is_valid)
+        }
 
+        checkGoogleConnection()
         checkNotionConnection()
-    }, [user_id])
+    }, [])
 
     // server request after notion consent
     useEffect(() => {
@@ -84,6 +94,7 @@ const Connections = ({ searchParams }) => {
 
         }
 
+        //subsequent request after redirect from consecnt screens
         if (searchParams.code) {
             if (searchParams.code.length > 36) {
                 createGoogleConnection()
@@ -137,13 +148,11 @@ const Connections = ({ searchParams }) => {
 
                     <Box sx={{ flex: '0 0 auto', marginTop: ['1rem', '0'] }}>
                         <Button
+                            style={{ textTransform: 'none', fontSize: "17px" }}
                             variant="contained"
                             sx={{ backgroundColor: "#14AE97", color: "#fff" }}
                         >
-                            <Link href={GOOGLE_CONNECTION_STRING}>
-                                Start Sync
-                            </Link>
-
+                            Start Sync
                         </Button>
                     </Box>
 
@@ -171,31 +180,23 @@ const Connections = ({ searchParams }) => {
                             connectionLink={NOTION_CONNECTION_STRING}
                         />
                     }
-                    {loading ? <>
+                    {googleConnection
+                        ? <ConnectCalendar
+                            title="Google Calendar"
+                            description="Connect your Google Calendar"
+                            button="Connect"
+                            image="/images/calendar-icon.svg"
+                            setGoogleConnection={setGoogleConnection}
+                        />
 
-                        <ConnectionCard
+                        : <ConnectionCard
                             title="Google Calendar"
                             description="Connect your Google Calendar"
                             button="Connect"
                             image="/images/calendar-icon.svg"
                             connectionLink={GOOGLE_CONNECTION_STRING}
-
                         />
 
-                    </>
-                        : <>
-
-
-
-
-
-                            <ConnectCalendar
-                                title="Google Calendar"
-                                description="Connect your Google Calendar"
-                                button="Connect"
-                                image="/images/calendar-icon.svg"
-                            />
-                        </>
                     }
                 </Box>
             </Box>
