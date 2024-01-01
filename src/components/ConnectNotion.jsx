@@ -7,9 +7,15 @@ import { MdOutlineCheckBoxOutlineBlank } from "react-icons/md";
 import { BsArrowRepeat } from "react-icons/bs";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { MdKeyboardArrowUp } from "react-icons/md";
+import { useSelector } from 'react-redux';
+import { selectUser } from '@/redux/features/authSlice';
+import { disconnectNotion } from '@/app/connections/libs/disconnectNotion';
 
 export const ConnectNotion = ({ title, description, button, image }) => {
     const [showConnections, setShowConnections] = useState(false);
+
+    //from redux state
+    const { user_id, email } = useSelector(selectUser);
 
 
     const dbConnections = [
@@ -73,11 +79,13 @@ export const ConnectNotion = ({ title, description, button, image }) => {
                         <FaCheck />
                         Connected
                     </Button>
-                    <Button variant="contained" sx={{ color: "#fff", backgroundColor: "#1681B1" }}>
-                        Connect
-                    </Button>
+
                 </Box>
-                <Button variant="contained" sx={{ color: "#fff", backgroundColor: "red" }}>
+                <Button
+                    onClick={() => disconnectNotion(user_id, email)}
+                    variant="contained"
+                    sx={{ color: "#fff", backgroundColor: "red" }}
+                >
                     disconnect
                 </Button>
             </CardActions>
