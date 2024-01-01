@@ -63,7 +63,7 @@ const Connections = ({ searchParams }) => {
         }
 
         checkNotionConnection()
-    }, [])
+    }, [user_id])
 
     // server request after notion consent
     useEffect(() => {
@@ -92,10 +92,7 @@ const Connections = ({ searchParams }) => {
             }
         }
 
-
     }, [searchParams, user_id, email])
-
-
 
 
     return (
@@ -164,6 +161,7 @@ const Connections = ({ searchParams }) => {
                             description="Connect your notion pages"
                             button="Connect"
                             image="/images/notion-icon.svg"
+                            setNotionConnection={setNotionConnection}
                         />
                         : <ConnectionCard
                             title="Notion"

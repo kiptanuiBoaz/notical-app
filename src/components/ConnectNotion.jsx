@@ -11,7 +11,7 @@ import { useSelector } from 'react-redux';
 import { selectUser } from '@/redux/features/authSlice';
 import { disconnectNotion } from '@/app/connections/libs/disconnectNotion';
 
-export const ConnectNotion = ({ title, description, button, image }) => {
+export const ConnectNotion = ({ title, description, image, setNotionConnection }) => {
     const [showConnections, setShowConnections] = useState(false);
 
     //from redux state
@@ -82,7 +82,10 @@ export const ConnectNotion = ({ title, description, button, image }) => {
 
                 </Box>
                 <Button
-                    onClick={() => disconnectNotion(user_id, email)}
+                    onClick={() => {
+                        disconnectNotion(user_id, email);
+                        setNotionConnection(false);
+                    }}
                     variant="contained"
                     sx={{ color: "#fff", backgroundColor: "red" }}
                 >
