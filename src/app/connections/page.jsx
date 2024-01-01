@@ -21,6 +21,7 @@ import { updateTableWithCalendarIds, updateTableWithGoogleTokens, updateUserTabl
 import { getGoogleAccessToken } from './libs/getGoogleToken';
 import { getGoogleCalendarIds } from './libs/getGoogleCalendarIds';
 import { createNoticationChannels } from './libs/createNoticationChannels';
+import { verifyNotionConnection } from './verifyNotionConnection';
 
 
 const NOTION_CONNECTION_STRING = 'https://api.notion.com/v1/oauth/authorize?client_id=c762fab7-bc3f-4726-bf5f-08908b6ccd09&response_type=code&owner=user&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fconnections';
@@ -28,7 +29,8 @@ const GOOGLE_CONNECTION_STRING = 'https://accounts.google.com/o/oauth2/auth/oaut
 
 
 const Connections = ({ searchParams }) => {
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [notionConnection, setNotionConnection] = useState(false);
     const [customerId, setCustomerId] = useState();
 
     const { user_id, email } = useSelector(selectUser);
@@ -52,6 +54,16 @@ const Connections = ({ searchParams }) => {
     // }, []);
 
     console.log(searchParams.code)
+
+    useEffect(() => {
+        const checkNotionConnection = async () => {
+            const { notion_access_token } = await getUser(user_id);
+            const is_valid = await verifyNotionConnection(notion_access_token)
+            setNotionConnection(is_valid);
+        }
+
+        checkNotionConnection()
+    }, [])
 
     // server request after notion consent
     useEffect(() => {
@@ -146,18 +158,30 @@ const Connections = ({ searchParams }) => {
                         gap: '1rem',
                     }}
                 >
-                    {loading ? <>
-                        <ConnectionCard
+                    {notionConnection
+                        ? <ConnectNotion
                             title="Notion"
                             description="Connect your notion pages"
                             button="Connect"
                             image="/images/notion-icon.svg"
                         />
+                        : <ConnectionCard
+                            title="Notion"
+                            description="Connect your notion pages"
+                            button="Connect"
+                            image="/images/notion-icon.svg"
+                            connectionLink={NOTION_CONNECTION_STRING}
+                        />
+                    }
+                    {loading ? <>
+
                         <ConnectionCard
                             title="Google Calendar"
                             description="Connect your Google Calendar"
                             button="Connect"
                             image="/images/calendar-icon.svg"
+                            connectionLink={GOOGLE_CONNECTION_STRING}
+
                         />
 
                     </>
@@ -165,12 +189,6 @@ const Connections = ({ searchParams }) => {
 
 
 
-                            <ConnectNotion
-                                title="Notion"
-                                description="Connect your notion pages"
-                                button="Connect"
-                                image="/images/notion-icon.svg"
-                            />
 
 
                             <ConnectCalendar

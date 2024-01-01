@@ -11,8 +11,8 @@ export const disconnectCalendar = async (user_id, email) => {
             google_access_token: null,
             google_refresh_token: null,
             active: false,
+        });
 
-        })
         if (data) console.log(data)
         if (error) throw error
         Notify.success("Calendar Disconnected Successfully")
