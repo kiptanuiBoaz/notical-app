@@ -12,7 +12,7 @@ import { selectUser } from '@/redux/features/authSlice';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { Loading } from 'notiflix';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { nodeApi } from '@/axios/nodeApi';
 import { createAuth } from '@supabase/supabase-js'
 import { getUser } from './libs/getUser';
@@ -37,6 +37,8 @@ const Connections = ({ searchParams }) => {
 
     const { user_id, email } = useSelector(selectUser);
     const theme = useTheme();
+    const router = useRouter();
+    const pathname = usePathname()
 
     // useEffect(() => {
     //     const handleConnections = async () => {
@@ -98,6 +100,7 @@ const Connections = ({ searchParams }) => {
             } else {
                 createNotionConnection();
             }
+            router.push(pathname);
         }
 
         checkGoogleConnection();
