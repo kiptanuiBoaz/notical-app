@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardActions, Typography, Button, Box, Icon, useTheme, Switch } from '@mui/material';
 import Image from 'next/image';
 import { FaCheck } from "react-icons/fa6";
@@ -10,21 +10,47 @@ import { MdKeyboardArrowUp } from "react-icons/md";
 import { useSelector } from 'react-redux';
 import { selectUser } from '@/redux/features/authSlice';
 import { disconnectNotion } from '@/app/connections/libs/disconnectNotion';
+import { getUser } from '@/app/connections/libs/getUser';
+import "./animation.css"
+import { updateSelectedDbIds } from '@/app/connections/libs/updateSelectedDbIds.';
 
 export const ConnectNotion = ({ title, description, image, setNotionConnection }) => {
     const [showConnections, setShowConnections] = useState(false);
+    const [selectedDatabseIds, setSelectedDatabseIds] = useState([]);
+    const [allDatabses, setAllDatabses] = useState([]);
+    const [updatingDatabseIds, setUpdatingDatabseIds] = useState(false);
 
     //from redux state
     const { user_id, email } = useSelector(selectUser);
+    useEffect(() => {
+        const getDbConnections = async () => {
+            const { databases_all, selected_databases_ids } = await getUser(user_id);
+            setAllDatabses(databases_all);
+            setSelectedDatabseIds(selected_databases_ids)
+        }
+        getDbConnections();
+    }, [user_id]);
 
+    const toggleDbConnection = (id) => {
+        setUpdatingDatabseIds(true)
+        let updatedSelectedDatabaseIds;
+        if (selectedDatabseIds.includes(id)) {
+            // Remove ID from selectedDatabseIds
+            updatedSelectedDatabaseIds = selectedDatabseIds.filter((dbId) => dbId !== id);
+        } else {
+            // Add new ID to selectedDatabseIds
+            updatedSelectedDatabaseIds = [...selectedDatabseIds, id];
+        }
 
-    const dbConnections = [
-        'Lorem ipsum dolor sit amet, consectetur',
-        'Pellentesque habitant morbi tristique',
-        'Sed do eiusmod tempor incididunt ut labore et',
-        'Ut enim ad minim veniam, quis nostrud ',
-        'Duis aute irure dolor in reprehenderit '
-    ];
+        // Update state with the modified array of selected database IDs
+        setSelectedDatabseIds(updatedSelectedDatabaseIds);
+
+        // Call the function to update the selected database IDs in the backend
+        updateSelectedDbIds(user_id, email, updatedSelectedDatabaseIds);
+        setUpdatingDatabseIds(false);
+    }
+
+    console.log(allDatabses, selectedDatabseIds)
 
     const theme = useTheme();
     return (
@@ -64,13 +90,31 @@ export const ConnectNotion = ({ title, description, image, setNotionConnection }
                 >
                     Your Notion Databases to Sync       {showConnections ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
                 </Typography>
-                {showConnections && dbConnections.map((text) => <CardActions sx={{ display: "flex", justifyContent: "space-between" }} key={text}>
-                    <Typography variant="body2" sx={{ color: 'gray', fontSize: "18px" }}>
-                        <MdOutlineCheckBoxOutlineBlank /> <FaRegSquareCheck />  {text}
+                {showConnections && allDatabses.map(({ id, title }) => <CardActions sx={{ display: "flex", justifyContent: "space-between" }} key={id}>
+                    <Typography
+                        variant="body2"
+                        sx={{
+                            color: selectedDatabseIds.includes(id) ? theme.palette.primary.main : 'gray',
+                            fontSize: "18px",
+                            display: "flex",
+                            alignItems: "center",
+                            cursor: "pointer",
+                            "&:hover": { color: theme.palette.primary.main }
+                        }}
+                        onClick={() => toggleDbConnection(id)}
+
+                    >
+                        {selectedDatabseIds.includes(id) ? <FaRegSquareCheck /> : <MdOutlineCheckBoxOutlineBlank />}
+                        &nbsp;&nbsp;
+                        {title}
                     </Typography>
-                    <BsArrowRepeat />
-                </CardActions>)}
-            </CardContent>
+                    <div className="rotatingIcon">
+                        <BsArrowRepeat sx={{ color: setUpdatingDatabseIds && "red" }} />
+                    </div>
+
+                </CardActions>)
+                }
+            </CardContent >
 
             <hr />
             <CardActions sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -96,6 +140,6 @@ export const ConnectNotion = ({ title, description, image, setNotionConnection }
                     disconnect
                 </Button>
             </CardActions>
-        </Card>
+        </Card >
     )
 }

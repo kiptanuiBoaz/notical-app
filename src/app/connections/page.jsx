@@ -32,7 +32,7 @@ const GOOGLE_CONNECTION_STRING = 'https://accounts.google.com/o/oauth2/auth/oaut
 
 const Connections = ({ searchParams }) => {
     const [loading, setLoading] = useState(true);
-    const [notionConnection, setNotionConnection] = useState(false);
+    const [notionConnection, setNotionConnection] = useState(true);
     const [googleConnection, setGoogleConnection] = useState(false);
     const [customerId, setCustomerId] = useState();
 
@@ -77,7 +77,7 @@ const Connections = ({ searchParams }) => {
             const calendarIds = await getGoogleCalendarIds(refresh_token);
             if (calendarIds) await updateTableWithCalendarIds(calendarIds, email, user_id);
 
-            const notificationchannels = await createNoticationChannels(access_token)
+            const notificationchannels = await createNoticationChannels(access_token);
 
         }
 
@@ -105,9 +105,9 @@ const Connections = ({ searchParams }) => {
         }
 
         checkGoogleConnection();
-        checkNotionConnection();
+        // checkNotionConnection();
 
-    }, [searchParams, user_id, email])
+    }, [searchParams, user_id, email, pathname, router])
 
 
     return (

@@ -1,0 +1,14 @@
+/* styles.css */
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.rotating-icon {
+  animation: rotate 2s linear infinite; /* Adjust the duration and animation properties as needed */
+}

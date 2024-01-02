@@ -46,6 +46,7 @@ export const updateTableWithGoogleTokens = async (google_access_token, google_re
     }
 
 }
+
 export const updateTableWithCalendarIds = async (calendar_ids, email, user_id) => {
     const supabase = createClientComponentClient();
     try {
