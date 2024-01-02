@@ -13,9 +13,10 @@ import { disconnectNotion } from '@/app/connections/libs/disconnectNotion';
 import { getUser } from '@/app/connections/libs/getUser';
 import "./animation.css"
 import { updateSelectedDbIds } from '@/app/connections/libs/updateSelectedDbIds.';
+import { selectTheme } from '@/redux/features/themeSlice';
 
 export const ConnectNotion = ({ title, description, image, setNotionConnection }) => {
-    const [showConnections, setShowConnections] = useState(false);
+    const [showConnections, setShowConnections] = useState(null);
     const [selectedDatabseIds, setSelectedDatabseIds] = useState([]);
     const [allDatabses, setAllDatabses] = useState([]);
     const [updatingDatabseIds, setUpdatingDatabseIds] = useState(false);
@@ -31,8 +32,8 @@ export const ConnectNotion = ({ title, description, image, setNotionConnection }
         getDbConnections();
     }, [user_id]);
 
-    const toggleDbConnection = (id) => {
-        setUpdatingDatabseIds(true)
+    const toggleDbConnection = async (id) => {
+        setUpdatingDatabseIds(id)
         let updatedSelectedDatabaseIds;
         if (selectedDatabseIds.includes(id)) {
             // Remove ID from selectedDatabseIds
@@ -46,13 +47,14 @@ export const ConnectNotion = ({ title, description, image, setNotionConnection }
         setSelectedDatabseIds(updatedSelectedDatabaseIds);
 
         // Call the function to update the selected database IDs in the backend
-        updateSelectedDbIds(user_id, email, updatedSelectedDatabaseIds);
-        setUpdatingDatabseIds(false);
+        await updateSelectedDbIds(user_id, email, updatedSelectedDatabaseIds);
+        setUpdatingDatabseIds(null);
     }
 
     console.log(allDatabses, selectedDatabseIds)
 
     const theme = useTheme();
+    const selectedTheme = useSelector(selectTheme);
     return (
         <Card sx={{ border: '1px solid gray', borderRadius: '10px', p: 2, backgroundColor: theme.palette.background.paper }}>
             <CardContent>
@@ -108,9 +110,12 @@ export const ConnectNotion = ({ title, description, image, setNotionConnection }
                         &nbsp;&nbsp;
                         {title}
                     </Typography>
-                    <div className="rotatingIcon">
-                        <BsArrowRepeat sx={{ color: setUpdatingDatabseIds && "red" }} />
-                    </div>
+                    {updatingDatabseIds === id
+                        ? <Image src={`/gifs/${selectedTheme}-refresh.gif`} height={20} width={20} alt='loading gif' />
+                        : <BsArrowRepeat />
+                    }
+
+
 
                 </CardActions>)
                 }
