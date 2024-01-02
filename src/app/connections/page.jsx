@@ -29,6 +29,7 @@ const NOTION_CONNECTION_STRING = 'https://api.notion.com/v1/oauth/authorize?clie
 const GOOGLE_CONNECTION_STRING = 'https://accounts.google.com/o/oauth2/auth/oauthchooseaccount?scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcalendar&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fconnections&response_type=code&client_id=474592924938-p58vbsd9l7hllhk84bee27e0oq5a6l98.apps.googleusercontent.com&access_type=offline&prompt=consent&service=lso&o2v=1&theme=glif&flowName=GeneralOAuthFlow'
 
 
+
 const Connections = ({ searchParams }) => {
     const [loading, setLoading] = useState(true);
     const [notionConnection, setNotionConnection] = useState(false);
