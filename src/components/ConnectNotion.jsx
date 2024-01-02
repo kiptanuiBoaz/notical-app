@@ -11,27 +11,30 @@ import { useSelector } from 'react-redux';
 import { selectUser } from '@/redux/features/authSlice';
 import { disconnectNotion } from '@/app/connections/libs/disconnectNotion';
 import { getUser } from '@/app/connections/libs/getUser';
-import "./animation.css"
 import { updateSelectedDbIds } from '@/app/connections/libs/updateSelectedDbIds.';
 import { selectTheme } from '@/redux/features/themeSlice';
+import { updateDeleteDone } from '@/app/connections/libs/updatedeleteDone';
 
 export const ConnectNotion = ({ title, description, image, setNotionConnection }) => {
     const [showConnections, setShowConnections] = useState(null);
     const [selectedDatabseIds, setSelectedDatabseIds] = useState([]);
     const [allDatabses, setAllDatabses] = useState([]);
     const [updatingDatabseIds, setUpdatingDatabseIds] = useState(false);
+    const [deleteDone, setDeleteDone] = useState(false);
 
     //from redux state
     const { user_id, email } = useSelector(selectUser);
     useEffect(() => {
         const getDbConnections = async () => {
-            const { databases_all, selected_databases_ids } = await getUser(user_id);
+            const { databases_all, selected_databases_ids, delete_done } = await getUser(user_id);
             setAllDatabses(databases_all);
-            setSelectedDatabseIds(selected_databases_ids)
+            setSelectedDatabseIds(selected_databases_ids);
+            setDeleteDone(delete_done);
         }
         getDbConnections();
     }, [user_id]);
 
+    //select and deselect notionDBs
     const toggleDbConnection = async (id) => {
         setUpdatingDatabseIds(id)
         let updatedSelectedDatabaseIds;
@@ -51,12 +54,18 @@ export const ConnectNotion = ({ title, description, image, setNotionConnection }
         setUpdatingDatabseIds(null);
     }
 
-    console.log(allDatabses, selectedDatabseIds)
+    //toggle delete_one
+    const toggleDeleteDone = async (isChecked) => {
+        setDeleteDone(isChecked);
+        await updateDeleteDone(user_id, email, isChecked);
+    };
+
+    console.log(deleteDone)
 
     const theme = useTheme();
     const selectedTheme = useSelector(selectTheme);
     return (
-        <Card sx={{ border: '1px solid gray', borderRadius: '10px', p: 2, backgroundColor: theme.palette.background.paper }}>
+        <Card sx={{ border: '1px solid gray', borderRadius: '10px', p: 2, backgroundColor: theme.palette.background.default }}>
             <CardContent>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     {/* <Box sx={{ m: 2, height: "30px" }}> */}
@@ -75,7 +84,13 @@ export const ConnectNotion = ({ title, description, image, setNotionConnection }
             </CardContent>
             <hr />
             <CardActions sx={{ display: "flex", justifyContent: "flex-start" }}>
-                <Switch size="lg" />
+                <Switch
+                    sx={{ color: theme.palette.secondary.main }}
+                    checked={deleteDone}
+                    onChange={(e) => toggleDeleteDone(e.target.checked)}
+                    aria-label="theme mode"
+                    size="lg"
+                />
                 <Typography variant="body2" sx={{ color: 'gray', fontSize: "15px" }}>
                     Don&lsquo;t show Events for Completed Notion Tasks
                 </Typography>
@@ -88,7 +103,13 @@ export const ConnectNotion = ({ title, description, image, setNotionConnection }
                 <Typography
                     onClick={() => setShowConnections(!showConnections)}
                     variant="body2"
-                    sx={{ color: theme.palette.primary.main, fontSize: "20px", display: "flex", justifyContent: "space-between", cursor: "pointer", }}
+                    sx={{
+                        "&hover": { bgcolor: theme.palette.background.paper },
+                        color: theme.palette.primary.main,
+                        fontSize: "20px", display: "flex",
+                        justifyContent: "space-between",
+                        cursor: "pointer",
+                    }}
                 >
                     Your Notion Databases to Sync       {showConnections ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
                 </Typography>

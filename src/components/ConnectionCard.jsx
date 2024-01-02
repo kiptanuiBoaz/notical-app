@@ -7,7 +7,7 @@ export const ConnectionCard = ({ title, description, image, connectionLink }) =>
     const theme = useTheme();
 
     return (
-        <Card sx={{ border: '1px solid gray', borderRadius: '10px', p: 2, backgroundColor: theme.palette.background.paper }}>
+        <Card sx={{ border: '1px solid gray', borderRadius: '10px', p: 2, backgroundColor: theme.palette.background.default, }}>
             <CardContent>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Image src={image} height={50} width={50} alt='title' style={{ marginRight: "10px" }} />

@@ -115,7 +115,7 @@ const Connections = ({ searchParams }) => {
             sx={{
                 paddingTop: '90px',
                 // height: '100vh',
-                backgroundColor: theme.palette.background.paper,
+                backgroundColor: theme.palette.background.default,
                 display: 'flex',
                 alignItems: 'start',
                 justifyContent: 'center',

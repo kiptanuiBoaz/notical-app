@@ -128,7 +128,7 @@ const Account = () => {
                         <Grid container alignItems="center" spacing={2} sx={{ padding: '0 0 10px 20px' }}>
                             <Grid item>
                                 <Switch
-                                    sx={{ color: '#57636C' }}
+                                    sx={{ color: theme.palette.secondary.main }}
                                     checked={mode === 'dark'}
                                     onChange={(e) => dispatch(TOGGLE_THEME({ theme: e.target.checked ? 'dark' : 'light' }))}
                                     aria-label="theme mode"
