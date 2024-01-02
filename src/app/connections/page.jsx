@@ -10,7 +10,7 @@ import { createStripeCustomer } from './libs/createStripeCustomer';
 import { useSelector } from 'react-redux';
 import { selectUser } from '@/redux/features/authSlice';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import { Loading } from 'notiflix';
+import Notiflix, { Loading, Notify } from 'notiflix';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { nodeApi } from '@/axios/nodeApi';
@@ -23,6 +23,7 @@ import { getGoogleCalendarIds } from './libs/getGoogleCalendarIds';
 import { createNoticationChannels } from './libs/createNoticationChannels';
 import { verifyNotionConnection } from './libs/verifyNotionConnection';
 import { verifyGoogleConnection } from './libs/verifyGoogleConnection';
+import { updateActiveField } from './libs/updateActiveField';
 
 
 const NOTION_CONNECTION_STRING = 'https://api.notion.com/v1/oauth/authorize?client_id=c762fab7-bc3f-4726-bf5f-08908b6ccd09&response_type=code&owner=user&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fconnections';
@@ -35,6 +36,8 @@ const Connections = ({ searchParams }) => {
     const [notionConnection, setNotionConnection] = useState(true);
     const [googleConnection, setGoogleConnection] = useState(false);
     const [customerId, setCustomerId] = useState();
+    const [stripeConnection, setStriepeConnection] = useState(true);
+    const [syncStatus, setSyncStatus] = useState(false);
 
     const { user_id, email } = useSelector(selectUser);
     const theme = useTheme();
@@ -60,7 +63,31 @@ const Connections = ({ searchParams }) => {
 
     console.log(notionConnection)
 
+    const checkSyncStatus = async () => {
+        if (stripeConnection) {
+            Notify.success("Successfully created stripe connection")
+        } else {
+            Notify.failure(" Please add opt into a subscription ")
+            return router.push("/subscriptions")
+        }
 
+
+        if (notionConnection) {
+            Notify.success("Successfully created Notion connection")
+        } else {
+            return Notify.failure(" Please create a Notion Connection ")
+        }
+
+
+        if (googleConnection) {
+            Notify.success("Successfully created Google Calendar connection")
+        } else {
+            return Notify.failure("Please create a Google Calendar  Connection ")
+        }
+        await updateActiveField(user_id, email, !syncStatus);
+        Notify.success(!syncStatus ? "Successfully synced  Google Calendar and Notion" : "Succesfully stopped sync")
+        setSyncStatus(!syncStatus);
+    }
 
     // server request after notion consent
     useEffect(() => {
@@ -152,11 +179,12 @@ const Connections = ({ searchParams }) => {
 
                     <Box sx={{ flex: '0 0 auto', marginTop: ['1rem', '0'] }}>
                         <Button
-                            style={{ textTransform: 'none', fontSize: "17px" }}
+                            style={{ fontSize: "17px" }}
                             variant="contained"
-                            sx={{ backgroundColor: "#14AE97", color: "#fff" }}
+                            sx={{ textTransform: 'none', backgroundColor: syncStatus ? "#DC4D00" : "#00A78E", color: "#fff" }}
+                            onClick={checkSyncStatus}
                         >
-                            Start Sync
+                            {syncStatus ? "Stop Sync" : "Start Sync"}
                         </Button>
                     </Box>
 
@@ -205,7 +233,7 @@ const Connections = ({ searchParams }) => {
                 </Box>
             </Box>
             {/* <Footer /> */}
-        </Box>
+        </Box >
     );
 };
 
