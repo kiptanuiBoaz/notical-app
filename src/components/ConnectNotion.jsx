@@ -58,6 +58,8 @@ export const ConnectNotion = ({ title, description, image, setNotionConnection }
     const toggleDeleteDone = async (isChecked) => {
         setDeleteDone(isChecked);
         await updateDeleteDone(user_id, email, isChecked);
+        const { delete_done } = await getUser(user_id);
+        setDeleteDone(delete_done);
     };
 
     console.log(deleteDone)
