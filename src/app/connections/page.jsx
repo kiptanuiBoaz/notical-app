@@ -61,7 +61,7 @@ const Connections = ({ searchParams }) => {
     //     if (!searchParams.code) handleConnections();
     // }, []);
 
-    console.log(notionConnection)
+
 
     const checkSyncStatus = async () => {
         if (stripeConnection) {
@@ -94,7 +94,7 @@ const Connections = ({ searchParams }) => {
         const createNotionConnection = async () => {
             const notionAccessToken = await getNotionAccessToken(user_id, searchParams.code);
             updateUserTableWithAccessToken(user_id, notionAccessToken, email);
-            console.log(notionAccessToken, "notion access token")
+
         }
 
         const createGoogleConnection = async () => {
@@ -104,7 +104,8 @@ const Connections = ({ searchParams }) => {
             const calendarIds = await getGoogleCalendarIds(refresh_token);
             if (calendarIds) await updateTableWithCalendarIds(calendarIds, email, user_id);
 
-            const notificationchannels = await createNoticationChannels(access_token);
+            //creae notification channels
+            await createNoticationChannels(access_token);
 
         }
 
@@ -132,8 +133,8 @@ const Connections = ({ searchParams }) => {
         }
 
         checkGoogleConnection();
-        // checkNotionConnection();
-
+        checkNotionConnection();
+        console.log("running useEffect")
     }, [searchParams, user_id, email, pathname, router])
 
 
