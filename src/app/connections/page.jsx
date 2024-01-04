@@ -25,6 +25,7 @@ import { verifyNotionConnection } from './libs/verifyNotionConnection';
 import { verifyGoogleConnection } from './libs/verifyGoogleConnection';
 import { updateActiveField } from './libs/updateActiveField';
 import { toggleSyncStatus } from './toggleSyncStatus';
+import { getCurrentDate } from './libs/getCurrentDate';
 
 
 const NOTION_CONNECTION_STRING = 'https://api.notion.com/v1/oauth/authorize?client_id=c762fab7-bc3f-4726-bf5f-08908b6ccd09&response_type=code&owner=user&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fconnections';
@@ -89,10 +90,11 @@ const Connections = ({ searchParams }) => {
 
         //check if user has authorized notion connection
         const checkNotionConnection = async () => {
-            const { notion_secret_key, selected_databases_ids } = await getUser(user_id);
+            const { notion_secret_key, selected_databases_ids, active } = await getUser(user_id);
             const { is_valid } = await verifyNotionConnection(notion_secret_key)
             setNotionConnection(is_valid);
             setSelectedDatabseIds(selected_databases_ids);
+            setSyncStatus(active);
         }
         //check if user has authorized google connection
         const checkGoogleConnection = async () => {
@@ -152,7 +154,7 @@ const Connections = ({ searchParams }) => {
                             Your Connections
                         </Typography>
                         <Typography variant="body1" sx={{ color: 'gray' }}>
-                            Not synced yet
+                            {syncStatus ? getCurrentDate() : " Not synced yet"}
                         </Typography>
 
                     </Box>
@@ -179,7 +181,7 @@ const Connections = ({ searchParams }) => {
                     {notionConnection
                         ? <ConnectNotion
                             title="Notion"
-                            description="Connect your notion pages"
+                            description="Congratuations! Notion has Been Connected Successfully."
                             button="Connect"
                             image="/images/notion-icon.svg"
                             setNotionConnection={setNotionConnection}
@@ -195,7 +197,7 @@ const Connections = ({ searchParams }) => {
                     {googleConnection
                         ? <ConnectCalendar
                             title="Google Calendar"
-                            description="Connect your Google Calendar"
+                            description="Your Google Calendar is Connected!"
                             button="Connect"
                             image="/images/calendar-icon.svg"
                             setGoogleConnection={setGoogleConnection}
