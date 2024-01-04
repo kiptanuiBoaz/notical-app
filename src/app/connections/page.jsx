@@ -10,7 +10,7 @@ import { createStripeCustomer } from './libs/createStripeCustomer';
 import { useSelector } from 'react-redux';
 import { selectUser } from '@/redux/features/authSlice';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import Notiflix, { Loading, Notify } from 'notiflix';
+import Notiflix, { Confirm, Loading, Notify, Report } from 'notiflix';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { nodeApi } from '@/axios/nodeApi';
@@ -38,8 +38,9 @@ const Connections = ({ searchParams }) => {
     const [customerId, setCustomerId] = useState();
     const [stripeConnection, setStriepeConnection] = useState(true);
     const [syncStatus, setSyncStatus] = useState(false);
+    const [selectedDatabseIds, setSelectedDatabseIds] = useState([]);
 
-    const { user_id, email } = useSelector(selectUser);
+    const { user_id, email, full_name } = useSelector(selectUser);
     const theme = useTheme();
     const router = useRouter();
     const pathname = usePathname()
@@ -64,29 +65,61 @@ const Connections = ({ searchParams }) => {
 
 
     const checkSyncStatus = async () => {
-        if (stripeConnection) {
-            Notify.success("Successfully created stripe connection")
-        } else {
-            Notify.failure(" Please add opt into a subscription ")
-            return router.push("/subscriptions")
-        }
+        const { selected_databases_ids } = await getUser(user_id);
+        Confirm.show(
+            `${syncStatus ? "Stop" : "Start "} synchronization ?`,
+            `${full_name.split(" ")[0]},${syncStatus
+                ? "This will stop all your current Notion Databases synchronization to Google Calendar"
+                : "this operation will synchronize all your selected Notion databases with your Google Calendar "
+            }`,
+            'Continue',
+            'Cancel',
+            async () => {
+                if (stripeConnection) {
+                    Notify.success("Successfully created stripe connection")
+                } else {
+                    Notify.failure(" Please add opt into a subscription ")
+                    return router.push("/subscriptions")
+                }
 
 
-        if (notionConnection) {
-            Notify.success("Successfully created Notion connection")
-        } else {
-            return Notify.failure(" Please create a Notion Connection ")
-        }
+                if (notionConnection) {
+                    Notify.success("Successfully created Notion connection")
+                } else {
+                    return Notify.failure(" Please create a Notion Connection ")
+                }
+
+                if (!syncStatus) {
+                    if (selected_databases_ids.length > 0) {
+                        Notify.success("Connected atleast one notion database")
+                    } else {
+                        return Report.warning(
+                            'No Database Selection',
+                            'Please Connect Atleast one Notion Database before attempting to sync again',
+                            'Okay',
+                        );
+                    }
+                }
 
 
-        if (googleConnection) {
-            Notify.success("Successfully created Google Calendar connection")
-        } else {
-            return Notify.failure("Please create a Google Calendar  Connection ")
-        }
-        await updateActiveField(user_id, email, !syncStatus);
-        Notify.success(!syncStatus ? "Successfully synced  Google Calendar and Notion" : "Succesfully stopped sync")
-        setSyncStatus(!syncStatus);
+
+                if (googleConnection) {
+                    Notify.success("Successfully created Google Calendar connection")
+                } else {
+                    return Notify.failure("Please create a Google Calendar  Connection ")
+                }
+                await updateActiveField(user_id, email, !syncStatus);
+                Notify.success(!syncStatus ? "Successfully synced  Google Calendar and Notion" : "Succesfully stopped sync")
+                setSyncStatus(!syncStatus);
+            },
+            () => {
+
+            },
+            {
+            },
+        );
+
+
     }
 
     // server request after notion consent
@@ -111,9 +144,10 @@ const Connections = ({ searchParams }) => {
 
         //check if user has authorized notion connection
         const checkNotionConnection = async () => {
-            const { notion_secret_key } = await getUser(user_id);
+            const { notion_secret_key, selected_databases_ids } = await getUser(user_id);
             const { is_valid } = await verifyNotionConnection(notion_secret_key)
             setNotionConnection(is_valid);
+            setSelectedDatabseIds(selected_databases_ids);
         }
         //check if user has authorized google connection
         const checkGoogleConnection = async () => {
