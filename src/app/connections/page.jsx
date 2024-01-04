@@ -24,6 +24,7 @@ import { createNoticationChannels } from './libs/createNoticationChannels';
 import { verifyNotionConnection } from './libs/verifyNotionConnection';
 import { verifyGoogleConnection } from './libs/verifyGoogleConnection';
 import { updateActiveField } from './libs/updateActiveField';
+import { toggleSyncStatus } from './toggleSyncStatus';
 
 
 const NOTION_CONNECTION_STRING = 'https://api.notion.com/v1/oauth/authorize?client_id=c762fab7-bc3f-4726-bf5f-08908b6ccd09&response_type=code&owner=user&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fconnections';
@@ -64,63 +65,7 @@ const Connections = ({ searchParams }) => {
 
 
 
-    const checkSyncStatus = async () => {
-        const { selected_databases_ids } = await getUser(user_id);
-        Confirm.show(
-            `${syncStatus ? "Stop" : "Start "} synchronization ?`,
-            `${full_name.split(" ")[0]},${syncStatus
-                ? "This will stop all your current Notion Databases synchronization to Google Calendar"
-                : "this operation will synchronize all your selected Notion databases with your Google Calendar "
-            }`,
-            'Continue',
-            'Cancel',
-            async () => {
-                if (stripeConnection) {
-                    Notify.success("Successfully created stripe connection")
-                } else {
-                    Notify.failure(" Please add opt into a subscription ")
-                    return router.push("/subscriptions")
-                }
 
-
-                if (notionConnection) {
-                    Notify.success("Successfully created Notion connection")
-                } else {
-                    return Notify.failure(" Please create a Notion Connection ")
-                }
-
-                if (!syncStatus) {
-                    if (selected_databases_ids.length > 0) {
-                        Notify.success("Connected atleast one notion database")
-                    } else {
-                        return Report.warning(
-                            'No Database Selection',
-                            'Please Connect Atleast one Notion Database before attempting to sync again',
-                            'Okay',
-                        );
-                    }
-                }
-
-
-
-                if (googleConnection) {
-                    Notify.success("Successfully created Google Calendar connection")
-                } else {
-                    return Notify.failure("Please create a Google Calendar  Connection ")
-                }
-                await updateActiveField(user_id, email, !syncStatus);
-                Notify.success(!syncStatus ? "Successfully synced  Google Calendar and Notion" : "Succesfully stopped sync")
-                setSyncStatus(!syncStatus);
-            },
-            () => {
-
-            },
-            {
-            },
-        );
-
-
-    }
 
     // server request after notion consent
     useEffect(() => {
@@ -217,7 +162,7 @@ const Connections = ({ searchParams }) => {
                             style={{ fontSize: "17px" }}
                             variant="contained"
                             sx={{ textTransform: 'none', backgroundColor: syncStatus ? "#DC4D00" : "#00A78E", color: "#fff" }}
-                            onClick={checkSyncStatus}
+                            onClick={() => toggleSyncStatus(user_id, syncStatus, full_name, stripeConnection, router, notionConnection, googleConnection, email, setSyncStatus)}
                         >
                             {syncStatus ? "Stop Sync" : "Start Sync"}
                         </Button>
