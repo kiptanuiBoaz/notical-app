@@ -3,9 +3,9 @@ import React from 'react';
 import { Card, CardContent, CardActions, Typography, Button, Box, Icon, useTheme } from '@mui/material';
 import { FaCheck } from "react-icons/fa6";
 import Image from 'next/image';
-import { disconnectCalendar } from '@/app/connections/libs/google/disconnectCalendar';
 import { useSelector } from 'react-redux';
 import { selectUser } from '@/redux/features/authSlice';
+import { disconnectCalendar } from '@/libs/google/disconnectCalendar';
 
 export const ConnectCalendar = ({ title, description, setGoogleConnection, image }) => {
     const theme = useTheme();

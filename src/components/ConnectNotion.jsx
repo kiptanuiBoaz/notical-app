@@ -9,11 +9,10 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import { MdKeyboardArrowUp } from "react-icons/md";
 import { useSelector } from 'react-redux';
 import { selectUser } from '@/redux/features/authSlice';
-import { disconnectNotion } from '@/app/connections/libs/notion/disconnectNotion';
-import { getUser } from '@/app/connections/libs/supabase/getUser';
-import { updateSelectedDbIds } from '@/app/connections/libs/supabase/updateSelectedDbIds.';
 import { selectTheme } from '@/redux/features/themeSlice';
-import { updateDeleteDone } from '@/app/connections/libs/supabase/updatedeleteDone';
+import { disconnectNotion } from '@/libs/notion/disconnectNotion';
+import { getUser } from '@/libs/supabase/getUser';
+import { updateSelectedDbIds } from '@/libs/supabase/updateSelectedDbIds.';
 
 
 export const ConnectNotion = ({ title, description, image, setNotionConnection }) => {
