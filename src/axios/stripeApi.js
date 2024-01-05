@@ -1,8 +1,6 @@
 const BASE_URL = "https://api.stripe.com/v1";
 import axios from 'axios';
 
-// Check if window is defined (client-side)
-const user = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('user')) : null;
 
 const axiosOptions = {
     baseURL: BASE_URL,

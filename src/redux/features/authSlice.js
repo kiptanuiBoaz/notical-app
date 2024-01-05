@@ -10,6 +10,8 @@ const initialState = storedUser ? JSON.parse(storedUser) : {
         email: null,
         full_name: '',
         avatarUrl: null,
+        stripeId: null,
+        stripeSubscriptionStatus: false,
         role: {
             id: null,
             name: ""
@@ -30,17 +32,16 @@ const authSlice = createSlice({
 
         RESET_AUTH: (state) => {
             state.user = {
-                user: {
-                    user_id: null,
-                    email: null,
-                    full_name: '',
-                    avatarUrl: null,
-                    role: {
-                        id: null,
-                        name: ""
-                    },
-
-                }
+                user_id: null,
+                email: null,
+                full_name: '',
+                avatarUrl: null,
+                stripeId: null,
+                stripeSubscriptionStatus: false,
+                role: {
+                    id: null,
+                    name: ""
+                },
             }
             // Create a deep copy of initialState.user
 

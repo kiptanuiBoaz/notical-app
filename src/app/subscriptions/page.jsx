@@ -1,12 +1,13 @@
 "use client"
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, Card, CardContent, CardActions, Typography, Button, List, ListItem, ListItemIcon, ListItemText, useTheme } from '@mui/material';
 import { FaCheck } from "react-icons/fa";
 import { plans } from "./plans";
+import { ActiveSubscriptionCard } from '@/components/ActiveSubscriptionCard';
 
 
 const Subscriptions = () => {
-
+    const [customerSubscribed, setCustomerSubscribed] = useState(true);
     const theme = useTheme()
     // Define the pricing plans data
 
@@ -25,7 +26,9 @@ const Subscriptions = () => {
                 color: theme.palette.primary.main
 
             }}
-        >
+        >{customerSubscribed
+            ? <ActiveSubscriptionCard />
+            :
             <Box
                 sx={{
                     width: ['95%', '70%', '45%'],
@@ -88,7 +91,9 @@ const Subscriptions = () => {
                         </Card>
                     ))}
                 </Box>
-            </Box>
+
+
+            </Box>}
         </Box>
     );
 };

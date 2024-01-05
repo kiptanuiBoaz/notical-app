@@ -1,15 +1,18 @@
 import { stripeApi } from "@/axios/stripeApi";
-import { Loading } from "notiflix";
+import { Loading, Notify } from "notiflix";
+const CREATE_CHECKOUT_SESSION_ROUTE = "/checkout/sessions"
 
-export const getStripeCustomerId = async (id) => {
-    const GET_CUSTOMER_ROUTES = "/customers";
-
+export const createCheckOutSession = async (customer_id, price) => {
     try {
         Loading.dots({
             svgColor: '#0276AA',
             backgroundColor: 'rgba(0,0,0,0.4)',
         });
-        const response = await stripeApi.get(`${GET_CUSTOMER_ROUTES}/cus_OmhcpPgbniHVxv`)
+        const response = await stripeApi.post(
+            CREATE_CHECKOUT_SESSION_ROUTE,
+            { customer_id, price }
+        )
+
         console.log(response)
         return response;
     } catch (error) {
