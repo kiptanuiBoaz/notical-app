@@ -4,9 +4,9 @@ import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { UPDATE_AUTH } from '@/redux/features/authSlice';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import { getUser } from './connections/libs/getUser';
-import { createStripeCustomer } from './connections/libs/createStripeCustomer';
-import { createUserProfile } from './connections/libs/createUserProfile';
+import { getUser } from './connections/libs/supabase/getUser';
+import { createStripeCustomer } from './connections/libs/stripe/createStripeCustomer';
+import { createUserProfile } from './connections/libs/supabase/createUserProfile';
 
 const Home = ({ searchParams }) => {
   const router = useRouter();

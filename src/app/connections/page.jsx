@@ -6,7 +6,7 @@ import { Footer } from '@/components/Footer';
 import { useTheme } from '@emotion/react';
 import { ConnectCalendar } from '@/components/ConnectCalendar';
 import { ConnectNotion } from '@/components/ConnectNotion';
-import { createStripeCustomer } from './libs/createStripeCustomer';
+import { createStripeCustomer } from './libs/stripe/createStripeCustomer';
 import { useSelector } from 'react-redux';
 import { selectUser } from '@/redux/features/authSlice';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
@@ -15,17 +15,17 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { nodeApi } from '@/axios/nodeApi';
 import { createAuth } from '@supabase/supabase-js'
-import { getUser } from './libs/getUser';
-import { getNotionAccessToken } from './libs/getNotionAccessToken';
-import { updateTableWithCalendarIds, updateTableWithGoogleTokens, updateUserTableWithAccessToken } from './libs/updateTable';
-import { getGoogleAccessToken } from './libs/getGoogleToken';
-import { getGoogleCalendarIds } from './libs/getGoogleCalendarIds';
-import { createNoticationChannels } from './libs/createNoticationChannels';
-import { verifyNotionConnection } from './libs/verifyNotionConnection';
-import { verifyGoogleConnection } from './libs/verifyGoogleConnection';
-import { updateActiveField } from './libs/updateActiveField';
-import { toggleSyncStatus } from './toggleSyncStatus';
-import { getCurrentDate } from './libs/getCurrentDate';
+import { getUser } from './libs/supabase/getUser';
+import { getNotionAccessToken } from './libs/notion/getNotionAccessToken';
+import { updateTableWithCalendarIds, updateTableWithGoogleTokens, updateUserTableWithAccessToken } from './libs/supabase/updateTable';
+import { getGoogleAccessToken } from './libs/google/getGoogleToken';
+import { getGoogleCalendarIds } from './libs/google/getGoogleCalendarIds';
+import { createNoticationChannels } from './libs/google/createNoticationChannels';
+import { verifyNotionConnection } from './libs/notion/verifyNotionConnection';
+import { verifyGoogleConnection } from './libs/google/verifyGoogleConnection';
+import { updateActiveField } from './libs/supabase/updateActiveField';
+import { toggleSyncStatus } from './libs/utils/toggleSyncStatus';
+import { getCurrentDate } from './libs/utils/getCurrentDate';
 
 
 const NOTION_CONNECTION_STRING = 'https://api.notion.com/v1/oauth/authorize?client_id=c762fab7-bc3f-4726-bf5f-08908b6ccd09&response_type=code&owner=user&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fconnections';

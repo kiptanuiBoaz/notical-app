@@ -18,9 +18,9 @@ import Image from 'next/image';
 import { useSelector } from 'react-redux';
 import { selectTheme } from '@/redux/features/themeSlice';
 import Link from 'next/link';
-import { createStripeCustomer } from '../../connections/libs/createStripeCustomer';
+import { createStripeCustomer } from '../../connections/libs/stripe/createStripeCustomer';
 import { Loading } from 'notiflix';
-import { createUserProfile } from '@/app/connections/libs/createUserProfile';
+import { createUserProfile } from '@/app/connections/libs/supabase/createUserProfile';
 
 const SignUp = () => {
     const [showPassword, setShowPassword] = useState(false);

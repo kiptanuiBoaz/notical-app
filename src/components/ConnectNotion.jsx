@@ -9,11 +9,12 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import { MdKeyboardArrowUp } from "react-icons/md";
 import { useSelector } from 'react-redux';
 import { selectUser } from '@/redux/features/authSlice';
-import { disconnectNotion } from '@/app/connections/libs/disconnectNotion';
-import { getUser } from '@/app/connections/libs/getUser';
-import { updateSelectedDbIds } from '@/app/connections/libs/updateSelectedDbIds.';
+import { disconnectNotion } from '@/app/connections/libs/notion/disconnectNotion';
+import { getUser } from '@/app/connections/libs/supabase/getUser';
+import { updateSelectedDbIds } from '@/app/connections/libs/supabase/updateSelectedDbIds.';
 import { selectTheme } from '@/redux/features/themeSlice';
-import { updateDeleteDone } from '@/app/connections/libs/updatedeleteDone';
+import { updateDeleteDone } from '@/app/connections/libs/supabase/updatedeleteDone';
+
 
 export const ConnectNotion = ({ title, description, image, setNotionConnection }) => {
     const [showConnections, setShowConnections] = useState(null);
@@ -64,7 +65,6 @@ export const ConnectNotion = ({ title, description, image, setNotionConnection }
         const { delete_done } = await getUser(user_id);
         setDeleteDone(delete_done);
     };
-
 
 
     const theme = useTheme();

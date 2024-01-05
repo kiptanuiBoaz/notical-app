@@ -1,6 +1,7 @@
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Loading, Notify } from "notiflix";
 
+
 export const disconnectCalendar = async (user_id, email) => {
     const supabase = createClientComponentClient();
     try {

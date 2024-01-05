@@ -1,6 +1,6 @@
 import { Confirm, Notify, Report } from "notiflix";
-import { updateActiveField } from "./libs/updateActiveField";
-import { getUser } from "./libs/getUser";
+import { updateActiveField } from "../supabase/updateActiveField";
+import { getUser } from "../supabase/getUser";
 
 export const toggleSyncStatus = async (user_id, syncStatus, full_name, stripeConnection, router, notionConnection, googleConnection, email, setSyncStatus) => {
     const { selected_databases_ids } = await getUser(user_id);
