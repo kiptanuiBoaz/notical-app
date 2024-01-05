@@ -60,6 +60,9 @@ const SignUp = () => {
             const { data, error } = await supabase.auth.signUp({
                 email,
                 password,
+                options: {
+                    emailRedirectTo: 'http://localhost:3000/auth/callback',
+                },
             });
 
             if (error) {
@@ -74,7 +77,7 @@ const SignUp = () => {
                 const registeredCustomer = await createUserProfile(customer.data.id, id, email);
 
                 console.log(registeredCustomer);
-                router.push(`/?code=${id}`);
+                // router.push(`/?code=${id}`);
             }
         } catch (error) {
             setError(true);

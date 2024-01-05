@@ -18,7 +18,7 @@ const Home = ({ searchParams }) => {
       const getCurrentUser = async () => {
         const code = searchParams.code;
         console.log(code)
-        const authenticatedUser = await supabase.auth.getUser() ?? await getUser(code);
+        const authenticatedUser = await supabase.auth.getUser()
         console.log(authenticatedUser);
         const { data: { user: { id, email, user_metadata, role, aud } } } = authenticatedUser;
 

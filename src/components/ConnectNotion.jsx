@@ -65,7 +65,7 @@ export const ConnectNotion = ({ title, description, image, setNotionConnection }
         setDeleteDone(delete_done);
     };
 
-    console.log(deleteDone)
+
 
     const theme = useTheme();
     const selectedTheme = useSelector(selectTheme);

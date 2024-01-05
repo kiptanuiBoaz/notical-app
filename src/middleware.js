@@ -2,25 +2,35 @@ import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs'
 import { NextResponse } from 'next/server'
 
 export async function middleware(req) {
-    const res = NextResponse.next();
+    // We need to create a response and hand it to the supabase client to be able to modify the response headers.
+    const res = NextResponse.next()
+    // Create authenticated Supabase Client.
+    const supabase = createMiddlewareClient({ req, res })
+    // Check if we have a session
+    const {
+        data: { session },
+    } = await supabase.auth.getSession()
 
-    const supabase = createMiddlewareClient({ req, res });
-    const { data: { user } } = await supabase.auth.getUser();
+    // Check auth condition
+    if (session?.user.email?.endsWith('@gmail.com')) {
+        console.log("Authentication successful")
+        // Authentication successful, forward request to protected route.
+        return res
+    }
 
-    console.log('User:', user);
-    console.log('Path:', req.nextUrl.pathname);
 
-    // if (!user && req.nextUrl.pathname !== '/auth/signup') {
-    //     console.log('Redirecting to /auth/login');
-    //     return NextResponse.redirect(new URL('/auth/login', req.url));
-    // }
-
-    return res;
+    console.log("Un authorized ")
+    // Auth condition not met, redirect to home page.
+    const redirectUrl = req.nextUrl.clone()
+    redirectUrl.pathname = '/auth/login'
+    redirectUrl.searchParams.set(`redirectedFrom`, req.nextUrl.pathname)
+    // return NextResponse.redirect(redirectUrl)
 }
 
 
 export const config = {
+    api: {
+        bodyParser: false,
+    },
     matcher: ["/", "/connections", "/account", "/subscriptions"]
-}
-
-
+};

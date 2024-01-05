@@ -35,7 +35,7 @@ const GOOGLE_CONNECTION_STRING = 'https://accounts.google.com/o/oauth2/auth/oaut
 
 const Connections = ({ searchParams }) => {
     const [loading, setLoading] = useState(true);
-    const [notionConnection, setNotionConnection] = useState(true);
+    const [notionConnection, setNotionConnection] = useState(false);
     const [googleConnection, setGoogleConnection] = useState(false);
     const [customerId, setCustomerId] = useState();
     const [stripeConnection, setStriepeConnection] = useState(true);
@@ -70,53 +70,69 @@ const Connections = ({ searchParams }) => {
 
     // server request after notion consent
     useEffect(() => {
-        const createNotionConnection = async () => {
-            const notionAccessToken = await getNotionAccessToken(user_id, searchParams.code);
-            updateUserTableWithAccessToken(user_id, notionAccessToken, email);
+        const runEffect = async () => {
+            try {
+                const createNotionConnection = async () => {
+                    const notionAccessToken = await getNotionAccessToken(user_id, searchParams.code);
+                    updateUserTableWithAccessToken(user_id, notionAccessToken, email);
 
-        }
+                }
 
-        const createGoogleConnection = async () => {
-            const { access_token, refresh_token } = await getGoogleAccessToken(searchParams.code);
-            if (access_token) updateTableWithGoogleTokens(access_token, refresh_token, email, user_id);
+                const createGoogleConnection = async () => {
+                    const { access_token, refresh_token } = await getGoogleAccessToken(searchParams.code);
+                    if (access_token) updateTableWithGoogleTokens(access_token, refresh_token, email, user_id);
 
-            const calendarIds = await getGoogleCalendarIds(refresh_token);
-            if (calendarIds) await updateTableWithCalendarIds(calendarIds, email, user_id);
+                    const calendarIds = await getGoogleCalendarIds(refresh_token);
+                    if (calendarIds) await updateTableWithCalendarIds(calendarIds, email, user_id);
 
-            //creae notification channels
-            await createNoticationChannels(access_token);
+                    //creae notification channels
+                    await createNoticationChannels(access_token);
 
-        }
+                }
 
-        //check if user has authorized notion connection
-        const checkNotionConnection = async () => {
-            const { notion_secret_key, selected_databases_ids, active } = await getUser(user_id);
-            const { is_valid } = await verifyNotionConnection(notion_secret_key)
-            setNotionConnection(is_valid);
-            setSelectedDatabseIds(selected_databases_ids);
-            setSyncStatus(active);
-        }
-        //check if user has authorized google connection
-        const checkGoogleConnection = async () => {
-            const { google_access_token } = await getUser(user_id);
-            const { is_valid } = await verifyGoogleConnection(google_access_token);
-            setGoogleConnection(is_valid)
-        }
+                //check if user has authorized notion connection
+                const checkNotionConnection = async () => {
+                    const user = await getUser(user_id);
+                    if (user) {
+                        const { notion_secret_key, selected_databases_ids, active } = user;
+                        const { is_valid } = await verifyNotionConnection(notion_secret_key)
+                        setNotionConnection(is_valid);
+                        setSelectedDatabseIds(selected_databases_ids);
+                        setSyncStatus(active);
+                    }
 
-        //subsequent request after redirect from consecnt screens
-        if (searchParams.code) {
-            if (searchParams.code.length > 36) {
-                createGoogleConnection()
-            } else {
-                createNotionConnection();
+                }
+                //check if user has authorized google connection
+                const checkGoogleConnection = async () => {
+                    const data = await getUser(user_id);
+                    if (data?.google_access_token) {
+                        const { is_valid } = await verifyGoogleConnection(data.google_access_token);
+                        setGoogleConnection(is_valid)
+                    }
+
+                }
+
+                //subsequent request after redirect from consecnt screens
+                if (searchParams.code) {
+                    if (searchParams.code.length > 36) {
+                        await createGoogleConnection()
+                    } else {
+                        await createNotionConnection();
+                    }
+                    router.push(pathname);
+                }
+
+                checkGoogleConnection();
+                checkNotionConnection();
+
+                console.log("running useEffect");
+            } catch (error) {
+                console.error("Error in useEffect:", error);
             }
-            router.push(pathname);
-        }
+        };
 
-        checkGoogleConnection();
-        checkNotionConnection();
-        console.log("running useEffect")
-    }, [searchParams, user_id, email, pathname, router])
+        runEffect();
+    }, [user_id, email])
 
 
     return (
