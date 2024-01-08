@@ -72,12 +72,12 @@ export const ConnectNotion = ({ title, description, image, setNotionConnection }
     return (
         <Card sx={{ border: '1px solid gray', borderRadius: '10px', p: 2, backgroundColor: theme.palette.background.default }}>
             <CardContent>
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: "start" }}>
                     {/* <Box sx={{ m: 2, height: "30px" }}> */}
                     <Image src={image} height={50} width={50} alt='title' style={{ marginRight: "10px" }} />
                     {/* </Box> */}
 
-                    <Box sx={{ flex: '1 1 auto' }}>
+                    <Box sx={{ flex: '1 1 auto', paddingLeft: "10px" }} textAlign={"start"}>
                         <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
                             {title}
                         </Typography>
@@ -103,17 +103,19 @@ export const ConnectNotion = ({ title, description, image, setNotionConnection }
             </CardActions>
             <hr />
 
-
             <CardContent>
                 <Typography
                     onClick={() => setShowConnections(!showConnections)}
                     variant="body2"
                     sx={{
-                        "&hover": { bgcolor: theme.palette.background.paper },
+                        "&:hover": { backgroundColor: theme.palette.background.default },
                         color: theme.palette.primary.main,
-                        fontSize: "20px", display: "flex",
+                        fontSize: ["17px", "18px", "20px"],
+                        display: "flex",
                         justifyContent: "space-between",
                         cursor: "pointer",
+                        padding: '5px 7px',
+                        borderRadius: '5px',
                     }}
                 >
                     Your Notion Databases to Sync       {showConnections ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
@@ -121,11 +123,13 @@ export const ConnectNotion = ({ title, description, image, setNotionConnection }
                 {showConnections && allDatabses.map(({ id, title }) => <CardActions sx={{ display: "flex", justifyContent: "space-between" }} key={id}>
                     <Typography
                         variant="body2"
+                        textAlign={"start"}
                         sx={{
                             color: selectedDatabseIds.includes(id) ? theme.palette.primary.main : 'gray',
                             fontSize: "18px",
                             display: "flex",
                             alignItems: "center",
+                            justifyContent: "flex-start",
                             cursor: "pointer",
                             "&:hover": { color: theme.palette.primary.main }
                         }}
@@ -141,13 +145,11 @@ export const ConnectNotion = ({ title, description, image, setNotionConnection }
                         : <BsArrowRepeat />
                     }
 
-
-
                 </CardActions>)
                 }
             </CardContent >
 
-            <hr />
+            <hr style={{ height: "0.5px" }} />
             <CardActions sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Box sx={{ display: 'flex', gap: '10px' }}>
                     <Button

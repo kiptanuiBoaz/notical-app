@@ -13,7 +13,8 @@ export const ActiveSubscriptionCard = () => {
     const { stripeId, subscriptionEnd, subscriptionInterval } = useSelector(selectUser);
 
     return (
-        <Card sx={{ border: '1px solid gray', borderRadius: '10px', p: 2, backgroundColor: theme.palette.background.primary, }}>
+        <Card sx={{ border: '1px solid gray', borderRadius: '10px', p: 2, backgroundColor: theme.palette.background.paper, }}>
+
             <CardContent>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Box>
@@ -89,6 +90,7 @@ export const ActiveSubscriptionCard = () => {
                     </Box>
                 </Link>
             </CardActions>
+
         </Card>
     );
 };

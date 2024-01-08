@@ -35,7 +35,7 @@ const Account = () => {
         <Box
             sx={{
                 width: '100%',
-                height: '100vh',
+                // height: '100vh',
                 cursor: 'pointer',
                 paddingTop: "70px",
                 display: 'flex',
@@ -62,14 +62,14 @@ const Account = () => {
             >
                 <Grid container spacing={2} >
                     <Grid item xs={12} >
-                        <Grid container alignItems="center" justifyContent="space-between" sx={{ padding: 4, fontSize: '22px' }}>
+                        <Grid container alignItems="center" justifyContent="space-between" sx={{ padding: 2, fontSize: '21px' }}>
                             <Grid item>
                                 <Typography variant="h4" component="h1">
                                     Your Account
                                 </Typography>
                             </Grid>
                             <Grid item>
-                                <Button variant="contained" color="error" sx={{ fontSize: '20px' }}>
+                                <Button variant="contained" color="error" sx={{ marginTop: "5px", fontSize: '19px', textTransform: "none" }}>
                                     Delete account
                                 </Button>
                             </Grid>
@@ -77,7 +77,7 @@ const Account = () => {
                     </Grid>
                     <hr style={{ width: "100%" }} />
                     <Grid item xs={12}>
-                        <Grid container alignItems="center" spacing={2} sx={{ padding: 1 }}>
+                        <Grid container alignItems="center" spacing={2} sx={{}}>
                             <Grid item>
                                 <Avatar href="/account" src={currentUser.avatarUrl} alt="user" sx={{ ml: "10px", height: "50px", width: "50px" }} />
                             </Grid>
@@ -99,7 +99,7 @@ const Account = () => {
                     </Grid>
                     <hr style={{ width: "100%" }} />
                     <Grid item xs={12}>
-                        <Grid container alignItems="center" spacing={2} sx={{ padding: "0 0 10px 20px" }}>
+                        <Grid container alignItems="center" spacing={2} sx={{ padding: "0 0 5px 20px" }}>
                             <Grid item>
                                 <WebIcon fontSize="large" />
                             </Grid>
@@ -112,7 +112,7 @@ const Account = () => {
                     </Grid>
                     <hr style={{ width: "100%" }} />
                     <Grid item xs={12}>
-                        <Grid container alignItems="center" spacing={2} sx={{ padding: "0 0 10px 20px" }}>
+                        <Grid container alignItems="center" spacing={2} sx={{ padding: "0 0 5px 20px" }}>
                             <Grid item>
                                 <LoopIcon fontSize="large" />
                             </Grid>
@@ -125,7 +125,7 @@ const Account = () => {
                     </Grid>
                     <hr style={{ width: "100%" }} />
                     <Grid item xs={12}>
-                        <Grid container alignItems="center" spacing={2} sx={{ padding: '0 0 10px 20px' }}>
+                        <Grid container alignItems="center" spacing={2} sx={{ padding: '0 0 5px 20px' }}>
                             <Grid item>
                                 <Switch
                                     sx={{ color: theme.palette.secondary.main }}
@@ -145,7 +145,7 @@ const Account = () => {
                     </Grid>
                     <hr style={{ width: "100%" }} />
                     <Grid item xs={12}>
-                        <Grid container alignItems="center" spacing={2} sx={{ padding: "0 0 15px 20px" }}>
+                        <Grid container alignItems="center" spacing={2} sx={{ padding: "0 0 5px 20px" }}>
                             <Grid item>
                                 <LogoutIcon fontSize="large" />
                             </Grid>

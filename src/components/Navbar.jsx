@@ -17,6 +17,7 @@ export const Navbar = () => {
     const pathname = usePathname();
     const selectedTheme = useSelector(selectTheme);
     const currentUser = useSelector(selectUser);
+    const [isHovered, setIsHovered] = useState("");
     const theme = useTheme();
     const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -66,13 +67,29 @@ export const Navbar = () => {
                         <IoMenu size={30} />
                     </IconButton>
 
-                    <Typography variant="p" sx={{ flexGrow: 1, textAlign: 'end', mr: "50px", color: theme.palette.primary.main, display: { xs: 'none', md: 'block' } }}>
-                        <Link style={{ color: pathname === "/connections" ? "#0275A9" : theme.palette.primary.main, textDecoration: "none" }} href="/connections"  >
+                    <Typography variant="p" sx={{ flexGrow: 1, textAlign: 'end', mr: "50px", display: { xs: 'none', md: 'block' } }}>
+                        <Link
+                            style={{
+                                color: pathname === "/connections" || isHovered === "/connections" ? "#0275A9" : theme.palette.primary.main, textDecoration: "none",
+                                "&hover": {
+                                    color: "#0275A9"
+                                },
+                                transition: 'color 0.3s ease'
+                            }}
+                            href="/connections"
+                            onMouseOver={() => setIsHovered("/connections")}
+                            onMouseOut={() => setIsHovered(false)}
+                        >
                             Connections
                         </Link>
                     </Typography>
                     <Typography variant="p" sx={{ flexGrow: 1, textAlign: 'start', mr: "50px", color: theme.palette.primary.main, display: { xs: 'none', md: 'block' } }}>
-                        <Link style={{ color: pathname === "/subscriptions" ? "#0275A9" : theme.palette.primary.main, textDecoration: "none" }} href="/subscriptions"  >
+                        <Link
+                            style={{ color: pathname === "/subscriptions" || isHovered === "/subscriptions" ? "#0275A9" : theme.palette.primary.main, textDecoration: "none" }}
+                            href="/subscriptions"
+                            onMouseOver={() => setIsHovered("/subscriptions")}
+                            onMouseOut={() => setIsHovered("")}
+                        >
                             Subscriptions
                         </Link>
                     </Typography>

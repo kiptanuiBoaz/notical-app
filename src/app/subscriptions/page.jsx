@@ -20,7 +20,7 @@ const Subscriptions = () => {
         <Box
             sx={{
                 paddingTop: '90px',
-                // height: '100vh',
+                height: '100vh',
                 // width: '100vw',
                 display: 'flex',
                 alignItems: 'start',

@@ -17,7 +17,7 @@ export const ConnectCalendar = ({ title, description, setGoogleConnection, image
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Image src={image} height={50} width={50} alt='title' style={{ marginRight: "10px" }} />
 
-                    <Box sx={{ flex: '1 1 auto' }}>
+                    <Box sx={{ flex: '1 1 auto', paddingLeft: "10px" }} textAlign={"start"}>
                         <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
                             {title}
                         </Typography>

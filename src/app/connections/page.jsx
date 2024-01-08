@@ -1,6 +1,6 @@
 "use client"
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, Button, Card, CardContent, CardActions } from '@mui/material';
+import { Box, Typography, Button, Grid } from '@mui/material';
 import { ConnectionCard } from '@/components/ConnectionCard';
 import { Footer } from '@/components/Footer';
 import { useTheme } from '@emotion/react';
@@ -18,12 +18,10 @@ import { verifyNotionConnection } from '@/libs/notion/verifyNotionConnection';
 import { toggleSyncStatus } from '@/libs/utils/toggleSyncStatus';
 import { getCurrentDate } from '@/libs/utils/getCurrentDate';
 import { getUser } from '@/libs/supabase/getUser';
-
+import { createNoticationChannels } from '@/libs/google/createNoticationChannels';
 
 const NOTION_CONNECTION_STRING = 'https://api.notion.com/v1/oauth/authorize?client_id=c762fab7-bc3f-4726-bf5f-08908b6ccd09&response_type=code&owner=user&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fconnections';
-const GOOGLE_CONNECTION_STRING = 'https://accounts.google.com/o/oauth2/auth/oauthchooseaccount?scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcalendar&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fconnections&response_type=code&client_id=474592924938-p58vbsd9l7hllhk84bee27e0oq5a6l98.apps.googleusercontent.com&access_type=offline&prompt=consent&service=lso&o2v=1&theme=glif&flowName=GeneralOAuthFlow'
-
-
+const GOOGLE_CONNECTION_STRING = 'https://accounts.google.com/o/oauth2/auth/oauthchooseaccount?scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcalendar&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fconnections&response_type=code&client_id=474592924938-p58vbsd9l7hllhk84bee27e0oq5a6l98.apps.googleusercontent.com&access_type=offline&prompt=consent&service=lso&o2v=1&theme=glif&flowName=GeneralOAuthFlow';
 
 const Connections = ({ searchParams }) => {
     const [loading, setLoading] = useState(false);
@@ -37,28 +35,7 @@ const Connections = ({ searchParams }) => {
     const { user_id, email, full_name } = useSelector(selectUser);
     const theme = useTheme();
     const router = useRouter();
-    const pathname = usePathname()
-
-    // useEffect(() => {
-    //     const handleConnections = async () => {
-    //         Loading.dots({
-    //             svgColor: '#0276AA',
-    //             backgroundColor: 'rgba(0,0,0,0.4)',
-    //         });
-
-    //         //fetch user from superbase
-    //         const res = await getUser(user_id);
-    //         console.log(res);
-    //         setCustomerId(res?.customer_id);
-    //         Loading.remove();
-    //     };
-
-    //     if (!searchParams.code) handleConnections();
-    // }, []);
-
-
-
-
+    const pathname = usePathname();
 
     // server request after notion consent
     useEffect(() => {
@@ -127,15 +104,18 @@ const Connections = ({ searchParams }) => {
     }, [user_id, email])
 
 
+
     return (
         <Box
             sx={{
                 paddingTop: '90px',
-                // height: '100vh',
-                backgroundColor: theme.palette.background.default,
                 display: 'flex',
-                alignItems: 'start',
+                alignItems: 'center',
                 justifyContent: 'center',
+                flexDirection: 'column',
+                textAlign: 'center',
+                backgroundColor: theme.palette.background.paper,
+                overflow: 'hidden',
             }}
         >
             <Box
@@ -147,83 +127,84 @@ const Connections = ({ searchParams }) => {
                     backgroundColor: theme.palette.background.default,
                 }}
             >
+                <Grid item xs={12} >
+                    <Grid container justifyContent="space-between" sx={{ padding: 2, fontSize: '21px' }}>
+                        <Grid item alignItems={"start"}>
+                            <Typography variant="h4" sx={{ fontWeight: 'bold', fontSize: ['24px', '28px', '32px'] }}>
+                                Your Connections
+                            </Typography>
+                            <Typography textAlign={"start"} variant="body1" sx={{ color: 'gray', fontSize: ['14px', '16px'] }}>
+                                {syncStatus ? getCurrentDate() : 'Not synced yet'}
+                            </Typography>
+                        </Grid>
+                        <Grid item>
+                            <Button
+                                style={{ fontSize: ['14px', '16px'] }}
+                                variant="contained"
+                                sx={{
+                                    textTransform: 'none',
+                                    backgroundColor: syncStatus ? '#DC4D00' : '#00A78E',
+                                    color: '#fff',
+                                    mt: '1rem',
+                                }}
+                                onClick={() =>
+                                    toggleSyncStatus(user_id, syncStatus, full_name, stripeConnection, router, notionConnection, googleConnection, email, setSyncStatus)
+                                }
+                            >
+                                {syncStatus ? 'Stop Sync' : 'Start Sync'}
+                            </Button>
+                        </Grid>
+                    </Grid>
+                </Grid>
 
-                <Box
-                    sx={{
-                        display: 'flex',
-                        flexDirection: ['column', 'row'],
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        marginBottom: '2rem',
-                    }}
-                >
-                    <Box sx={{ flex: '1 1 auto' }}>
-                        <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
-                            Your Connections
-                        </Typography>
-                        <Typography variant="body1" sx={{ color: 'gray' }}>
-                            {syncStatus ? getCurrentDate() : " Not synced yet"}
-                        </Typography>
 
-                    </Box>
 
-                    <Box sx={{ flex: '0 0 auto', marginTop: ['1rem', '0'] }}>
-                        <Button
-                            style={{ fontSize: "17px" }}
-                            variant="contained"
-                            sx={{ textTransform: 'none', backgroundColor: syncStatus ? "#DC4D00" : "#00A78E", color: "#fff" }}
-                            onClick={() => toggleSyncStatus(user_id, syncStatus, full_name, stripeConnection, router, notionConnection, googleConnection, email, setSyncStatus)}
-                        >
-                            {syncStatus ? "Stop Sync" : "Start Sync"}
-                        </Button>
-                    </Box>
 
-                </Box>
                 <Box
                     sx={{
                         display: 'grid',
                         gridTemplateColumns: ['1fr', '1fr'],
                         gap: '1rem',
+                        backgroundColor: theme.palette.background.default,
                     }}
                 >
-                    {notionConnection
-                        ? <ConnectNotion
+                    {notionConnection ? (
+                        <ConnectNotion
                             title="Notion"
-                            description="Congratuations! Notion has Been Connected Successfully."
+                            description="Congratulations! Notion has been connected successfully."
                             button="Connect"
                             image="/images/notion-icon.svg"
                             setNotionConnection={setNotionConnection}
                         />
-                        : <ConnectionCard
+                    ) : (
+                        <ConnectionCard
                             title="Notion"
-                            description="Connect your notion pages"
+                            description="Connect your Notion pages"
                             button="Connect"
                             image="/images/notion-icon.svg"
                             connectionLink={NOTION_CONNECTION_STRING}
                         />
-                    }
-                    {googleConnection
-                        ? <ConnectCalendar
+                    )}
+                    {googleConnection ? (
+                        <ConnectCalendar
                             title="Google Calendar"
-                            description="Your Google Calendar is Connected!"
+                            description="Your Google Calendar is connected!"
                             button="Connect"
                             image="/images/calendar-icon.svg"
                             setGoogleConnection={setGoogleConnection}
                         />
-
-                        : <ConnectionCard
+                    ) : (
+                        <ConnectionCard
                             title="Google Calendar"
                             description="Connect your Google Calendar"
                             button="Connect"
                             image="/images/calendar-icon.svg"
                             connectionLink={GOOGLE_CONNECTION_STRING}
                         />
-
-                    }
+                    )}
                 </Box>
             </Box>
-            {/* <Footer /> */}
-        </Box >
+        </Box>
     );
 };
 
