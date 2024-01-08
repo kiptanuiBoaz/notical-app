@@ -18,6 +18,7 @@ const Home = ({ searchParams }) => {
   useEffect(() => {
     try {
       const getCurrentUser = async () => {
+
         const code = searchParams.code;
         // console.log(code)
         const authenticatedUser = await supabase.auth.getUser()
@@ -38,7 +39,7 @@ const Home = ({ searchParams }) => {
           full_name: user_metadata.full_name,
           avatarUrl: user_metadata.avatar_url,
           stripeId: stripeCustomer.data.id,
-          stripeSubscriptionStatus: stripeCustomer?.data?.subscriptions.data[0]?.status === "active" || stripeCustomer?.data?.subscriptions.data[0]?.status === "trialing" ? true : false,
+          stripeSubscriptionStatus: stripeCustomer?.data?.subscriptions.data[0]?.status ?? false,
           subscriptionPlan: stripeCustomer?.data?.subscriptions.data[0]?.plan.amount ?? null,
           subscriptionInterval: stripeCustomer?.data?.subscriptions.data[0]?.plan.interval ?? null,
           role: {
@@ -48,7 +49,14 @@ const Home = ({ searchParams }) => {
         }));
       }
       getCurrentUser();
-      router.push("/connections")
+      console.log(searchParams.redirectedFrom)
+      if (searchParams.redirectedFrom === "stripe") {
+        router.push("/subscriptions");
+
+      } else {
+        router.push("/connections")
+      }
+
 
     } catch (e) {
       console.error(e.message)

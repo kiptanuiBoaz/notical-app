@@ -10,7 +10,7 @@ import { formatDate } from '@/utility/formatDate';
 
 export const ActiveSubscriptionCard = () => {
     const theme = useTheme();
-    const { stripeId, subscriptionEnd, subscriptionInterval } = useSelector(selectUser);
+    const { stripeId, subscriptionEnd, subscriptionInterval, stripeSubscriptionStatus } = useSelector(selectUser);
 
     return (
         <Card sx={{ border: '1px solid gray', borderRadius: '10px', p: 2, backgroundColor: theme.palette.background.paper, }}>
@@ -68,7 +68,7 @@ export const ActiveSubscriptionCard = () => {
                     $9.99
                 </Typography>
                 <Typography variant="body2" sx={{ fontSize: "16px", marginTop: "5px", color: "#919DA8" }}>
-                    Renews at: {formatDate(subscriptionEnd)}
+                    {stripeSubscriptionStatus === "active" ? "Renews on" : "Trial ends on"} {formatDate(subscriptionEnd)}
                 </Typography>
             </CardContent>
             <CardActions>
