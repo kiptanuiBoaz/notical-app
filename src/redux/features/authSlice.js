@@ -1,26 +1,33 @@
 "use client"
 import { createSlice } from '@reduxjs/toolkit';
 
-
-const storedUser = typeof window !== 'undefined' ? localStorage.getItem("user") : null;
-
-const initialState = storedUser ? JSON.parse(storedUser) : {
-    user: {
-        user_id: null,
-        email: null,
-        full_name: '',
-        avatarUrl: null,
-        stripeId: null,
+const pseudoInitialState = {
+    stripe: {
+        customerId: null,
         subscriptionEnd: null,
         stripeSubscriptionStatus: false,
         subscriptionPlan: null,
         subscriptionInterval: null,
-        role: {
-            id: null,
-            name: ""
-        },
+    },
+    connectionStatus: {
+        notion: null,
+        google: null,
+    },
+    user_id: null,
+    email: null,
+    full_name: '',
+    avatarUrl: null,
+    role: {
+        id: null,
+        name: ""
+    },
+}
 
-    }
+const storedUser = typeof window !== 'undefined' ? localStorage.getItem("user") : null;
+
+const initialState = storedUser ? JSON.parse(storedUser) : {
+    user: pseudoInitialState
+
 };
 
 
@@ -30,32 +37,26 @@ const authSlice = createSlice({
     initialState,
     reducers: {
         UPDATE_AUTH: (state, action) => {
-            state.user = action.payload;
+            state.user = {
+                ...state.user,
+                ...action.payload,
+            };
+        },
+
+        UPDATE_CONNECTION_STATUS: (state, action) => {
+            state.user.connectionStatus = {
+                ...state.user.connectionStatus,
+                ...action.payload.connectionStatus,
+            }
         },
 
         RESET_AUTH: (state) => {
-            state.user = {
-                user_id: null,
-                email: null,
-                full_name: '',
-                avatarUrl: null,
-                stripeId: null,
-                subscriptionEnd: null,
-                stripeSubscriptionStatus: false,
-                subscriptionPlan: null,
-                subscriptionInterval: null,
-                role: {
-                    id: null,
-                    name: ""
-                },
-            }
-            // Create a deep copy of initialState.user
-
+            state.user = pseudoInitialState
         },
 
     },
 });
 
-export const { UPDATE_AUTH, RESET_AUTH } = authSlice.actions;
+export const { UPDATE_AUTH, RESET_AUTH, UPDATE_CONNECTION_STATUS } = authSlice.actions;
 export default authSlice.reducer;
 export const selectUser = (state) => state?.auth?.user;

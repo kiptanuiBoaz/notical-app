@@ -10,7 +10,7 @@ import { PricingSection } from '@/components/PricingSection';
 const Subscriptions = () => {
     const [customerSubscribed, setCustomerSubscribed] = useState(false);
     const theme = useTheme()
-    const { stripeId, stripeSubscriptionStatus } = useSelector(selectUser);
+    const { stripe: { stripeId, stripeSubscriptionStatus } } = useSelector(selectUser);
     console.log(stripeId, stripeSubscriptionStatus);
     // Define the pricing plans data
 

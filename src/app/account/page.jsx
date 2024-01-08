@@ -12,7 +12,6 @@ import { useRouter } from 'next/navigation';
 import { RESET_AUTH, selectUser } from '@/redux/features/authSlice';
 
 const Account = () => {
-    // const [mode, setMode] = useState('dark');
     const dispatch = useDispatch();
     const theme = useTheme()
     const mode = useSelector(selectTheme);

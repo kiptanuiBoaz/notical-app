@@ -35,17 +35,19 @@ const Home = ({ searchParams }) => {
         dispatch(UPDATE_AUTH({
           user_id: id,
           email: email,
-          subscriptionEnd: stripeCustomer?.data?.subscriptions.data[0]?.current_period_end ?? null,
           full_name: user_metadata.full_name,
           avatarUrl: user_metadata.avatar_url,
-          stripeId: stripeCustomer.data.id,
-          stripeSubscriptionStatus: stripeCustomer?.data?.subscriptions.data[0]?.status ?? false,
-          subscriptionPlan: stripeCustomer?.data?.subscriptions.data[0]?.plan.amount ?? null,
-          subscriptionInterval: stripeCustomer?.data?.subscriptions.data[0]?.plan.interval ?? null,
           role: {
             name: role,
             id: aud
           },
+          stripe: {
+            subscriptionEnd: stripeCustomer?.data?.subscriptions.data[0]?.current_period_end ?? null,
+            customerId: stripeCustomer.data.id,
+            stripeSubscriptionStatus: stripeCustomer?.data?.subscriptions.data[0]?.status ?? false,
+            subscriptionPlan: stripeCustomer?.data?.subscriptions.data[0]?.plan.amount ?? null,
+            subscriptionInterval: stripeCustomer?.data?.subscriptions.data[0]?.plan.interval ?? null,
+          }
         }));
       }
       getCurrentUser();

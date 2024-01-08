@@ -10,7 +10,7 @@ import { formatDate } from '@/utility/formatDate';
 
 export const ActiveSubscriptionCard = () => {
     const theme = useTheme();
-    const { stripeId, subscriptionEnd, subscriptionInterval, stripeSubscriptionStatus } = useSelector(selectUser);
+    const { stripe: { stripeId, subscriptionEnd, subscriptionInterval, stripeSubscriptionStatus } } = useSelector(selectUser);
 
     return (
         <Card sx={{ border: '1px solid gray', borderRadius: '10px', p: 2, backgroundColor: theme.palette.background.paper, }}>

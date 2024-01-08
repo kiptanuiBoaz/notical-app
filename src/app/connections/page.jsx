@@ -6,8 +6,8 @@ import { Footer } from '@/components/Footer';
 import { useTheme } from '@emotion/react';
 import { ConnectCalendar } from '@/components/ConnectCalendar';
 import { ConnectNotion } from '@/components/ConnectNotion';
-import { useSelector } from 'react-redux';
-import { selectUser } from '@/redux/features/authSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { UPDATE_AUTH, UPDATE_CONNECTION_STATUS, selectUser } from '@/redux/features/authSlice';
 import { usePathname, useRouter } from 'next/navigation';
 import { getNotionAccessToken } from '@/libs/notion/getNotionAccessToken';
 import { updateTableWithCalendarIds, updateTableWithGoogleTokens, updateUserTableWithAccessToken } from '@/libs/supabase/updateTable';
@@ -24,18 +24,15 @@ const NOTION_CONNECTION_STRING = 'https://api.notion.com/v1/oauth/authorize?clie
 const GOOGLE_CONNECTION_STRING = 'https://accounts.google.com/o/oauth2/auth/oauthchooseaccount?scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcalendar&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fconnections&response_type=code&client_id=474592924938-p58vbsd9l7hllhk84bee27e0oq5a6l98.apps.googleusercontent.com&access_type=offline&prompt=consent&service=lso&o2v=1&theme=glif&flowName=GeneralOAuthFlow';
 
 const Connections = ({ searchParams }) => {
-    const [loading, setLoading] = useState(false);
-    const [notionConnection, setNotionConnection] = useState(false);
-    const [googleConnection, setGoogleConnection] = useState(false);
-    const [customerId, setCustomerId] = useState();
     const [stripeConnection, setStriepeConnection] = useState(true);
     const [syncStatus, setSyncStatus] = useState(false);
     const [selectedDatabseIds, setSelectedDatabseIds] = useState([]);
 
-    const { user_id, email, full_name } = useSelector(selectUser);
+    const { user_id, email, full_name, connectionStatus: { google: googleConnection, notion: notionConnection } } = useSelector(selectUser);
     const theme = useTheme();
     const router = useRouter();
     const pathname = usePathname();
+    const dispatch = useDispatch();
 
     // server request after notion consent
     useEffect(() => {
@@ -44,7 +41,11 @@ const Connections = ({ searchParams }) => {
                 const createNotionConnection = async () => {
                     const notionAccessToken = await getNotionAccessToken(user_id, searchParams.code);
                     updateUserTableWithAccessToken(user_id, notionAccessToken, email);
-
+                    dispatch(UPDATE_CONNECTION_STATUS({
+                        connectionStatus: {
+                            notion: true,
+                        }
+                    }))
                 }
 
                 const createGoogleConnection = async () => {
@@ -56,7 +57,11 @@ const Connections = ({ searchParams }) => {
 
                     //creae notification channels
                     await createNoticationChannels(access_token);
-
+                    dispatch(UPDATE_CONNECTION_STATUS({
+                        connectionStatus: {
+                            google: true,
+                        }
+                    }))
                 }
 
                 //check if user has authorized notion connection
@@ -65,34 +70,43 @@ const Connections = ({ searchParams }) => {
                     if (user) {
                         const { notion_secret_key, selected_databases_ids, active } = user;
                         const { is_valid } = await verifyNotionConnection(notion_secret_key)
-                        setNotionConnection(is_valid);
                         setSelectedDatabseIds(selected_databases_ids);
-                        setSyncStatus(active);
+                        dispatch(UPDATE_CONNECTION_STATUS({
+                            connectionStatus: {
+                                notion: is_valid,
+                            }
+                        }))
                     }
 
                 }
+
                 //check if user has authorized google connection
                 const checkGoogleConnection = async () => {
                     const data = await getUser(user_id);
                     if (data?.google_access_token) {
                         const { is_valid } = await verifyGoogleConnection(data.google_access_token);
-                        setGoogleConnection(is_valid)
+                        dispatch(UPDATE_CONNECTION_STATUS({
+                            connectionStatus: {
+                                google: is_valid,
+                            }
+                        }))
                     }
-
                 }
 
-                //subsequent request after redirect from consecnt screens
+                //subsequent request after redirect from consent screens
                 if (searchParams.code) {
                     if (searchParams.code.length > 36) {
                         await createGoogleConnection()
                     } else {
                         await createNotionConnection();
                     }
+
                     router.push(pathname);
                 }
 
-                checkGoogleConnection();
-                checkNotionConnection();
+                if (googleConnection === null || undefined) checkGoogleConnection();
+                if (notionConnection === null || undefined) checkNotionConnection();
+
 
                 console.log("running useEffect");
             } catch (error) {
@@ -158,8 +172,6 @@ const Connections = ({ searchParams }) => {
                 </Grid>
 
 
-
-
                 <Box
                     sx={{
                         display: 'grid',
@@ -168,40 +180,40 @@ const Connections = ({ searchParams }) => {
                         backgroundColor: theme.palette.background.default,
                     }}
                 >
-                    {notionConnection ? (
-                        <ConnectNotion
+                    {notionConnection
+                        ? <ConnectNotion
                             title="Notion"
                             description="Congratulations! Notion has been connected successfully."
                             button="Connect"
                             image="/images/notion-icon.svg"
-                            setNotionConnection={setNotionConnection}
+
                         />
-                    ) : (
-                        <ConnectionCard
+                        : <ConnectionCard
                             title="Notion"
                             description="Connect your Notion pages"
                             button="Connect"
                             image="/images/notion-icon.svg"
                             connectionLink={NOTION_CONNECTION_STRING}
                         />
-                    )}
-                    {googleConnection ? (
-                        <ConnectCalendar
+                    }
+
+                    {googleConnection
+                        ? <ConnectCalendar
                             title="Google Calendar"
                             description="Your Google Calendar is connected!"
                             button="Connect"
                             image="/images/calendar-icon.svg"
-                            setGoogleConnection={setGoogleConnection}
+
                         />
-                    ) : (
-                        <ConnectionCard
+
+                        : <ConnectionCard
                             title="Google Calendar"
                             description="Connect your Google Calendar"
                             button="Connect"
                             image="/images/calendar-icon.svg"
                             connectionLink={GOOGLE_CONNECTION_STRING}
                         />
-                    )}
+                    }
                 </Box>
             </Box>
         </Box>

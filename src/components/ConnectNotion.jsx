@@ -7,8 +7,8 @@ import { MdOutlineCheckBoxOutlineBlank } from "react-icons/md";
 import { BsArrowRepeat } from "react-icons/bs";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { MdKeyboardArrowUp } from "react-icons/md";
-import { useSelector } from 'react-redux';
-import { selectUser } from '@/redux/features/authSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { UPDATE_CONNECTION_STATUS, selectUser } from '@/redux/features/authSlice';
 import { selectTheme } from '@/redux/features/themeSlice';
 import { disconnectNotion } from '@/libs/notion/disconnectNotion';
 import { getUser } from '@/libs/supabase/getUser';
@@ -16,7 +16,7 @@ import { updateSelectedDbIds } from '@/libs/supabase/updateSelectedDbIds.';
 import { updateDeleteDone } from '@/libs/supabase/updatedeleteDone';
 
 
-export const ConnectNotion = ({ title, description, image, setNotionConnection }) => {
+export const ConnectNotion = ({ title, description, image }) => {
     const [showConnections, setShowConnections] = useState(null);
     const [selectedDatabseIds, setSelectedDatabseIds] = useState([]);
     const [allDatabses, setAllDatabses] = useState([]);
@@ -25,6 +25,8 @@ export const ConnectNotion = ({ title, description, image, setNotionConnection }
 
     //from redux state
     const { user_id, email } = useSelector(selectUser);
+    const dispatch = useDispatch();
+
     useEffect(() => {
         const getDbConnections = async () => {
             const { databases_all, selected_databases_ids, delete_done } = await getUser(user_id);
@@ -137,8 +139,7 @@ export const ConnectNotion = ({ title, description, image, setNotionConnection }
 
                     >
                         {selectedDatabseIds.includes(id) ? <FaRegSquareCheck /> : <MdOutlineCheckBoxOutlineBlank />}
-                        &nbsp;&nbsp;
-                        {title}
+                        &nbsp;&nbsp;   {title}
                     </Typography>
                     {updatingDatabseIds === id
                         ? <Image src={`/gifs/${selectedTheme}-refresh.gif`} height={20} width={20} alt='loading gif' />
@@ -165,7 +166,11 @@ export const ConnectNotion = ({ title, description, image, setNotionConnection }
                 <Button
                     onClick={async () => {
                         await disconnectNotion(user_id, email);
-                        setNotionConnection(false);
+                        dispatch(UPDATE_CONNECTION_STATUS({
+                            connectionStatus: {
+                                notion: false,
+                            }
+                        }))
                     }}
                     variant="contained"
                     sx={{ color: "#fff", backgroundColor: "red" }}

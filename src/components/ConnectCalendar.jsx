@@ -3,12 +3,13 @@ import React from 'react';
 import { Card, CardContent, CardActions, Typography, Button, Box, Icon, useTheme } from '@mui/material';
 import { FaCheck } from "react-icons/fa6";
 import Image from 'next/image';
-import { useSelector } from 'react-redux';
-import { selectUser } from '@/redux/features/authSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { UPDATE_CONNECTION_STATUS, selectUser } from '@/redux/features/authSlice';
 import { disconnectCalendar } from '@/libs/google/disconnectCalendar';
 
-export const ConnectCalendar = ({ title, description, setGoogleConnection, image }) => {
+export const ConnectCalendar = ({ title, description, image }) => {
     const theme = useTheme();
+    const dispatch = useDispatch();
     const { user_id, email } = useSelector(selectUser);
 
     return (
@@ -44,7 +45,11 @@ export const ConnectCalendar = ({ title, description, setGoogleConnection, image
                 <Button
                     onClick={async () => {
                         await disconnectCalendar(user_id, email);
-                        setGoogleConnection(false);
+                        dispatch(UPDATE_CONNECTION_STATUS({
+                            connectionStatus: {
+                                google: false,
+                            }
+                        }))
                     }}
                     style={{ textTransform: 'none', fontSize: "17px" }}
                     variant="contained"

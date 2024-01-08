@@ -12,7 +12,7 @@ import { useRouter } from 'next/navigation';
 export const PricingSection = () => {
     const theme = useTheme();
     const router = useRouter()
-    const { stripeId } = useSelector(selectUser);
+    const { stripe: { stripeId } } = useSelector(selectUser);
     return (
         <Box
             sx={{
