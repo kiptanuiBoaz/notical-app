@@ -13,6 +13,7 @@ import { selectTheme } from '@/redux/features/themeSlice';
 import { disconnectNotion } from '@/libs/notion/disconnectNotion';
 import { getUser } from '@/libs/supabase/getUser';
 import { updateSelectedDbIds } from '@/libs/supabase/updateSelectedDbIds.';
+import { updateDeleteDone } from '@/libs/supabase/updatedeleteDone';
 
 
 export const ConnectNotion = ({ title, description, image, setNotionConnection }) => {

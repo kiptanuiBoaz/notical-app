@@ -3,6 +3,13 @@ import './globals.css'
 import ThemeRegistry from './ThemeRegistry.jsx';
 import { Navbar } from '@/components/Navbar';
 import ReduxProvider from '@/redux/Reduxprovider';
+import { Roboto } from 'next/font/google'
+
+const roboto = Roboto({
+  subsets: ['latin'],
+  display: 'swap',
+  weight: '400',
+})
 
 export const metadata = {
   title: 'Notycal | Sync Notion Dabases with Google Calendar',
@@ -15,7 +22,7 @@ export default function RootLayout(props) {
   return (
     <ReduxProvider>
       <AuthProvider>
-        <html lang="en">
+        <html lang="en" className={roboto.className}>
           <body>
             <ThemeRegistry >
               {children}

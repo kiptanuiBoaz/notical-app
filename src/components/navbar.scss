@@ -1,0 +1,11 @@
+.logo {
+    margin-right: 2px;
+    padding: 2px;
+    width: 160px; // Default width for md and above screens
+    height: 60px; // Default height for md and above screens
+
+    @media (max-width: 600px) {
+        width: 110px; // Set width for xs screens
+        height: 35px; // Set height for xs screens
+    }
+}
