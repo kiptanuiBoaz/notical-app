@@ -11,7 +11,10 @@ const initialState = storedUser ? JSON.parse(storedUser) : {
         full_name: '',
         avatarUrl: null,
         stripeId: null,
+        subscriptionEnd: null,
         stripeSubscriptionStatus: false,
+        subscriptionPlan: null,
+        subscriptionInterval: null,
         role: {
             id: null,
             name: ""
@@ -37,7 +40,10 @@ const authSlice = createSlice({
                 full_name: '',
                 avatarUrl: null,
                 stripeId: null,
+                subscriptionEnd: null,
                 stripeSubscriptionStatus: false,
+                subscriptionPlan: null,
+                subscriptionInterval: null,
                 role: {
                     id: null,
                     name: ""

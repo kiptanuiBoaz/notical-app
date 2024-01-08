@@ -10,7 +10,16 @@ export const createCheckOutSession = async (customer_id, price) => {
         });
         const response = await stripeApi.post(
             CREATE_CHECKOUT_SESSION_ROUTE,
-            { customer_id, price }
+            {
+                success_url: "http://localhost:3000/subscription",
+                "cancel_url": "http://localhost:3000/subscription",
+                "line_items[0][price]": price,
+                "line_items[0][quantity]": "1",
+                "mode": "subscription",
+                "customer": customer_id,
+                "subscription_data[trial_period_days]": 5
+            }
+
         )
 
         console.log(response)

@@ -5,7 +5,8 @@ export const plans = [
         price: '$9.99',
         trial: '5 days free trial',
         cta: 'Get started',
-        range: "month"
+        range: "month",
+        priceId: "price_1NBf3FIVOiWOJVaAOq71woK4"
     },
     {
         title: 'Yearly',
@@ -13,7 +14,8 @@ export const plans = [
         price: '$72.00',
         trial: '14 days free trial',
         cta: 'Go Yearly',
-        range: "year"
+        range: "year",
+        priceId: "price_1NBf3FIVOiWOJVaAOq71woK4"
     },
 
 ];

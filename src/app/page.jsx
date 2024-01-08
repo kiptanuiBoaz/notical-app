@@ -29,15 +29,18 @@ const Home = ({ searchParams }) => {
         // await createUserProfile(stripeCustomer.data.id, id, email)
         const user = await getUser(id);
         const stripeCustomer = await getStripeCustomerId(user.stripe_customer_id);
-        console.log(stripeCustomer.data);
+
         //update redux state
         dispatch(UPDATE_AUTH({
           user_id: id,
           email: email,
+          subscriptionEnd: stripeCustomer?.data?.subscriptions.data[0]?.current_period_end ?? null,
           full_name: user_metadata.full_name,
           avatarUrl: user_metadata.avatar_url,
           stripeId: stripeCustomer.data.id,
-          stripeSubscriptionStatus: stripeCustomer?.data?.subscriptions.data[0]?.status ?? false,
+          stripeSubscriptionStatus: stripeCustomer?.data?.subscriptions.data[0]?.status === "active" ? true : false,
+          subscriptionPlan: stripeCustomer?.data?.subscriptions.data[0]?.plan.amount ?? null,
+          subscriptionInterval: stripeCustomer?.data?.subscriptions.data[0]?.plan.interval ?? null,
           role: {
             name: role,
             id: aud

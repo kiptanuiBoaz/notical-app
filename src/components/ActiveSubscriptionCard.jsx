@@ -1,10 +1,16 @@
+"use client"
 import React from 'react';
 import { Card, CardContent, Typography, Box, useTheme, CardActions } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
+import { selectUser } from '@/redux/features/authSlice';
+import { useSelector } from 'react-redux';
+import { createCustomerPortal } from '@/libs/stripe/createCustomerPortal';
+import { formatDate } from '@/utility/formatDate';
 
 export const ActiveSubscriptionCard = () => {
     const theme = useTheme();
+    const { stripeId, subscriptionEnd, subscriptionInterval } = useSelector(selectUser);
 
     return (
         <Card sx={{ border: '1px solid gray', borderRadius: '10px', p: 2, backgroundColor: theme.palette.background.primary, }}>
@@ -21,33 +27,54 @@ export const ActiveSubscriptionCard = () => {
                 </Box>
             </CardContent>
             <hr style={{ margin: "5px 15px" }} />
-            <Typography
-                variant="body3"
-                sx={{
-                    "&hover": { bgcolor: theme.palette.background.paper },
-                    color: "#1681B1",
-                    fontSize: "19px",
-                    display: "flex",
-                    justifyContent: "space-between",
-                    cursor: "pointer",
-                    fontWeight: "bold",
-                    padding: "8px 15px  0px"
-                }}
-            >
-                Pro Membership
-            </Typography>
+            <div style={{ display: "flex", flexDirection: "row", alignItems: "center", marginTop: "8px" }}>
+                <Typography
+                    variant="body3"
+                    sx={{
+                        "&hover": { bgcolor: theme.palette.background.paper },
+                        color: "#1681B1",
+                        fontSize: "19px",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        cursor: "pointer",
+                        fontWeight: "bold",
+                        padding: "5px 15px  ",
+                    }}
+                >
+                    Pro Membership
+                </Typography>
+                <Typography
+                    variant="body3"
+                    sx={{
+                        bgcolor: theme.palette.background.default,
+                        color: "#cccc",
+                        fontSize: "19px",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        cursor: "pointer",
+                        fontWeight: "bold",
+                        padding: "5px 15px  ",
+                        borderRadius: "5px",
+                    }}
+                >
+                    {subscriptionInterval === "year" ? "Yearly" : "Monthly"}
+                </Typography>
+            </div>
+
+
             <CardContent>
                 <Typography variant="body2" sx={{ fontSize: "16px", }}>
                     $9.99
                 </Typography>
                 <Typography variant="body2" sx={{ fontSize: "16px", marginTop: "5px", color: "#919DA8" }}>
-                    Renews at: [Insert Renewal Date and Time] (UTC)
+                    Renews at: {formatDate(subscriptionEnd)}
                 </Typography>
             </CardContent>
             <CardActions>
                 <Link style={{ textDecoration: 'none', color: '#fff', paddingLeft: '5px' }} href="#">
                     <Box
                         component="div"
+                        onClick={async () => await createCustomerPortal(stripeId)}
                         sx={{
                             backgroundColor: "#1681B1",
                             padding: '7px 18px',

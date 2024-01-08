@@ -2,7 +2,7 @@ import { stripeApi } from "@/axios/stripeApi";
 import { Loading } from "notiflix";
 const CREATE_CUSTOMER_PORTAL_ROUTE = "/billing_portal/sessions"
 
-export const createCustomerPortal = async (customer_id, return_url) => {
+export const createCustomerPortal = async (customer) => {
     try {
         Loading.dots({
             svgColor: '#0276AA',
@@ -10,7 +10,7 @@ export const createCustomerPortal = async (customer_id, return_url) => {
         });
         const response = await stripeApi.post(
             CREATE_CUSTOMER_PORTAL_ROUTE,
-            { customer_id, return_url }
+            { customer, return_url: "http://localhost:3000/subscription" }
         )
 
         console.log(response)
