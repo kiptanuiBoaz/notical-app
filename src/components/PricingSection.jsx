@@ -1,3 +1,4 @@
+"use client"
 import React from 'react';
 import { FaCheck } from "react-icons/fa";
 import { Box, Card, CardContent, CardActions, Typography, Button, List, ListItem, ListItemIcon, ListItemText, useTheme } from '@mui/material';
@@ -5,10 +6,12 @@ import { plans } from '@/app/subscriptions/plans';
 import { createCheckOutSession } from '@/libs/stripe/createCheckOutSession';
 import { useSelector } from 'react-redux';
 import { selectUser } from '@/redux/features/authSlice';
+import { useRouter } from 'next/navigation';
 
 
 export const PricingSection = () => {
     const theme = useTheme();
+    const router = useRouter()
     const { stripeId } = useSelector(selectUser);
     return (
         <Box
@@ -31,9 +34,8 @@ export const PricingSection = () => {
             </Box>
 
             <Box sx={{ display: 'flex', flexWrap: 'wrap', }}>
-                {plans.map(({ index, price, title, features, priceId, cta, range, trial }) => (
-
-                    <Card key={index} sx={{ width: '1000%', padding: "20px 10px", margin: "20px 0", border: '1px solid #ccc', borderRadius: 2, backgroundColor: theme.palette.background.default, }}>
+                {plans.map(({ price, title, features, priceId, cta, range, trial }) =>
+                    <Card key={title} sx={{ width: '1000%', padding: "20px 10px", margin: "20px 0", border: '1px solid #ccc', borderRadius: 2, backgroundColor: theme.palette.background.default, }}>
 
                         <CardContent>
 
@@ -60,18 +62,18 @@ export const PricingSection = () => {
                             </Typography>
 
                             <Typography variant="body2" component="p" sx={{ color: '#777', textAlign: 'left', marginBottom: 1 }}>
-                                {trial}
+                                {trial} days free trial
                             </Typography>
                         </CardContent>
 
                         <CardActions sx={{ display: 'flex', justifyContent: 'left' }}>
 
-                            <Button variant="contained" color="success" sx={{}} onClick={async () => await createCheckOutSession(stripeId, priceId)}>
+                            <Button variant="contained" color="success" sx={{}} onClick={async () => await createCheckOutSession(stripeId, priceId, trial)}>
                                 {cta}
                             </Button>
                         </CardActions>
                     </Card>
-                ))}
+                )}
             </Box>
 
 

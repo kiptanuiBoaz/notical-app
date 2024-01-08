@@ -38,7 +38,7 @@ const Home = ({ searchParams }) => {
           full_name: user_metadata.full_name,
           avatarUrl: user_metadata.avatar_url,
           stripeId: stripeCustomer.data.id,
-          stripeSubscriptionStatus: stripeCustomer?.data?.subscriptions.data[0]?.status === "active" ? true : false,
+          stripeSubscriptionStatus: stripeCustomer?.data?.subscriptions.data[0]?.status === "active" || stripeCustomer?.data?.subscriptions.data[0]?.status === "trialing" ? true : false,
           subscriptionPlan: stripeCustomer?.data?.subscriptions.data[0]?.plan.amount ?? null,
           subscriptionInterval: stripeCustomer?.data?.subscriptions.data[0]?.plan.interval ?? null,
           role: {

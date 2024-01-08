@@ -1,33 +1,40 @@
-import { stripeApi } from "@/axios/stripeApi";
-import { Loading, Notify } from "notiflix";
-const CREATE_CHECKOUT_SESSION_ROUTE = "/checkout/sessions"
+import { Loading } from 'notiflix';
+import stripe from 'stripe';
 
-export const createCheckOutSession = async (customer_id, price) => {
+const stripeClient = new stripe(process.env.NEXT_PUBLIC_STRIPE_API_KEY);
+
+export const createCheckOutSession = async (customer_id, price, trial, router) => {
+
     try {
         Loading.dots({
             svgColor: '#0276AA',
             backgroundColor: 'rgba(0,0,0,0.4)',
         });
-        const response = await stripeApi.post(
-            CREATE_CHECKOUT_SESSION_ROUTE,
-            {
-                success_url: "http://localhost:3000/subscription",
-                "cancel_url": "http://localhost:3000/subscription",
-                "line_items[0][price]": price,
-                "line_items[0][quantity]": "1",
-                "mode": "subscription",
-                "customer": customer_id,
-                "subscription_data[trial_period_days]": 5
-            }
 
-        )
+        const session = await stripeClient.checkout.sessions.create({
+            success_url: "http://localhost:3000",
+            cancel_url: "http://localhost:3000/subscriptions",
+            line_items: [
+                {
+                    price: price,
+                    quantity: 1,
+                },
+            ],
+            mode: 'subscription',
+            customer: customer_id,
+            subscription_data: {
+                trial_period_days: trial,
+            },
+        });
 
-        console.log(response)
-        return response;
+        console.log(session);
+        return window.location.href = session.url;
     } catch (error) {
-        console.error(error.message)
-        Loading.remove()
+        console.error(error.message);
+        Loading.remove();
     } finally {
-        Loading.remove()
+        Loading.remove();
     }
-}
+};
+
+
