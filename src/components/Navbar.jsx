@@ -62,13 +62,13 @@ export const Navbar = () => {
 
     return (
         <nav sx={{ flexGrow: 1 }}>
-            <AppBar position="fixed" sx={{ bgcolor: theme.palette.background.paper }}>
+            <AppBar position="fixed" sx={{ bgcolor: theme.palette.background.paper, padding: "5px 2%" }}>
                 <Toolbar sx={{
                     color: theme.palette.primary.main,
                     fontSize: "18px",
                     display: "flex",
                     justifyContent: { xs: 'space-between', md: 'flex-end' },
-                    margin: { xs: '15px 20px', md: '0' },
+                    margin: { xs: '4px', md: '0' },
                 }}>
 
                     <Link href="/connections">

@@ -4,6 +4,7 @@ import { InputAdornment, IconButton, Box, Typography, TextField, Button, Icon } 
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { SetMeal, Visibility, VisibilityOff } from '@mui/icons-material';
 import GoogleIcon from '@mui/icons-material/Google';
+import { RxNotionLogo } from "react-icons/rx";
 import { useRouter } from 'next/navigation';
 import FormHelperText from '@mui/material/FormHelperText';
 import Image from 'next/image';
@@ -45,6 +46,11 @@ const Login = () => {
             console.error(error.message)
         }
 
+    }
+
+    const handleSignInWithNotion = async () => {
+        // secret_wEQXx2F1CV79UlODH5S0ie51ZGAoaEpKmnBMC804Uut
+        console.log("signing in with notion")
     }
 
 
@@ -173,6 +179,24 @@ const Login = () => {
                             cursor: 'pointer',
                             fontSize: '40px',
                             p: '5px',
+                            '&:hover': {
+                                backgroundColor: '#cccc', // set the background color to #cccc on hover
+                            },
+                        }}
+                    />
+
+
+                    <RxNotionLogo
+                        onClick={handleSignInWithNotion}
+                        size={40}
+                        style={{
+                            margin: "10px 10px 15px 10px",
+                            border: '1px solid gray',
+                            borderRadius: '2px',
+                            backgroundColor: 'transparent', // set the initial background color to transparent
+                            cursor: 'pointer',
+                            fontSize: '40px',
+                            padding: '6px',
                             '&:hover': {
                                 backgroundColor: '#cccc', // set the background color to #cccc on hover
                             },

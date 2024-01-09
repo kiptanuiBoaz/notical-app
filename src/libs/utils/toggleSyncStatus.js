@@ -13,44 +13,24 @@ export const toggleSyncStatus = async (user_id, syncStatus, full_name, stripeSub
         'Continue',
         'Cancel',
         async () => {
-            if (stripeSubscriptionStatus) {
-                Notify.success("Successfully created stripe connection")
-            } else {
+            if (!stripeSubscriptionStatus) {
                 Notify.failure(" Please add opt into a subscription ")
                 return router.push("/subscriptions")
             }
 
+            if (!notionConnection) return Notify.failure(" Please create a Notion Connection ");
 
-            if (notionConnection) {
-                Notify.success("Successfully created Notion connection")
-            } else {
-                return Notify.failure(" Please create a Notion Connection ")
-            }
+            if (!syncStatus && !selected_databases_ids.length > 0) return Report.warning(
+                'No Database Selection',
+                'Please Connect Atleast one Notion Database before attempting to sync again',
+                'Okay',
+            );
 
-            if (!syncStatus) {
-                if (selected_databases_ids.length > 0) {
-                    Notify.success("Connected atleast one notion database")
-                } else {
-                    return Report.warning(
-                        'No Database Selection',
-                        'Please Connect Atleast one Notion Database before attempting to sync again',
-                        'Okay',
-                    );
-                }
-            }
-
-
-            if (!syncStatus) {
-                if (googleConnection) {
-                    Notify.success("Successfully created Google Calendar connection and try agin")
-                } else {
-                    return Report.warning(
-                        'Google Calendar not Connected!',
-                        'Please create a Google Calendar  Connection',
-                        'Okay',
-                    );
-                }
-            }
+            if (!syncStatus && !googleConnection) return Report.warning(
+                'Google Calendar not Connected!',
+                'Please create a Google Calendar  Connection',
+                'Okay',
+            );
 
 
             await updateActiveField(user_id, email, !syncStatus);
