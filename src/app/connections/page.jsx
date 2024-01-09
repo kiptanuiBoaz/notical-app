@@ -24,11 +24,9 @@ const NOTION_CONNECTION_STRING = 'https://api.notion.com/v1/oauth/authorize?clie
 const GOOGLE_CONNECTION_STRING = 'https://accounts.google.com/o/oauth2/auth/oauthchooseaccount?scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcalendar&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fconnections&response_type=code&client_id=474592924938-p58vbsd9l7hllhk84bee27e0oq5a6l98.apps.googleusercontent.com&access_type=offline&prompt=consent&service=lso&o2v=1&theme=glif&flowName=GeneralOAuthFlow';
 
 const Connections = ({ searchParams }) => {
-    const [stripeConnection, setStriepeConnection] = useState(true);
     const [syncStatus, setSyncStatus] = useState(false);
-    const [selectedDatabseIds, setSelectedDatabseIds] = useState([]);
 
-    const { user_id, email, full_name, connectionStatus: { google: googleConnection, notion: notionConnection } } = useSelector(selectUser);
+    const { user_id, email, full_name, stripe: { stripeSubscriptionStatus }, connectionStatus: { google: googleConnection, notion: notionConnection } } = useSelector(selectUser);
     const theme = useTheme();
     const router = useRouter();
     const pathname = usePathname();
@@ -70,7 +68,6 @@ const Connections = ({ searchParams }) => {
                     if (user) {
                         const { notion_secret_key, selected_databases_ids, active } = user;
                         const { is_valid } = await verifyNotionConnection(notion_secret_key)
-                        setSelectedDatabseIds(selected_databases_ids);
                         dispatch(UPDATE_CONNECTION_STATUS({
                             connectionStatus: {
                                 notion: is_valid,
@@ -162,7 +159,7 @@ const Connections = ({ searchParams }) => {
                                     mt: '1rem',
                                 }}
                                 onClick={() =>
-                                    toggleSyncStatus(user_id, syncStatus, full_name, stripeConnection, router, notionConnection, googleConnection, email, setSyncStatus)
+                                    toggleSyncStatus(user_id, syncStatus, full_name, stripeSubscriptionStatus, router, notionConnection, googleConnection, email, setSyncStatus)
                                 }
                             >
                                 {syncStatus ? 'Stop Sync' : 'Start Sync'}

@@ -2,7 +2,7 @@ import { Confirm, Notify, Report } from "notiflix";
 import { updateActiveField } from "../supabase/updateActiveField";
 import { getUser } from "../supabase/getUser";
 
-export const toggleSyncStatus = async (user_id, syncStatus, full_name, stripeConnection, router, notionConnection, googleConnection, email, setSyncStatus) => {
+export const toggleSyncStatus = async (user_id, syncStatus, full_name, stripeSubscriptionStatus, router, notionConnection, googleConnection, email, setSyncStatus) => {
     const { selected_databases_ids } = await getUser(user_id);
     Confirm.show(
         `${syncStatus ? "Stop" : "Start "} synchronization ?`,
@@ -13,7 +13,7 @@ export const toggleSyncStatus = async (user_id, syncStatus, full_name, stripeCon
         'Continue',
         'Cancel',
         async () => {
-            if (stripeConnection) {
+            if (stripeSubscriptionStatus) {
                 Notify.success("Successfully created stripe connection")
             } else {
                 Notify.failure(" Please add opt into a subscription ")

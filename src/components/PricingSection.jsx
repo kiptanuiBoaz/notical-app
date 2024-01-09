@@ -12,7 +12,7 @@ import { useRouter } from 'next/navigation';
 export const PricingSection = () => {
     const theme = useTheme();
     const router = useRouter()
-    const { stripe: { stripeId } } = useSelector(selectUser);
+    const { stripe: { customerId } } = useSelector(selectUser);
     return (
         <Box
             sx={{
@@ -68,7 +68,7 @@ export const PricingSection = () => {
 
                         <CardActions sx={{ display: 'flex', justifyContent: 'left' }}>
 
-                            <Button variant="contained" color="success" sx={{}} onClick={async () => await createCheckOutSession(stripeId, priceId, trial)}>
+                            <Button variant="contained" color="success" sx={{}} onClick={async () => await createCheckOutSession(customerId, priceId, trial)}>
                                 {cta}
                             </Button>
                         </CardActions>

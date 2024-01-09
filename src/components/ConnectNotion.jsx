@@ -1,3 +1,4 @@
+"use client"
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardActions, Typography, Button, Box, Icon, useTheme, Switch } from '@mui/material';
 import Image from 'next/image';
@@ -18,8 +19,8 @@ import { updateDeleteDone } from '@/libs/supabase/updatedeleteDone';
 
 export const ConnectNotion = ({ title, description, image }) => {
     const [showConnections, setShowConnections] = useState(null);
-    const [selectedDatabseIds, setSelectedDatabseIds] = useState([]);
-    const [allDatabses, setAllDatabses] = useState([]);
+    const [selectedDatabseIds, setSelectedDatabseIds] = useState(null);
+    const [allDatabses, setAllDatabses] = useState(null);
     const [updatingDatabseIds, setUpdatingDatabseIds] = useState(false);
     const [deleteDone, setDeleteDone] = useState(false);
 
@@ -34,8 +35,8 @@ export const ConnectNotion = ({ title, description, image }) => {
             setSelectedDatabseIds(selected_databases_ids);
             setDeleteDone(delete_done);
         }
-        getDbConnections();
-    }, [user_id]);
+        if (allDatabses === null) getDbConnections();
+    }, [user_id, allDatabses]);
 
     //select and deselect notionDBs
     const toggleDbConnection = async (id) => {

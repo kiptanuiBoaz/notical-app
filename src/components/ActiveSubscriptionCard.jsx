@@ -10,7 +10,7 @@ import { formatDate } from '@/utility/formatDate';
 
 export const ActiveSubscriptionCard = () => {
     const theme = useTheme();
-    const { stripe: { stripeId, subscriptionEnd, subscriptionInterval, stripeSubscriptionStatus } } = useSelector(selectUser);
+    const { stripe: { customerId, subscriptionEnd, subscriptionInterval, stripeSubscriptionStatus } } = useSelector(selectUser);
 
     return (
         <Card sx={{ border: '1px solid gray', borderRadius: '10px', p: 2, backgroundColor: theme.palette.background.paper, }}>
@@ -75,7 +75,7 @@ export const ActiveSubscriptionCard = () => {
                 <Link style={{ textDecoration: 'none', color: '#fff', paddingLeft: '5px' }} href="#">
                     <Box
                         component="div"
-                        onClick={async () => await createCustomerPortal(stripeId)}
+                        onClick={async () => await createCustomerPortal(customerId)}
                         sx={{
                             backgroundColor: "#1681B1",
                             padding: '7px 18px',
