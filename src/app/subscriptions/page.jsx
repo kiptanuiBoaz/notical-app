@@ -19,7 +19,7 @@ const Subscriptions = () => {
 
         <Box
             sx={{
-                paddingTop: '90px',
+                paddingTop: '110px',
                 height: '100vh',
                 // width: '100vw',
                 display: 'flex',
