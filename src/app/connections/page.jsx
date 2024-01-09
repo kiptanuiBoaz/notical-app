@@ -125,7 +125,7 @@ const Connections = ({ searchParams }) => {
                 justifyContent: 'center',
                 flexDirection: 'column',
                 textAlign: 'center',
-                backgroundColor: theme.palette.background.paper,
+                // backgroundColor: theme.palette.background.paper,
                 overflow: 'hidden',
             }}
         >

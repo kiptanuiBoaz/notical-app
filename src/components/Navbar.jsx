@@ -1,7 +1,7 @@
 "use client"
 import React, { useState } from 'react';
 import { usePathname } from 'next/navigation';
-import { AppBar, Toolbar, Typography, Button, Avatar, useTheme, Drawer, List, ListItem, IconButton } from '@mui/material';
+import { AppBar, Toolbar, Typography, Button, Avatar, useTheme, Drawer, List, ListItem, IconButton, Box } from '@mui/material';
 import Image from 'next/image';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
@@ -12,6 +12,7 @@ import { selectUser } from '@/redux/features/authSlice';
 import { IoMenu } from "react-icons/io5";
 import { IoClose } from "react-icons/io5";
 import "./navbar.scss"
+import { useRouter } from 'next/navigation';
 
 export const Navbar = () => {
     const pathname = usePathname();
@@ -21,15 +22,41 @@ export const Navbar = () => {
     const theme = useTheme();
     const [drawerOpen, setDrawerOpen] = useState(false);
 
-    const handleDrawerOpen = () => {
-        setDrawerOpen(true);
-    };
+    const router = useRouter()
 
     const handleDrawerClose = () => {
         setDrawerOpen(false);
     };
+    const subscriptionsLink = <Link
+        style={{ color: pathname === "/subscriptions" || isHovered === "/subscriptions" ? "#0275A9" : theme.palette.primary.main, textDecoration: "none" }}
+        href="/subscriptions"
+        onMouseOver={() => setIsHovered("/subscriptions")}
+        onMouseOut={() => setIsHovered("")}
+    >
+        Subscriptions
+    </Link>
+    const connectionsLink = <Link
+        style={{
+            color: pathname === "/connections" || isHovered === "/connections" ? "#0275A9" : theme.palette.primary.main, textDecoration: "none",
+            "&hover": {
+                color: "#0275A9"
+            },
+            transition: 'color 0.3s ease',
 
+        }}
+        href="/connections"
+        onMouseOver={() => setIsHovered("/connections")}
+        onMouseOut={() => setIsHovered(false)}
+    >
+        Connections
+    </Link>
 
+    const profileAvatart = <Avatar
+        href="/account"
+        src={currentUser.avatarUrl}
+        alt="user"
+        sx={{ height: { xs: "35px", md: "50px" }, width: { xs: "35px", md: "50px" }, }}
+    />
 
     if (pathname.startsWith('/auth')) return <></>;
 
@@ -37,13 +64,13 @@ export const Navbar = () => {
         <nav sx={{ flexGrow: 1 }}>
             <AppBar position="fixed" sx={{ bgcolor: theme.palette.background.paper }}>
                 <Toolbar sx={{
-                    // mx: 10,
                     color: theme.palette.primary.main,
                     fontSize: "18px",
                     display: "flex",
-                    justifyContent: { xs: 'space-between', md: 'flex-end' }, // Adjusted justifyContent
-                    margin: { xs: '15px 20px', md: '0' }, // Added margin
+                    justifyContent: { xs: 'space-between', md: 'flex-end' },
+                    margin: { xs: '15px 20px', md: '0' },
                 }}>
+
                     <Link href="/connections">
                         <Image
                             priority={true}
@@ -53,58 +80,36 @@ export const Navbar = () => {
                             height={60}
                             className='logo'
                         />
+                    </Link>
+
+                    <Typography variant="p" sx={{ flexGrow: 1, textAlign: 'end', display: { xs: 'none', md: 'block' } }}>
+                        {connectionsLink}
+                    </Typography>
+                    <Typography variant="p" sx={{ flexGrow: 1, textAlign: 'start', color: theme.palette.primary.main, display: { xs: 'none', md: 'block' }, marginLeft: "25px", marginRight: "25px" }}>
+
+                        {subscriptionsLink}
+                    </Typography>
+
+                    {/* Updated styling for the Avatar */}
+                    <Link href="/account" sx={{ textDecoration: "none", ml: '10px', mr: '20px', }}>
+                        <Box sx={{ display: { xs: 'none', md: 'block' } }}>
+                            {profileAvatart}
+                        </Box>
 
                     </Link>
 
+                    {/* Updated styling for the IconButton */}
                     <IconButton
                         edge="start"
                         color="inherit"
                         aria-label="menu"
-                        sx={{ display: { md: 'none' } }}
-                        onClick={handleDrawerOpen}
-
+                        sx={{ display: { md: 'none' }, ml: '10px' }}
+                        onClick={() => setDrawerOpen(true)}
                     >
-                        <IoMenu size={30} />
+                        <IoMenu size={40} />
                     </IconButton>
 
-                    <Typography variant="p" sx={{ flexGrow: 1, textAlign: 'end', mr: "50px", display: { xs: 'none', md: 'block' } }}>
-                        <Link
-                            style={{
-                                color: pathname === "/connections" || isHovered === "/connections" ? "#0275A9" : theme.palette.primary.main, textDecoration: "none",
-                                "&hover": {
-                                    color: "#0275A9"
-                                },
-                                transition: 'color 0.3s ease'
-                            }}
-                            href="/connections"
-                            onMouseOver={() => setIsHovered("/connections")}
-                            onMouseOut={() => setIsHovered(false)}
-                        >
-                            Connections
-                        </Link>
-                    </Typography>
-                    <Typography variant="p" sx={{ flexGrow: 1, textAlign: 'start', mr: "50px", color: theme.palette.primary.main, display: { xs: 'none', md: 'block' } }}>
-                        <Link
-                            style={{ color: pathname === "/subscriptions" || isHovered === "/subscriptions" ? "#0275A9" : theme.palette.primary.main, textDecoration: "none" }}
-                            href="/subscriptions"
-                            onMouseOver={() => setIsHovered("/subscriptions")}
-                            onMouseOut={() => setIsHovered("")}
-                        >
-                            Subscriptions
-                        </Link>
-                    </Typography>
-
-                    <Link href="/account" sx={{ textDecoration: "none" }}>
-                        <Avatar
-                            href="/account"
-                            src={currentUser.avatarUrl}
-                            alt="user"
-                            sx={{ ml: 2, height: { xs: "35px", md: "50px" }, width: { xs: "35px", md: "50px" }, }}
-
-                        />
-                    </Link>
                 </Toolbar>
-
 
                 {/* Drawer for mobile view */}
                 <Drawer anchor="right" open={drawerOpen} onClose={handleDrawerClose}>
@@ -112,22 +117,28 @@ export const Navbar = () => {
                         <ListItem button onClick={handleDrawerClose}>
                             <IoClose size={30} />
                         </ListItem>
+
                         <ListItem onClick={handleDrawerClose}>
-                            <Link style={{ color: pathname === "/connections" ? "#0275A9" : theme.palette.primary.main, textDecoration: "none" }} href="/connections">
-                                Connections
-                            </Link>
+                            {connectionsLink}
                         </ListItem>
                         <ListItem onClick={handleDrawerClose}>
-                            <Link
+                            {subscriptionsLink}
+                        </ListItem>
 
-                                style={{
-                                    color: pathname === "/subscriptions" ? "#0275A9" : theme.palette.primary.main,
-                                    textDecoration: "none"
-                                }}
-                                href="/subscriptions"
-                            >
-                                Subscriptions
-                            </Link>
+                        <ListItem
+                            onClick={() => {
+                                router.push("/account");
+                                handleDrawerClose();
+                            }}
+                            sx={{
+                                cursor: "pointer",
+                                '&:hover': { color: "#0275A9" }
+                            }}
+                        >
+                            <Link href="/account" sx={{ textDecoration: "none", ml: '10px', mr: '20px' }}>
+                                {profileAvatart}
+                            </Link> &nbsp;&nbsp; Account
+
                         </ListItem>
                     </List>
                 </Drawer>
