@@ -16,14 +16,14 @@ const Home = ({ searchParams }) => {
   useEffect(() => {
     try {
       const getCurrentUser = async () => {
+        //get currently signed in user
+        const { data: { user: { id, email, user_metadata, role, aud } } } = await supabase.auth.getUser();
 
-        const authenticatedUser = await supabase.auth.getUser()
+        //get stripe customer id from users table in db
+        const { stripe_customer_id } = await getUserProfile(id);
 
-        const { data: { user: { id, email, user_metadata, role, aud } } } = authenticatedUser;
-        console.log(id, email, user_metadata, role, aud);
-        const user = await getUserProfile(id);
-        console.log(user)
-        const stripeCustomer = await getStripeCustomerId(user.stripe_customer_id);
+        //get stripe customer info from stripe
+        const stripeCustomer = await getStripeCustomerId(stripe_customer_id);
 
         //update redux state
         dispatch(UPDATE_AUTH({
@@ -49,17 +49,15 @@ const Home = ({ searchParams }) => {
       getCurrentUser();
       if (searchParams.redirectedFrom === "stripe") {
         router.push("/subscriptions");
-
       } else {
         router.push("/connections")
       }
-
 
     } catch (e) {
       console.error(e.message)
     }
 
-  },);
+  });
 
   return <p></p>;
 };

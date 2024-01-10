@@ -13,10 +13,9 @@ export const createCustomerPortal = async (customer) => {
 
         const session = await stripeClient.billingPortal.sessions.create({
             customer,
-            return_url: 'http://localhost:3000?redirectedFrom=stripe',
+            return_url: process.env.NEXT_PUBLIC_STRIPE_CUSTOMER_PORTAL_RETURN_URL,
         });
 
-        console.log(session);
         return window.location.href = session.url;
     } catch (error) {
         console.error(error.message);

@@ -69,12 +69,20 @@ const SignUp = () => {
                             default: {
                                 colors: {
                                     brand: '#0275A9',
-                                    brandAccent: '#0275A9',
+                                    brandAccent: '#0488c4',
                                 },
                             },
                         },
-                    }}
 
+                    }}
+                    localization={{
+                        variables: {
+                            sign_in: {
+                                email_label: 'Sign Up with your email address',
+                                social_provider_text: "Sign Up with {{provider}}",
+                            },
+                        },
+                    }}
                     showLinks={false}
                     redirectTo="http://localhost:3000/auth/callback"
                     providers={["google", "notion"]}

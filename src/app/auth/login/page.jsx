@@ -62,7 +62,7 @@ const Login = () => {
                             default: {
                                 colors: {
                                     brand: '#0275A9',
-                                    brandAccent: '#0275A9',
+                                    brandAccent: '#0488c4',
                                 },
                             },
                         },

@@ -13,7 +13,7 @@ export const createNoticationChannels = async (access_token) => {
             CREATE_COMMS_CHANNEL_ENDPOINT,
             { access_token }
         )
-        console.log(res)
+
         Notify.success("Successfully created notification channels")
         return res;
     } catch (error) {

@@ -6,7 +6,7 @@ export const plans = [
         trial: 5,
         cta: 'Get started',
         range: "month",
-        priceId: "price_1NeQDRIVOiWOJVaA5oL41cRl"
+        priceId: process.env.NEXT_PUBLIC_STRIPE_MONTHLY_PRICE_ID
     },
     {
         title: 'Yearly',
@@ -15,7 +15,7 @@ export const plans = [
         trial: 14,
         cta: 'Go Yearly',
         range: "year",
-        priceId: "price_1NeQECIVOiWOJVaAVig0hida"
+        priceId: process.env.NEXT_PUBLIC_STRIPE_YEARLY_PRICE_ID
     },
 
 ];

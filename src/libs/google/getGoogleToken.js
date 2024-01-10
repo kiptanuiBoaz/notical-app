@@ -12,7 +12,7 @@ export const getGoogleAccessToken = async (code) => {
             GOOGLE_ACCESS_TOKEN_ENDPOINT,
             { code }
         );
-        console.log(res)
+
         return res.data
     } catch (error) {
         console.error(error.messsage)

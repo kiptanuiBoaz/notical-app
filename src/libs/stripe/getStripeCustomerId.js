@@ -9,9 +9,9 @@ export const getStripeCustomerId = async (id) => {
             svgColor: '#0276AA',
             backgroundColor: 'rgba(0,0,0,0.4)',
         });
-        const response = await stripeApi.get(`${GET_CUSTOMER_ROUTES}/${id}`)
-        console.log(response)
-        return response;
+
+        return await stripeApi.get(`${GET_CUSTOMER_ROUTES}/${id}`);
+
     } catch (error) {
         console.error(error.message)
         Loading.remove()

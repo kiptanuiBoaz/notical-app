@@ -12,7 +12,7 @@ export const verifyGoogleConnection = async (access_token) => {
             VERIFY_GOOGLE_ACCESS_TOKEN_ENDPOINT,
             { access_token }
         );
-        console.log(res)
+
         return res.data
     } catch (error) {
         console.error(error.messsage)

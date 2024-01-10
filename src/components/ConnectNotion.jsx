@@ -17,9 +17,9 @@ import { updateDeleteDone } from '@/libs/supabase/updatedeleteDone';
 import { getUserProfile } from '@/libs/supabase/getUserProfile';
 
 
-export const ConnectNotion = ({ title, description, image }) => {
+export const ConnectNotion = () => {
     const [showConnections, setShowConnections] = useState(null);
-    const [selectedDatabseIds, setSelectedDatabseIds] = useState(null);
+    const [selectedDatabaseIds, setSelectedDatabaseIds] = useState([""]);
     const [allDatabses, setAllDatabses] = useState(null);
     const [updatingDatabseIds, setUpdatingDatabseIds] = useState(false);
     const [deleteDone, setDeleteDone] = useState(false);
@@ -27,13 +27,16 @@ export const ConnectNotion = ({ title, description, image }) => {
     //from redux state
     const { user_id, email } = useSelector(selectUser);
     const dispatch = useDispatch();
+    const theme = useTheme();
+    const selectedTheme = useSelector(selectTheme);
 
     useEffect(() => {
         const getDbConnections = async () => {
             const { databases_all, selected_databases_ids, delete_done } = await getUserProfile(user_id);
             setAllDatabses(databases_all);
-            setSelectedDatabseIds(selected_databases_ids);
+            setSelectedDatabaseIds(selected_databases_ids ?? [""]);
             setDeleteDone(delete_done);
+
         }
         if (allDatabses === null) getDbConnections();
     }, [user_id, allDatabses]);
@@ -42,16 +45,16 @@ export const ConnectNotion = ({ title, description, image }) => {
     const toggleDbConnection = async (id) => {
         setUpdatingDatabseIds(id)
         let updatedSelectedDatabaseIds;
-        if (selectedDatabseIds.includes(id)) {
+        if (selectedDatabaseIds.includes(id)) {
             // Remove ID from selectedDatabseIds
-            updatedSelectedDatabaseIds = selectedDatabseIds.filter((dbId) => dbId !== id);
+            updatedSelectedDatabaseIds = selectedDatabaseIds.filter((dbId) => dbId !== id);
         } else {
             // Add new ID to selectedDatabseIds
-            updatedSelectedDatabaseIds = [...selectedDatabseIds, id];
+            updatedSelectedDatabaseIds = [...selectedDatabaseIds, id];
         }
 
         // Update state with the modified array of selected database IDs
-        setSelectedDatabseIds(updatedSelectedDatabaseIds);
+        setSelectedDatabaseIds(updatedSelectedDatabaseIds);
 
         // Call the function to update the selected database IDs in the backend
         await updateSelectedDbIds(user_id, email, updatedSelectedDatabaseIds);
@@ -69,9 +72,6 @@ export const ConnectNotion = ({ title, description, image }) => {
         setDeleteDone(delete_done);
     };
 
-
-    const theme = useTheme();
-    const selectedTheme = useSelector(selectTheme);
     return (
         <Card sx={{
             border: '1px solid gray',
@@ -82,16 +82,16 @@ export const ConnectNotion = ({ title, description, image }) => {
         }}>
             <CardContent>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: "start" }}>
-                    {/* <Box sx={{ m: 2, height: "30px" }}> */}
-                    <Image src={image} height={50} width={50} alt='title' style={{ marginRight: "10px" }} />
-                    {/* </Box> */}
+
+                    <Image src="/images/notion-icon.svg" height={50} width={50} alt='title' style={{ marginRight: "10px" }} />
+
 
                     <Box sx={{ flex: '1 1 auto', paddingLeft: "10px" }} textAlign={"start"}>
                         <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
-                            {title}
+                            Notion
                         </Typography>
                         <Typography variant="body2" sx={{ color: 'gray', fontSize: "18px" }}>
-                            {description}
+                            {`Congratulations! Notion has been connected successfully`}
                         </Typography>
                     </Box>
                 </Box>
@@ -134,7 +134,7 @@ export const ConnectNotion = ({ title, description, image }) => {
                         variant="body2"
                         textAlign={"start"}
                         sx={{
-                            color: selectedDatabseIds.includes(id) ? theme.palette.primary.main : 'gray',
+                            color: !selectedDatabaseIds?.includes(id) ? 'gray' : theme.palette.primary.main,
                             fontSize: "18px",
                             display: "flex",
                             alignItems: "center",
@@ -145,7 +145,7 @@ export const ConnectNotion = ({ title, description, image }) => {
                         onClick={() => toggleDbConnection(id)}
 
                     >
-                        {selectedDatabseIds.includes(id) ? <FaRegSquareCheck /> : <MdOutlineCheckBoxOutlineBlank />}
+                        {selectedDatabaseIds.includes(id) ? <FaRegSquareCheck /> : <MdOutlineCheckBoxOutlineBlank />}
                         &nbsp;&nbsp;   {title}
                     </Typography>
                     {updatingDatabseIds === id

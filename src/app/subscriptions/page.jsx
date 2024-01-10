@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react';
+import React from 'react';
 import { Box, useTheme } from '@mui/material';
 import { ActiveSubscriptionCard } from '@/components/ActiveSubscriptionCard';
 import { selectUser } from '@/redux/features/authSlice';
@@ -8,15 +8,10 @@ import { PricingSection } from '@/components/PricingSection';
 
 
 const Subscriptions = () => {
-    const [customerSubscribed, setCustomerSubscribed] = useState(false);
     const theme = useTheme()
-    const { stripe: { stripeId, stripeSubscriptionStatus } } = useSelector(selectUser);
-    console.log(stripeId, stripeSubscriptionStatus);
-    // Define the pricing plans data
-
+    const { stripe: { stripeSubscriptionStatus } } = useSelector(selectUser);
 
     return (
-
         <Box
             sx={{
                 paddingTop: '110px',
@@ -25,7 +20,7 @@ const Subscriptions = () => {
                 display: 'flex',
                 alignItems: 'start',
                 justifyContent: 'center',
-                // backgroundColor: theme.palette.background.paper,
+                backgroundColor: theme.palette.background.default,
                 color: theme.palette.primary.main
 
             }}

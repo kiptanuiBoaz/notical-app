@@ -48,7 +48,7 @@ export const ActiveSubscriptionCard = () => {
                     variant="body3"
                     sx={{
                         bgcolor: theme.palette.background.default,
-                        color: "#cccc",
+                        color: theme.palette.primary.main,
                         fontSize: "19px",
                         display: "flex",
                         justifyContent: "space-between",

@@ -8,7 +8,7 @@ const colors = {
         primaryBackgroundColor: "#121926",
         accentBackgroundColor: "#0D121D",
         primaryColor: "#FFFFFF",
-        secondaryColor: "#FFFFFF",
+        secondaryColor: "#cccc",
     },
     light: {
         primaryBackgroundColor: "#F1F4F8",

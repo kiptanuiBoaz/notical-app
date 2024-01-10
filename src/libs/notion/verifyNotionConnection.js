@@ -12,7 +12,7 @@ export const verifyNotionConnection = async (access_token) => {
             VERIFY_NOTION_ACCESS_TOKEN_ENDPOINT,
             { access_token }
         );
-        console.log(res)
+
         return res.data
     } catch (error) {
         console.error(error.messsage)

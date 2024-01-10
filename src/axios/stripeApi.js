@@ -8,7 +8,7 @@ const axiosOptions = {
         "Content-Type": "Application/json",
         "Accept": "Application/json",
         withCredentials: false,
-        "Authorization": process.env.NEXT_PUBLIC_STRIPE_API_KEY,
+        "Authorization": `Bearer ${process.env.NEXT_PUBLIC_STRIPE_API_KEY}`,
     }
 }
 

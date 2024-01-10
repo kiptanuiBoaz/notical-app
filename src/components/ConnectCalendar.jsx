@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { UPDATE_CONNECTION_STATUS, selectUser } from '@/redux/features/authSlice';
 import { disconnectCalendar } from '@/libs/google/disconnectCalendar';
 
-export const ConnectCalendar = ({ title, description, image }) => {
+export const ConnectCalendar = () => {
     const theme = useTheme();
     const dispatch = useDispatch();
     const { user_id, email } = useSelector(selectUser);
@@ -16,14 +16,14 @@ export const ConnectCalendar = ({ title, description, image }) => {
         <Card sx={{ border: '1px solid gray', borderRadius: '10px', p: 2, backgroundColor: theme.palette.background.default, }}>
             <CardContent>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <Image src={image} height={50} width={50} alt='title' style={{ marginRight: "10px" }} />
+                    <Image src={"/images/calendar-icon.svg"} height={50} width={50} alt='title' style={{ marginRight: "10px" }} />
 
                     <Box sx={{ flex: '1 1 auto', paddingLeft: "10px" }} textAlign={"start"}>
                         <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
-                            {title}
+                            Google Calendar
                         </Typography>
                         <Typography variant="body2" sx={{ color: 'gray', fontSize: "18px" }}>
-                            {description}
+                            Your Google Calendar is connected!
                         </Typography>
                     </Box>
                 </Box>

@@ -2,8 +2,8 @@ import { Confirm, Notify, Report } from "notiflix";
 import { updateActiveField } from "../supabase/updateActiveField";
 import { getUserProfile } from "../supabase/getUserProfile";
 
-export const toggleSyncStatus = async (user_id, syncStatus, full_name, stripeSubscriptionStatus, router, notionConnection, googleConnection, email, setSyncStatus) => {
-    const { selected_databases_ids } = await getUserProfile(user_id);
+export const toggleSyncStatus = async (user_id, syncStatus, full_name, stripeSubscriptionStatus, router, notionConnection, googleConnection, email, setSyncStatus, setLastSync) => {
+
     Confirm.show(
         `${syncStatus ? "Stop" : "Start "} synchronization ?`,
         `${full_name.split(" ")[0]},${syncStatus
@@ -13,6 +13,7 @@ export const toggleSyncStatus = async (user_id, syncStatus, full_name, stripeSub
         'Continue',
         'Cancel',
         async () => {
+            const { selected_databases_ids } = await getUserProfile(user_id);
             if (!stripeSubscriptionStatus) {
                 Notify.failure(" Please add opt into a subscription ")
                 return router.push("/subscriptions")
@@ -34,13 +35,19 @@ export const toggleSyncStatus = async (user_id, syncStatus, full_name, stripeSub
 
 
             await updateActiveField(user_id, email, !syncStatus);
-            Notify.success(!syncStatus ? "Successfully synced  Google Calendar and Notion" : "Succesfully stopped sync")
+            const { notion_last_poll } = await getUserProfile(user_id);
             setSyncStatus(!syncStatus);
+            setLastSync(notion_last_poll);
+            Notify.success(!syncStatus ? "Successfully synced  Google Calendar and Notion" : "Succesfully stopped sync")
         },
-        () => {
-
-        },
+        () => { },
         {
+            titleFontSize: "21px",
+            messageFontSize: "17px",
+            buttonsFontSize: "19px",
+            width: "400px",
+            titleColor: "#0276AA",
+            okButtonBackground: "#0276AA",
         },
     );
 

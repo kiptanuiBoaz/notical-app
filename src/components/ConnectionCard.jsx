@@ -3,7 +3,7 @@ import { Card, CardContent, Typography, Box, useTheme, CardActions } from '@mui/
 import Image from 'next/image';
 import Link from 'next/link';
 
-export const ConnectionCard = ({ title, description, image, connectionLink }) => {
+export const ConnectionCard = ({ title, image, connectionLink }) => {
     const theme = useTheme();
 
     return (
@@ -16,7 +16,7 @@ export const ConnectionCard = ({ title, description, image, connectionLink }) =>
                             {title}
                         </Typography>
                         <Typography variant="body2" sx={{ color: 'gray', fontSize: "18px" }}>
-                            {description}
+                            {`Connect your ${title}`}
                         </Typography>
                     </Box>
                 </Box>

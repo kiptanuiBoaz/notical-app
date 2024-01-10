@@ -12,8 +12,8 @@ export const createCheckOutSession = async (customer_id, price, trial) => {
         });
 
         const session = await stripeClient.checkout.sessions.create({
-            success_url: "http://localhost:3000?redirectedFrom=stripe",
-            cancel_url: "http://localhost:3000/subscriptions",
+            success_url: process.env.NEXT_PUBLIC_STRIPE_CHECKOUT_SUCCESS_URL,
+            cancel_url: process.env.NEXT_PUBLIC_STRIPE_CHECKOUT_CANCEL_URL,
             line_items: [
                 {
                     price: price,
@@ -27,7 +27,7 @@ export const createCheckOutSession = async (customer_id, price, trial) => {
             },
         });
 
-
+        //roroute the user
         return window.location.href = session.url;
     } catch (error) {
         console.error(error.message);

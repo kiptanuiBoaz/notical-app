@@ -52,10 +52,11 @@ export const Navbar = () => {
     </Link>
 
     const profileAvatart = <Avatar
+        placeholder="blur"
         href="/account"
         src={currentUser.avatarUrl}
         alt="user"
-        sx={{ height: { xs: "35px", md: "50px" }, width: { xs: "35px", md: "50px" }, }}
+        sx={{ height: { xs: "35px", md: "50px" }, width: { xs: "35px", md: "50px" }, border: "solid 2px #0275A9" }}
     />
 
     if (pathname.startsWith('/auth')) return <></>;
@@ -91,7 +92,11 @@ export const Navbar = () => {
                     </Typography>
 
                     {/* Updated styling for the Avatar */}
-                    <Link href="/account" sx={{ textDecoration: "none", ml: '10px', mr: '20px', }}>
+                    <Link href="/account" style={{ textDecoration: "none", display: "flex", flexDirection: "row", alignItems: "center" }}>
+                        <Typography sx={{ color: theme.palette.primary.main, fontSize: "18px", marginRight: "15px", "&:hover": { color: "#0275A9" }, display: { xs: 'none', md: 'block' } }}>
+                            Hi,&nbsp;{currentUser.full_name.split(" ")[0]}
+                        </Typography>
+
                         <Box sx={{ display: { xs: 'none', md: 'block' } }}>
                             {profileAvatart}
                         </Box>
@@ -117,14 +122,6 @@ export const Navbar = () => {
                         <ListItem button onClick={handleDrawerClose}>
                             <IoClose size={30} />
                         </ListItem>
-
-                        <ListItem onClick={handleDrawerClose}>
-                            {connectionsLink}
-                        </ListItem>
-                        <ListItem onClick={handleDrawerClose}>
-                            {subscriptionsLink}
-                        </ListItem>
-
                         <ListItem
                             onClick={() => {
                                 router.push("/account");
@@ -137,9 +134,23 @@ export const Navbar = () => {
                         >
                             <Link href="/account" sx={{ textDecoration: "none", ml: '10px', mr: '20px' }}>
                                 {profileAvatart}
-                            </Link> &nbsp;&nbsp; Account
+                            </Link>
+                            &nbsp;
+                            <Typography sx={{ color: theme.palette.primary.main, fontSize: "18px", marginRight: "15px", "&:hover": { color: "#0275A9" } }}>
+                                Hi,&nbsp;{currentUser.full_name.split(" ")[0]}
+                            </Typography>
 
                         </ListItem>
+
+
+                        <ListItem onClick={handleDrawerClose}>
+                            {connectionsLink}
+                        </ListItem>
+                        <ListItem onClick={handleDrawerClose}>
+                            {subscriptionsLink}
+                        </ListItem>
+
+
                     </List>
                 </Drawer>
             </AppBar>

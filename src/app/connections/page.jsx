@@ -19,13 +19,12 @@ import { toggleSyncStatus } from '@/libs/utils/toggleSyncStatus';
 import { getCurrentDate } from '@/libs/utils/getCurrentDate';
 import { createNoticationChannels } from '@/libs/google/createNoticationChannels';
 import { getUserProfile } from '@/libs/supabase/getUserProfile';
+import { formatDate } from '@/utility/formatDate';
 
-
-const NOTION_CONNECTION_STRING = 'https://api.notion.com/v1/oauth/authorize?client_id=c762fab7-bc3f-4726-bf5f-08908b6ccd09&response_type=code&owner=user&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fconnections';
-const GOOGLE_CONNECTION_STRING = 'https://accounts.google.com/o/oauth2/auth/oauthchooseaccount?scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcalendar&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fconnections&response_type=code&client_id=474592924938-p58vbsd9l7hllhk84bee27e0oq5a6l98.apps.googleusercontent.com&access_type=offline&prompt=consent&service=lso&o2v=1&theme=glif&flowName=GeneralOAuthFlow';
 
 const Connections = ({ searchParams }) => {
     const [syncStatus, setSyncStatus] = useState(false);
+    const [lastSync, setLastSync] = useState();
 
     const { user_id, email, full_name, stripe: { stripeSubscriptionStatus }, connectionStatus: { google: googleConnection, notion: notionConnection } } = useSelector(selectUser);
     const theme = useTheme();
@@ -105,8 +104,6 @@ const Connections = ({ searchParams }) => {
                 if (googleConnection === null || undefined) checkGoogleConnection();
                 if (notionConnection === null || undefined) checkNotionConnection();
 
-
-                console.log("running useEffect");
             } catch (error) {
                 console.error("Error in useEffect:", error);
             }
@@ -114,7 +111,6 @@ const Connections = ({ searchParams }) => {
 
         runEffect();
     }, [user_id, email])
-
 
 
     return (
@@ -126,7 +122,7 @@ const Connections = ({ searchParams }) => {
                 justifyContent: 'center',
                 flexDirection: 'column',
                 textAlign: 'center',
-                // backgroundColor: theme.palette.background.paper,
+                backgroundColor: theme.palette.background.default,
                 overflow: 'hidden',
             }}
         >
@@ -136,17 +132,17 @@ const Connections = ({ searchParams }) => {
                     border: '1px solid gray',
                     borderRadius: '10px',
                     padding: '2rem',
-                    backgroundColor: theme.palette.background.default,
+
                 }}
             >
                 <Grid item xs={12} >
                     <Grid container justifyContent="space-between" sx={{ padding: 2, fontSize: '21px' }}>
                         <Grid item alignItems={"start"}>
-                            <Typography variant="h4" sx={{ fontWeight: 'bold', fontSize: ['24px', '28px', '32px'] }}>
+                            <Typography variant="h4" sx={{ color: theme.palette.primary.main, fontWeight: 'bold', fontSize: ['24px', '28px', '32px'] }}>
                                 Your Connections
                             </Typography>
-                            <Typography textAlign={"start"} variant="body1" sx={{ color: 'gray', fontSize: ['14px', '16px'] }}>
-                                {syncStatus ? getCurrentDate() : 'Not synced yet'}
+                            <Typography textAlign={"start"} variant="body1" sx={{ color: theme.palette.secondary.main, fontSize: ['14px', '16px'] }}>
+                                {syncStatus ? `Last Sync: ${formatDate(lastSync)}` : 'Not synced yet'}
                             </Typography>
                         </Grid>
                         <Grid item>
@@ -160,7 +156,7 @@ const Connections = ({ searchParams }) => {
                                     mt: '1rem',
                                 }}
                                 onClick={() =>
-                                    toggleSyncStatus(user_id, syncStatus, full_name, stripeSubscriptionStatus, router, notionConnection, googleConnection, email, setSyncStatus)
+                                    toggleSyncStatus(user_id, syncStatus, full_name, stripeSubscriptionStatus, router, notionConnection, googleConnection, email, setSyncStatus, setLastSync)
                                 }
                             >
                                 {syncStatus ? 'Stop Sync' : 'Start Sync'}
@@ -179,37 +175,20 @@ const Connections = ({ searchParams }) => {
                     }}
                 >
                     {notionConnection
-                        ? <ConnectNotion
-                            title="Notion"
-                            description="Congratulations! Notion has been connected successfully."
-                            button="Connect"
-                            image="/images/notion-icon.svg"
-
-                        />
+                        ? <ConnectNotion />
                         : <ConnectionCard
                             title="Notion"
-                            description="Connect your Notion pages"
-                            button="Connect"
                             image="/images/notion-icon.svg"
-                            connectionLink={NOTION_CONNECTION_STRING}
+                            connectionLink={process.env.NEXT_PUBLIC_NOTION_CONNECTION_STRING}
                         />
                     }
 
                     {googleConnection
-                        ? <ConnectCalendar
-                            title="Google Calendar"
-                            description="Your Google Calendar is connected!"
-                            button="Connect"
-                            image="/images/calendar-icon.svg"
-
-                        />
-
+                        ? <ConnectCalendar />
                         : <ConnectionCard
                             title="Google Calendar"
-                            description="Connect your Google Calendar"
-                            button="Connect"
                             image="/images/calendar-icon.svg"
-                            connectionLink={GOOGLE_CONNECTION_STRING}
+                            connectionLink={process.env.NEXT_PUBLIC_GOOGLE_CONNECTION_STRING}
                         />
                     }
                 </Box>

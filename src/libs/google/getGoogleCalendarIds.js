@@ -13,7 +13,7 @@ export const getGoogleCalendarIds = async (refresh_token) => {
             GET_GOOGLE_CALENDAR_IDS_ENDPOINT,
             { refresh_token }
         )
-        console.log(res.data.ids);
+
         return res.data.ids;
     } catch (error) {
         console.error(error);

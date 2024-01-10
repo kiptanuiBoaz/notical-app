@@ -10,6 +10,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useRouter } from 'next/navigation';
 import { RESET_AUTH, selectUser } from '@/redux/features/authSlice';
+import { deleteUserProfile } from '@/libs/supabase/deleteUserProfile';
+import { Confirm } from 'notiflix';
 
 const Account = () => {
     const dispatch = useDispatch();
@@ -18,11 +20,10 @@ const Account = () => {
     const supabase = createClientComponentClient();
     const router = useRouter();
 
-    const currentUser = useSelector(selectUser);
+    const { stripe: { stripeSubscriptionStatus }, user_id, email, full_name, avatarUrl } = useSelector(selectUser);
 
     const handleSignOut = async () => {
         const res = await supabase.auth.signOut();
-        console.log(res);
         if (!res.error) {
             dispatch(RESET_AUTH());
             router.push("/auth/login")
@@ -30,11 +31,36 @@ const Account = () => {
 
     }
 
+    const handleAccountDelete = async () => {
+        Confirm.show(
+            'Permanently deleting your account?',
+            'Please note that all your Notion Database integrations and Calendar synchronizations will be lost completely',
+            'Delete Account',
+            'Cancel',
+            async () => {
+                await deleteUserProfile(user_id);
+                await handleSignOut();
+            },
+            () => { },
+            {
+                okButtonColor: "#fff",
+                okButtonBackground: "red",
+                cancelButtonColor: theme.palette.primary.main,
+                titleColor: "#0276AA",
+                titleFontSize: "21px",
+                messageFontSize: "17px",
+                buttonsFontSize: "19px",
+                width: "400px"
+            },
+        );
+
+    }
+
     return (
         <Box
             sx={{
                 width: '100%',
-                // height: '100vh',
+                height: '100vh',
                 cursor: 'pointer',
                 paddingTop: "70px",
                 display: 'flex',
@@ -59,37 +85,48 @@ const Account = () => {
                     overflow: 'auto',
                 }}
             >
-                <Grid container spacing={2} >
+                <Grid container spacing={2}  >
                     <Grid item xs={12} >
-                        <Grid container alignItems="center" justifyContent="space-between" sx={{ padding: 2, fontSize: '21px' }}>
+                        <Grid
+                            container
+                            alignItems="center"
+                            justifyContent="space-between"
+                            sx={{ padding: 2, fontSize: '21px', color: theme.palette.primary.main }}
+                        >
                             <Grid item>
                                 <Typography variant="h4" component="h1">
                                     Your Account
                                 </Typography>
                             </Grid>
                             <Grid item>
-                                <Button variant="contained" color="error" sx={{ marginTop: "5px", fontSize: '19px', textTransform: "none" }}>
+                                <Button onClick={handleAccountDelete} variant="contained" color="error" sx={{ marginTop: "5px", fontSize: '19px', textTransform: "none" }}>
                                     Delete account
                                 </Button>
                             </Grid>
                         </Grid>
                     </Grid>
                     <hr style={{ width: "100%" }} />
-                    <Grid item xs={12}>
-                        <Grid container alignItems="center" spacing={2} sx={{}}>
+                    <Grid item xs={12} >
+                        <Grid container alignItems="center" spacing={2} sx={{ color: theme.palette.primary.main }}>
                             <Grid item>
-                                <Avatar href="/account" src={currentUser.avatarUrl} alt="user" sx={{ ml: "10px", height: "50px", width: "50px" }} />
+                                <Avatar
+                                    href="/account"
+                                    src={avatarUrl}
+                                    alt="user"
+                                    sx={{ ml: "10px", height: "50px", width: "50px" }}
+
+                                />
                             </Grid>
                             <Grid item>
                                 <Grid container direction="column" >
                                     <Grid item>
                                         <Typography variant="h6" component="h2">
-                                            {currentUser.full_name}
+                                            {full_name}
                                         </Typography>
                                     </Grid>
                                     <Grid item>
                                         <Typography variant="body1" sx={{ fontSize: "19px", color: "#0276AA" }} component="p">
-                                            {currentUser.email}
+                                            {email}
                                         </Typography>
                                     </Grid>
                                 </Grid>
@@ -97,21 +134,21 @@ const Account = () => {
                         </Grid>
                     </Grid>
                     <hr style={{ width: "100%" }} />
-                    <Grid item xs={12}>
-                        <Grid container alignItems="center" spacing={2} sx={{ padding: "0 0 5px 20px" }}>
+                    <Grid item xs={12} sx={{ color: theme.palette.secondary.main, "&:hover": { color: theme.palette.primary.main } }}>
+                        <Grid container alignItems="center" spacing={2} sx={{ padding: "0 0 5px 20px" }} onClick={() => router.push("/subscriptions")}>
                             <Grid item>
                                 <WebIcon fontSize="large" />
                             </Grid>
                             <Grid item>
-                                <Typography variant="h6" component="h3">
-                                    Manage Subscription
+                                <Typography sx={{}} variant="h6" component="h3" >
+                                    {stripeSubscriptionStatus ? "Manage Subscription" : "View Pricing Plans"}
                                 </Typography>
                             </Grid>
                         </Grid>
                     </Grid>
                     <hr style={{ width: "100%" }} />
-                    <Grid item xs={12}>
-                        <Grid container alignItems="center" spacing={2} sx={{ padding: "0 0 5px 20px" }}>
+                    <Grid item xs={12} sx={{ color: theme.palette.secondary.main, "&:hover": { color: theme.palette.primary.main } }}>
+                        <Grid container alignItems="center" spacing={2} sx={{ padding: "0 0 5px 20px" }} onClick={() => router.push("/connections")}>
                             <Grid item>
                                 <LoopIcon fontSize="large" />
                             </Grid>
@@ -123,7 +160,7 @@ const Account = () => {
                         </Grid>
                     </Grid>
                     <hr style={{ width: "100%" }} />
-                    <Grid item xs={12}>
+                    <Grid item xs={12} sx={{ color: theme.palette.secondary.main, "&:hover": { color: theme.palette.primary.main } }}>
                         <Grid container alignItems="center" spacing={2} sx={{ padding: '0 0 5px 20px' }}>
                             <Grid item>
                                 <Switch
@@ -143,7 +180,7 @@ const Account = () => {
                         </Grid>
                     </Grid>
                     <hr style={{ width: "100%" }} />
-                    <Grid item xs={12}>
+                    <Grid item xs={12} sx={{ color: theme.palette.secondary.main, "&:hover": { color: theme.palette.primary.main } }}>
                         <Grid container alignItems="center" spacing={2} sx={{ padding: "0 0 5px 20px" }}>
                             <Grid item>
                                 <LogoutIcon fontSize="large" />
