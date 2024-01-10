@@ -73,7 +73,13 @@ export const ConnectNotion = ({ title, description, image }) => {
     const theme = useTheme();
     const selectedTheme = useSelector(selectTheme);
     return (
-        <Card sx={{ border: '1px solid gray', borderRadius: '10px', p: 2, backgroundColor: theme.palette.background.default }}>
+        <Card sx={{
+            border: '1px solid gray',
+            borderRadius: '10px',
+            p: 2,
+            backgroundColor: theme.palette.background.default,
+            overflow: 'hidden',
+        }}>
             <CardContent>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: "start" }}>
                     {/* <Box sx={{ m: 2, height: "30px" }}> */}
