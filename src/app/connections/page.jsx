@@ -17,8 +17,8 @@ import { verifyGoogleConnection } from '@/libs/google/verifyGoogleConnection';
 import { verifyNotionConnection } from '@/libs/notion/verifyNotionConnection';
 import { toggleSyncStatus } from '@/libs/utils/toggleSyncStatus';
 import { getCurrentDate } from '@/libs/utils/getCurrentDate';
-import { getUser } from '@/libs/supabase/getUser';
 import { createNoticationChannels } from '@/libs/google/createNoticationChannels';
+import { getUserProfile } from '@/libs/supabase/getUserProfile';
 
 
 const NOTION_CONNECTION_STRING = 'https://api.notion.com/v1/oauth/authorize?client_id=c762fab7-bc3f-4726-bf5f-08908b6ccd09&response_type=code&owner=user&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fconnections';
@@ -65,7 +65,7 @@ const Connections = ({ searchParams }) => {
 
                 //check if user has authorized notion connection
                 const checkNotionConnection = async () => {
-                    const user = await getUser(user_id);
+                    const user = await getUserProfile(user_id);
                     if (user) {
                         const { notion_secret_key, selected_databases_ids, active } = user;
                         const { is_valid } = await verifyNotionConnection(notion_secret_key)
@@ -80,7 +80,7 @@ const Connections = ({ searchParams }) => {
 
                 //check if user has authorized google connection
                 const checkGoogleConnection = async () => {
-                    const data = await getUser(user_id);
+                    const data = await getUserProfile(user_id);
                     if (data?.google_access_token) {
                         const { is_valid } = await verifyGoogleConnection(data.google_access_token);
                         dispatch(UPDATE_CONNECTION_STATUS({

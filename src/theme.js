@@ -40,9 +40,7 @@ export const getDesignTokens = (mode) => ({
 });
 
 const theme = createTheme(() => {
-
     const colorMode = useSelector(selectTheme());
-    console.log(colorMode);
     return colorMode;
 });
 

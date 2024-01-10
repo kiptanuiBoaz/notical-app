@@ -1,9 +1,6 @@
 const BASE_URL = "https://squid-app-o4fnk.ondigitalocean.app/api";
 import axios from 'axios';
 
-// Check if window is defined (client-side)
-const user = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('user')) : null;
-
 const axiosOptions = {
     baseURL: BASE_URL,
     headers: {

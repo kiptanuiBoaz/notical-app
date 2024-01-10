@@ -1,9 +1,8 @@
 "use client"
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Loading } from "notiflix";
 
-export const createUserProfile = async (stripe_customer_id, user_id, email) => {
-    const supabase = createClientComponentClient();
+export const createUserProfile = async (stripe_customer_id, user_id, email, supabase) => {
+
     try {
         Loading.dots({
             svgColor: '#0276AA',

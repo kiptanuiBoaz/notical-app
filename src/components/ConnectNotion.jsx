@@ -12,9 +12,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { UPDATE_CONNECTION_STATUS, selectUser } from '@/redux/features/authSlice';
 import { selectTheme } from '@/redux/features/themeSlice';
 import { disconnectNotion } from '@/libs/notion/disconnectNotion';
-import { getUser } from '@/libs/supabase/getUser';
 import { updateSelectedDbIds } from '@/libs/supabase/updateSelectedDbIds.';
 import { updateDeleteDone } from '@/libs/supabase/updatedeleteDone';
+import { getUserProfile } from '@/libs/supabase/getUserProfile';
 
 
 export const ConnectNotion = ({ title, description, image }) => {
@@ -30,7 +30,7 @@ export const ConnectNotion = ({ title, description, image }) => {
 
     useEffect(() => {
         const getDbConnections = async () => {
-            const { databases_all, selected_databases_ids, delete_done } = await getUser(user_id);
+            const { databases_all, selected_databases_ids, delete_done } = await getUserProfile(user_id);
             setAllDatabses(databases_all);
             setSelectedDatabseIds(selected_databases_ids);
             setDeleteDone(delete_done);
@@ -65,7 +65,7 @@ export const ConnectNotion = ({ title, description, image }) => {
         //uupdate in db
         await updateDeleteDone(user_id, email, isChecked);
         //update incase of error
-        const { delete_done } = await getUser(user_id);
+        const { delete_done } = await getUserProfile(user_id);
         setDeleteDone(delete_done);
     };
 

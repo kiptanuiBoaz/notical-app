@@ -4,9 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { UPDATE_AUTH } from '@/redux/features/authSlice';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import { createStripeCustomer } from '@/libs/stripe/createStripeCustomer';
-import { createUserProfile } from '@/libs/supabase/createUserProfile';
-import { getUser } from '@/libs/supabase/getUser';
+import { getUserProfile } from '@/libs/supabase/getUserProfile';
 import { getStripeCustomerId } from '@/libs/stripe/getStripeCustomerId';
 
 
@@ -19,16 +17,12 @@ const Home = ({ searchParams }) => {
     try {
       const getCurrentUser = async () => {
 
-        const code = searchParams.code;
-        // console.log(code)
         const authenticatedUser = await supabase.auth.getUser()
-        // console.log(authenticatedUser);
+
         const { data: { user: { id, email, user_metadata, role, aud } } } = authenticatedUser;
-
-        // const stripeCustomer = await createStripeCustomer(email);
-
-        // await createUserProfile(stripeCustomer.data.id, id, email)
-        const user = await getUser(id);
+        console.log(id, email, user_metadata, role, aud);
+        const user = await getUserProfile(id);
+        console.log(user)
         const stripeCustomer = await getStripeCustomerId(user.stripe_customer_id);
 
         //update redux state
@@ -50,8 +44,9 @@ const Home = ({ searchParams }) => {
           }
         }));
       }
+
+
       getCurrentUser();
-      console.log(searchParams.redirectedFrom)
       if (searchParams.redirectedFrom === "stripe") {
         router.push("/subscriptions");
 

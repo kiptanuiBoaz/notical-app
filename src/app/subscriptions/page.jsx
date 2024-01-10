@@ -25,7 +25,7 @@ const Subscriptions = () => {
                 display: 'flex',
                 alignItems: 'start',
                 justifyContent: 'center',
-                backgroundColor: theme.palette.background.paper,
+                // backgroundColor: theme.palette.background.paper,
                 color: theme.palette.primary.main
 
             }}

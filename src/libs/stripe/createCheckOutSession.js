@@ -3,7 +3,7 @@ import stripe from 'stripe';
 
 const stripeClient = new stripe(process.env.NEXT_PUBLIC_STRIPE_API_KEY);
 
-export const createCheckOutSession = async (customer_id, price, trial, router) => {
+export const createCheckOutSession = async (customer_id, price, trial) => {
 
     try {
         Loading.dots({

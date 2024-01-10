@@ -1,25 +1,11 @@
-import { stripeApi } from "@/axios/stripeApi";
-import { Loading, Notify } from "notiflix";
+import stripe from 'stripe';
+const stripeClient = new stripe(process.env.NEXT_PUBLIC_STRIPE_API_KEY);
+
 
 export const createStripeCustomer = async (email) => {
-    const CREATE_CUSTOMER_ROUTES = "/customers";
-
     try {
-        Loading.dots({
-            svgColor: '#0276AA',
-            backgroundColor: 'rgba(0,0,0,0.4)',
-        });
-        const response = await stripeApi.post(
-            CREATE_CUSTOMER_ROUTES,
-            { email }
-        )
-        Notify.success("Created added to stripe successfully")
-        console.log(response)
-        return response;
+        return await stripeClient.customers.create({ email });
     } catch (error) {
         console.error(error.message)
-
-    } finally {
-        Loading.remove()
     }
 }

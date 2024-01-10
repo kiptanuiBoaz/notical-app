@@ -8,7 +8,7 @@ const axiosOptions = {
         "Content-Type": "Application/json",
         "Accept": "Application/json",
         withCredentials: false,
-        "Authorization": `Bearer sk_test_51HIAUkIVOiWOJVaA59Cwxh8qpE1a1OqRU69ddyWvHrpRsUWxSyuwP1YdKTm3HO6HCTRJT8GE9sjXAUaVGQ96WNRk00SwxIlWCL`,
+        "Authorization": process.env.NEXT_PUBLIC_STRIPE_API_KEY,
     }
 }
 

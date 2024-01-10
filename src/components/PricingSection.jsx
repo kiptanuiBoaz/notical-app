@@ -20,7 +20,7 @@ export const PricingSection = () => {
                 border: '1px solid gray',
                 borderRadius: '10px',
                 padding: '3rem 2rem',
-                backgroundColor: theme.palette.background.default,
+                // backgroundColor: theme.palette.background.default,
             }}
         >
 
