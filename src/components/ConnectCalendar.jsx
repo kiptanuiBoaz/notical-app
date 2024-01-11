@@ -42,6 +42,7 @@ export const ConnectCalendar = () => {
 
                 </Box>
 
+
                 <Button
                     onClick={async () => {
                         await disconnectCalendar(user_id, email);
