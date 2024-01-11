@@ -23,10 +23,9 @@ import { formatDate } from '@/utility/formatDate';
 
 
 const Connections = ({ searchParams }) => {
-    const [syncStatus, setSyncStatus] = useState(false);
     const [lastSync, setLastSync] = useState();
 
-    const { user_id, email, full_name, stripe: { stripeSubscriptionStatus }, connectionStatus: { google: googleConnection, notion: notionConnection } } = useSelector(selectUser);
+    const { user_id, syncStatus, email, full_name, stripe: { stripeSubscriptionStatus }, connectionStatus: { google: googleConnection, notion: notionConnection } } = useSelector(selectUser);
     const theme = useTheme();
     const router = useRouter();
     const pathname = usePathname();
@@ -156,7 +155,7 @@ const Connections = ({ searchParams }) => {
                                     mt: '1rem',
                                 }}
                                 onClick={() =>
-                                    toggleSyncStatus(user_id, syncStatus, full_name, stripeSubscriptionStatus, router, notionConnection, googleConnection, email, setSyncStatus, setLastSync)
+                                    toggleSyncStatus(user_id, syncStatus, full_name, stripeSubscriptionStatus, router, notionConnection, googleConnection, email, setLastSync, dispatch)
                                 }
                             >
                                 {syncStatus ? 'Stop Sync' : 'Start Sync'}

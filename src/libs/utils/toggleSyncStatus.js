@@ -1,8 +1,9 @@
 import { Confirm, Notify, Report } from "notiflix";
 import { updateActiveField } from "../supabase/updateActiveField";
 import { getUserProfile } from "../supabase/getUserProfile";
+import { UPDATE_AUTH } from "@/redux/features/authSlice";
 
-export const toggleSyncStatus = async (user_id, syncStatus, full_name, stripeSubscriptionStatus, router, notionConnection, googleConnection, email, setSyncStatus, setLastSync) => {
+export const toggleSyncStatus = async (user_id, syncStatus, full_name, stripeSubscriptionStatus, router, notionConnection, googleConnection, email, setLastSync, dispatch) => {
 
     Confirm.show(
         `${syncStatus ? "Stop" : "Start "} synchronization ?`,
@@ -36,7 +37,9 @@ export const toggleSyncStatus = async (user_id, syncStatus, full_name, stripeSub
 
             await updateActiveField(user_id, email, !syncStatus);
             const { notion_last_poll } = await getUserProfile(user_id);
-            setSyncStatus(!syncStatus);
+            dispatch(UPDATE_AUTH({
+                syncStatus: !syncStatus
+            }))
             setLastSync(notion_last_poll);
             Notify.success(!syncStatus ? "Successfully synced  Google Calendar and Notion" : "Succesfully stopped sync")
         },

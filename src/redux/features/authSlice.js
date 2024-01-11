@@ -13,6 +13,7 @@ const pseudoInitialState = {
         notion: null,
         google: null,
     },
+    syncStatus: false,
     user_id: null,
     email: null,
     full_name: '',

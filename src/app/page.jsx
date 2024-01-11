@@ -20,7 +20,7 @@ const Home = ({ searchParams }) => {
         const { data: { user: { id, email, user_metadata, role, aud } } } = await supabase.auth.getUser();
 
         //get stripe customer id from users table in db
-        const { stripe_customer_id } = await getUserProfile(id);
+        const { stripe_customer_id, active } = await getUserProfile(id);
 
         //get stripe customer info from stripe
         const stripeCustomer = await getStripeCustomerId(stripe_customer_id);
@@ -31,6 +31,7 @@ const Home = ({ searchParams }) => {
           email: email,
           full_name: user_metadata.full_name,
           avatarUrl: user_metadata.avatar_url,
+          syncStatus: active,
           role: {
             name: role,
             id: aud
