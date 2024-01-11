@@ -1,18 +1,18 @@
 "use client"
 import React, { useState } from 'react';
 import { usePathname } from 'next/navigation';
-import { AppBar, Toolbar, Typography, Button, Avatar, useTheme, Drawer, List, ListItem, IconButton, Box } from '@mui/material';
+import { AppBar, Toolbar, Typography, Button, Avatar, useTheme, Drawer, List, ListItem, IconButton, Box, Grid } from '@mui/material';
 import Image from 'next/image';
-import MenuIcon from '@mui/icons-material/Menu';
-import CloseIcon from '@mui/icons-material/Close';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectTheme } from '../redux/features/themeSlice';
 import Link from 'next/link';
-import { selectUser } from '@/redux/features/authSlice';
+import { RESET_AUTH, selectUser } from '@/redux/features/authSlice';
 import { IoMenu } from "react-icons/io5";
 import { IoClose } from "react-icons/io5";
 import "./navbar.scss"
 import { useRouter } from 'next/navigation';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 
 export const Navbar = () => {
     const pathname = usePathname();
@@ -20,13 +20,25 @@ export const Navbar = () => {
     const currentUser = useSelector(selectUser);
     const [isHovered, setIsHovered] = useState("");
     const theme = useTheme();
+    const supabase = createClientComponentClient();
     const [drawerOpen, setDrawerOpen] = useState(false);
 
-    const router = useRouter()
+    const router = useRouter();
+    const dispatch = useDispatch();
 
     const handleDrawerClose = () => {
         setDrawerOpen(false);
     };
+
+    const handleSignOut = async () => {
+        const res = await supabase.auth.signOut();
+        if (!res.error) {
+            dispatch(RESET_AUTH());
+            router.push("/auth/login")
+        }
+
+    }
+
     const subscriptionsLink = <Link
         style={{ color: pathname === "/subscriptions" || isHovered === "/subscriptions" ? "#0275A9" : theme.palette.primary.main, textDecoration: "none" }}
         href="/subscriptions"
@@ -148,6 +160,18 @@ export const Navbar = () => {
                         </ListItem>
                         <ListItem onClick={handleDrawerClose}>
                             {subscriptionsLink}
+                        </ListItem>
+                        <ListItem onClick={handleDrawerClose} sx={{ "&:hover": { color: "red" }, cursor: "pointer" }}>
+
+                            <LogoutIcon fontSize="medium" />
+
+                            <Typography
+                                onClick={handleSignOut}
+                                sx={{ marginLeft: "8px", fontSize: "15px" }}
+                            >
+                                Logout
+                            </Typography>
+
                         </ListItem>
 
 

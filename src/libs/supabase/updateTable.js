@@ -70,3 +70,24 @@ export const updateTableWithCalendarIds = async (calendar_ids, email, user_id) =
 
 }
 
+export const updateTableWithLastSync = async (user_id, last_notion_poll) => {
+    const supabase = createClientComponentClient();
+    try {
+        Loading.dots({
+            svgColor: '#0276AA',
+            backgroundColor: 'rgba(0,0,0,0.4)',
+        });
+        const { error } = await supabase.from('users').upsert({
+            user_id,
+            last_notion_poll
+        })
+        if (error) throw error
+
+    } catch (error) {
+        console.error(error.message)
+    } finally {
+        Loading.remove();
+    }
+}
+
+

@@ -62,3 +62,5 @@ export const ConnectCalendar = () => {
 
     )
 }
+
+export default ConnectCalendar;

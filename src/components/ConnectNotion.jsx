@@ -188,3 +188,5 @@ export const ConnectNotion = () => {
         </Card >
     )
 }
+
+export default ConnectNotion;

@@ -2,6 +2,7 @@ import { Confirm, Notify, Report } from "notiflix";
 import { updateActiveField } from "../supabase/updateActiveField";
 import { getUserProfile } from "../supabase/getUserProfile";
 import { UPDATE_AUTH } from "@/redux/features/authSlice";
+import { updateTableWithLastSync } from "../supabase/updateTable";
 
 export const toggleSyncStatus = async (user_id, syncStatus, full_name, stripeSubscriptionStatus, router, notionConnection, googleConnection, email, setLastSync, dispatch) => {
 
@@ -36,11 +37,12 @@ export const toggleSyncStatus = async (user_id, syncStatus, full_name, stripeSub
 
 
             await updateActiveField(user_id, email, !syncStatus);
-            const { notion_last_poll } = await getUserProfile(user_id);
             dispatch(UPDATE_AUTH({
                 syncStatus: !syncStatus
             }))
-            setLastSync(notion_last_poll);
+            const current_time_unix_epoch = Math.floor(Date.now() / 1000);
+            setLastSync(current_time_unix_epoch);
+            await updateTableWithLastSync(user_id, current_time_unix_epoch);
             Notify.success(!syncStatus ? "Successfully synced  Google Calendar and Notion" : "Succesfully stopped sync")
         },
         () => { },

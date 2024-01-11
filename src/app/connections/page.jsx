@@ -4,8 +4,8 @@ import { Box, Typography, Button, Grid } from '@mui/material';
 import { ConnectionCard } from '@/components/ConnectionCard';
 import { Footer } from '@/components/Footer';
 import { useTheme } from '@emotion/react';
-import { ConnectCalendar } from '@/components/ConnectCalendar';
-import { ConnectNotion } from '@/components/ConnectNotion';
+import ConnectCalendar from '@/components/ConnectCalendar';
+import ConnectNotion from '@/components/ConnectNotion';
 import { useDispatch, useSelector } from 'react-redux';
 import { UPDATE_AUTH, UPDATE_CONNECTION_STATUS, selectUser } from '@/redux/features/authSlice';
 import { usePathname, useRouter } from 'next/navigation';
@@ -20,6 +20,7 @@ import { getCurrentDate } from '@/libs/utils/getCurrentDate';
 import { createNoticationChannels } from '@/libs/google/createNoticationChannels';
 import { getUserProfile } from '@/libs/supabase/getUserProfile';
 import { formatDate } from '@/utility/formatDate';
+
 
 
 const Connections = ({ searchParams }) => {
