@@ -42,7 +42,7 @@ export const toggleSyncStatus = async (user_id, syncStatus, full_name, stripeSub
             }))
             const current_time_unix_epoch = Math.floor(Date.now() / 1000);
             setLastSync(current_time_unix_epoch);
-            await updateTableWithLastSync(user_id, current_time_unix_epoch);
+            if (syncStatus === false) await updateTableWithLastSync(user_id, current_time_unix_epoch);
             Notify.success(!syncStatus ? "Successfully synced  Google Calendar and Notion" : "Succesfully stopped sync")
         },
         () => { },
